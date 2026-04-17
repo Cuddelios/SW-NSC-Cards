@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="120">
+  <g id="template">
+    <rect x="0" y="0" width="300" height="120" fill="white" stroke="black" />
+    <text x="20" y="35" data-field="Name">NAME</text>
+    <text x="20" y="65" data-field="Ort">ORT</text>
+    <text x="20" y="95" data-field="Abteilung">ABTEILUNG</text>
+  </g>
+</svg>
