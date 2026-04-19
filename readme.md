@@ -11,6 +11,16 @@ Ohne Parameter verwendet der Generator jetzt:
 
 Eine vollständige Beispiel-CSV für das Character-Template liegt unter `data/char_template_example.csv`.
 
+## Beispiel-Daten als Tabelle
+
+| Name | Level | Parade | Robustheit | Wunden | Fertigkeiten | Beschreibung | Talente | Kartenfarbe | Level-Farbe | Geschick | Konstitution | Stärke | Verstand | Willenskraft | Fertigkeitswürfel |
+|---|---:|---:|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Roderick Stahl | 3 | 7 | `8,1` | `true` | Kämpfen d10, Athletik d8, Heimlichkeit d6 | Erfahrener Söldner und Fährtensucher aus den Grenzlanden. | Beidhändig, Kräftig | `#d9c27a` | `#b8860b` | `d8` | `d8` | `d10` | `d6` | `d6` | `d10` |
+| Elena Voss | 2 | 6 | `7,0` | `false` | Schießen d10, Wahrnehmung d8, Überreden d6 | Ehemalige Offizierin mit ruhiger Hand und scharfem Blick. | Scharfschütze, Kommandant | `#9fc5e8` | `#3d85c6` | `d6` | `d6` | `d6` | `d8` | `d8` | `d10` |
+| Professor Aldwyn | 2 | 5 | `6,0` | `false` | Wissen d10, Heilen d8, Nachforschungen d8 | Arkanforscher mit einer Vorliebe für alte Ruinen und verbotene Texte. | Arkaner Hintergrund, Gelehrt | `#cfe2f3` | `#6fa8dc` | `d4` | `d6` | `d4` | `d10` | `d8` | `d8` |
+| Mara Kestrel | 3 | 6 | `8,1` | `true` | Einschüchtern d8, Fahren d8, Reparieren d6 | Hartgesottener Schmuggler, der auf jede Gefahr eine schnelle Ausrede hat. | Glück, Zäh | `#d5a6bd` | `#a64d79` | `d8` | `d8` | `d6` | `d6` | `d8` | `d8` |
+| Talia Dorn | 1 | 7 | `7,0` | `false` | Überleben d10, Wahrnehmung d10, Reiten d8 | Nomadische Späherin, immer auf der Suche nach der besten Route. | Waldläufer, Schnell | `#b6d7a8` | `#6aa84f` | `d8` | `d6` | `d6` | `d8` | `d8` | `d10` |
+
 Starten:
 
 ```powershell
