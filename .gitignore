@@ -56,3 +56,4 @@ nunit-*.xml
 # Build und Output folders
 .dotnet-home/
 output/
+nsc-cards-gen/Properties/launchSettings.json

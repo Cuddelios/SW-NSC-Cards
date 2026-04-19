@@ -1,7 +1,7 @@
 ﻿using SvgPdfGenerator;
 using SvgPdfGenerator.Models;
 
-string csvPath = args.Length > 0 ? args[0] : Path.Combine("data", "test.csv");
+string csvPath = args.Length > 0 ? args[0] : Path.Combine("data", "char_template_example.csv");
 string svgTemplatePath = args.Length > 1 ? args[1] : Path.Combine("templates", "char_template.svg");
 string outputPdfPath = args.Length > 2 ? args[2] : Path.Combine("output", "output.pdf");
 bool usesCharacterTemplate = string.Equals(

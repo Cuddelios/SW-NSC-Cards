@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "name": "C#: nsc-cards-gen",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}\\nsc-cards-gen\\nsc-cards-gen.csproj",
+        }
+    ]
+}
