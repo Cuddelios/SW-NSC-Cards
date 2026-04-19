@@ -1,11 +1,6 @@
 card_back_color;level_color;wc_wound;skills_text;description;edges;parry;toughness;level;name;agility_dices;vigor_dices;st_dices;smarts_dices;spirit_dices;skills_dices
-#d9c27a;#b8860b;true;"Kämpfen d10, Athletik d8, Heimlichkeit d6";"Erfahrener Söldner und Fährtensucher aus den Grenzlanden.";"Beidhändig, Kräftig";7;"8
-1";3;Roderick Stahl;d8;d8;d10;d6;d6;d10
-#9fc5e8;#3d85c6;false;"Schießen d10, Wahrnehmung d8, Überreden d6";"Ehemalige Offizierin mit ruhiger Hand und scharfem Blick.";"Scharfschütze, Kommandant";6;"7
-0";2;Elena Voss;d6;d6;d6;d8;d8;d10
-#cfe2f3;#6fa8dc;false;"Wissen d10, Heilen d8, Nachforschungen d8";"Arkanforscher mit einer Vorliebe für alte Ruinen und verbotene Texte.";"Arkaner Hintergrund, Gelehrt";5;"6
-0";2;Professor Aldwyn;d4;d6;d4;d10;d8;d8
-#d5a6bd;#a64d79;true;"Einschüchtern d8, Fahren d8, Reparieren d6";"Hartgesottener Schmuggler, der auf jede Gefahr eine schnelle Ausrede hat.";"Glück, Zäh";6;"8
-1";3;Mara Kestrel;d8;d8;d6;d6;d8;d8
-#b6d7a8;#6aa84f;false;"Überleben d10, Wahrnehmung d10, Reiten d8";"Nomadische Späherin, immer auf der Suche nach der besten Route.";"Waldläufer, Schnell";7;"7
-0";1;Talia Dorn;d8;d6;d6;d8;d8;d10
+#d9c27a;#b8860b;true;"Kämpfen d10, Athletik d8, Heimlichkeit d6";"Erfahrener Söldner und Fährtensucher aus den Grenzlanden.";"Beidhändig, Kräftig";7;"8,1";3;Roderick Stahl;d8;d8;d10;d6;d6;d10
+#9fc5e8;#3d85c6;false;"Schießen d10, Wahrnehmung d8, Überreden d6";"Ehemalige Offizierin mit ruhiger Hand und scharfem Blick.";"Scharfschütze, Kommandant";6;"7,0";2;Elena Voss;d6;d6;d6;d8;d8;d10
+#cfe2f3;#6fa8dc;false;"Wissen d10, Heilen d8, Nachforschungen d8";"Arkanforscher mit einer Vorliebe für alte Ruinen und verbotene Texte.";"Arkaner Hintergrund, Gelehrt";5;"6,0";2;Professor Aldwyn;d4;d6;d4;d10;d8;d8
+#d5a6bd;#a64d79;true;"Einschüchtern d8, Fahren d8, Reparieren d6";"Hartgesottener Schmuggler, der auf jede Gefahr eine schnelle Ausrede hat.";"Glück, Zäh";6;"8,1";3;Mara Kestrel;d8;d8;d6;d6;d8;d8
+#b6d7a8;#6aa84f;false;"Überleben d10, Wahrnehmung d10, Reiten d8";"Nomadische Späherin, immer auf der Suche nach der besten Route.";"Waldläufer, Schnell";7;"7,0";1;Talia Dorn;d8;d6;d6;d8;d8;d10

@@ -89,6 +89,8 @@ Die `dices`-Felder sind keine einfachen Textfelder. Stattdessen zeigt der Wert a
 
 `skills_text` kann als komma-getrennte Liste gepflegt werden, zum Beispiel `Kämpfen d10, Athletik d8, Heimlichkeit d6`. Der Renderer trennt diese Einträge automatisch auf mehrere Zeilen auf, entfernt den Würfelwert aus dem Text und zeigt stattdessen rechts neben jeder Fertigkeit das passende `dices`-Element an.
 
+Für Felder mit vorhandenen `tspan`-Einträgen, insbesondere `toughness`, bleibt die SVG-Struktur erhalten. Mehrteilige Werte werden dafür komma-getrennt übergeben, zum Beispiel `8,1`.
+
 Empfohlene Eingabewerte sind daher genau:
 
 - `d4`

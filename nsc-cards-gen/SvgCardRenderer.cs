@@ -241,10 +241,27 @@ public sealed class SvgCardRenderer
             return;
         }
 
-        string[] lines = value.Replace("\r\n", "\n", StringComparison.Ordinal).Split('\n');
         List<XElement> existingTspans = element.Elements(SvgNs + "tspan").ToList();
+        if (existingTspans.Count > 0)
+        {
+            string[] parts = SplitTextParts(value);
 
-        if (lines.Length <= 1 && existingTspans.Count == 0)
+            for (int index = 0; index < existingTspans.Count; index++)
+            {
+                existingTspans[index].Value = index < parts.Length ? parts[index] : string.Empty;
+            }
+
+            if (parts.Length > existingTspans.Count)
+            {
+                existingTspans[^1].Value = string.Join(", ", parts.Skip(existingTspans.Count - 1));
+            }
+
+            return;
+        }
+
+        string[] lines = value.Replace("\r\n", "\n", StringComparison.Ordinal).Split('\n');
+
+        if (lines.Length <= 1)
         {
             element.Value = value;
             return;
@@ -300,6 +317,13 @@ public sealed class SvgCardRenderer
         }
 
         return fontSize * lineHeightFactor;
+    }
+
+    private static string[] SplitTextParts(string value)
+    {
+        return value
+            .Replace("\r\n", "\n", StringComparison.Ordinal)
+            .Split([',', '\n'], StringSplitOptions.TrimEntries);
     }
 
     private static void ApplySkillsField(
