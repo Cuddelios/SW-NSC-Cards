@@ -8,11 +8,19 @@ namespace SvgPdfGenerator;
 public sealed class SvgCardRenderer
 {
     private static readonly XNamespace SvgNs = "http://www.w3.org/2000/svg";
+    private static readonly HashSet<string> ShapeElementNames = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "rect", "circle", "ellipse", "path", "polygon", "line", "polyline"
+    };
 
     private readonly XElement svgRootTemplate;
-    private readonly string templateGroupId;
+    private readonly string? templateGroupId;
+    private readonly string? templateViewBox;
 
-    public SvgCardRenderer(string svgTemplatePath, string templateGroupId = "template")
+    public SvgCardRenderer(
+        string svgTemplatePath,
+        string? templateGroupId = null,
+        string? templateViewBox = null)
     {
         if (string.IsNullOrWhiteSpace(svgTemplatePath))
         {
@@ -29,6 +37,7 @@ public sealed class SvgCardRenderer
             ?? throw new InvalidOperationException("SVG root element was not found.");
 
         this.templateGroupId = templateGroupId;
+        this.templateViewBox = templateViewBox;
 
         EnsureTemplateExists();
     }
@@ -59,19 +68,22 @@ public sealed class SvgCardRenderer
 
     private void EnsureTemplateExists()
     {
-        XElement? template = FindTemplateGroup(new XElement(this.svgRootTemplate));
+        XElement? template = FindTemplateRoot(new XElement(this.svgRootTemplate));
         if (template == null)
         {
             throw new InvalidOperationException(
-                $"Template group with id='{this.templateGroupId}' was not found.");
+                this.templateGroupId == null
+                    ? "SVG template root was not found."
+                    : $"Template group with id='{this.templateGroupId}' was not found.");
         }
     }
 
     private string BuildFilledSvg(IReadOnlyDictionary<string, string> values)
     {
         XElement svgRootClone = new XElement(this.svgRootTemplate);
+        ApplyViewBoxOverride(svgRootClone, this.templateViewBox);
 
-        XElement template = FindTemplateGroup(svgRootClone)
+        XElement template = FindTemplateRoot(svgRootClone)
             ?? throw new InvalidOperationException("Template group was not found in SVG clone.");
 
         FillTemplateFields(template, values);
@@ -79,8 +91,13 @@ public sealed class SvgCardRenderer
         return svgRootClone.ToString(SaveOptions.DisableFormatting);
     }
 
-    private XElement? FindTemplateGroup(XElement root)
+    private XElement? FindTemplateRoot(XElement root)
     {
+        if (string.IsNullOrWhiteSpace(this.templateGroupId))
+        {
+            return root;
+        }
+
         return root
             .Descendants(SvgNs + "g")
             .FirstOrDefault(e => string.Equals(
@@ -94,7 +111,7 @@ public sealed class SvgCardRenderer
         IReadOnlyDictionary<string, string> values)
     {
         IEnumerable<XElement> elementsWithField = templateClone
-            .Descendants()
+            .DescendantsAndSelf()
             .Where(e => e.Attribute("data-field") != null);
 
         foreach (XElement element in elementsWithField)
@@ -107,9 +124,168 @@ public sealed class SvgCardRenderer
 
             if (values.TryGetValue(fieldName, out string? value))
             {
-                element.Value = value ?? string.Empty;
+                ApplyFieldValue(element, value ?? string.Empty);
             }
         }
+    }
+
+    private static void ApplyFieldValue(XElement element, string value)
+    {
+        if (TryApplyGroupSelection(element, value))
+        {
+            return;
+        }
+
+        if (TryApplyVisibility(element, value))
+        {
+            return;
+        }
+
+        if (TryApplyFillColor(element, value))
+        {
+            return;
+        }
+
+        ApplyTextValue(element, value);
+    }
+
+    private static bool TryApplyGroupSelection(XElement element, string value)
+    {
+        List<XElement> directChildGroups = element
+            .Elements(SvgNs + "g")
+            .Where(child => child.Attribute("data-field") != null)
+            .ToList();
+
+        if (directChildGroups.Count == 0)
+        {
+            return false;
+        }
+
+        XElement? matchingGroup = directChildGroups.FirstOrDefault(child => string.Equals(
+            (string?)child.Attribute("data-field"),
+            value,
+            StringComparison.OrdinalIgnoreCase));
+
+        if (matchingGroup == null)
+        {
+            return false;
+        }
+
+        foreach (XElement childGroup in directChildGroups)
+        {
+            bool isMatch = ReferenceEquals(childGroup, matchingGroup);
+            childGroup.SetAttributeValue("display", isMatch ? null : "none");
+        }
+
+        return true;
+    }
+
+    private static bool TryApplyVisibility(XElement element, string value)
+    {
+        if (!string.Equals(element.Name.LocalName, "g", StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+
+        if (!TryParseBooleanLike(value, out bool isVisible))
+        {
+            return false;
+        }
+
+        element.SetAttributeValue("display", isVisible ? null : "none");
+        return true;
+    }
+
+    private static bool TryApplyFillColor(XElement element, string value)
+    {
+        if (!ShapeElementNames.Contains(element.Name.LocalName))
+        {
+            return false;
+        }
+
+        if (element.Attribute("fill") == null)
+        {
+            return false;
+        }
+
+        element.SetAttributeValue("fill", value);
+        return true;
+    }
+
+    private static void ApplyTextValue(XElement element, string value)
+    {
+        if (!string.Equals(element.Name.LocalName, "text", StringComparison.OrdinalIgnoreCase))
+        {
+            element.Value = value;
+            return;
+        }
+
+        List<XElement> tspans = element.Elements(SvgNs + "tspan").ToList();
+        if (tspans.Count == 0)
+        {
+            element.Value = value;
+            return;
+        }
+
+        string[] lines = value.Replace("\r\n", "\n", StringComparison.Ordinal).Split('\n');
+
+        for (int index = 0; index < tspans.Count; index++)
+        {
+            tspans[index].Value = index < lines.Length ? lines[index] : string.Empty;
+        }
+
+        if (lines.Length > tspans.Count)
+        {
+            tspans[^1].Value = string.Join(Environment.NewLine, lines.Skip(tspans.Count - 1));
+        }
+    }
+
+    private static bool TryParseBooleanLike(string value, out bool result)
+    {
+        switch (value.Trim().ToLowerInvariant())
+        {
+            case "1":
+            case "true":
+            case "yes":
+            case "ja":
+            case "y":
+            case "on":
+                result = true;
+                return true;
+            case "0":
+            case "false":
+            case "no":
+            case "nein":
+            case "n":
+            case "off":
+            case "":
+                result = false;
+                return true;
+            default:
+                result = false;
+                return false;
+        }
+    }
+
+    private static void ApplyViewBoxOverride(XElement root, string? templateViewBox)
+    {
+        if (string.IsNullOrWhiteSpace(templateViewBox))
+        {
+            return;
+        }
+
+        root.SetAttributeValue("viewBox", templateViewBox);
+
+        string[] parts = templateViewBox
+            .Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+        if (parts.Length != 4)
+        {
+            return;
+        }
+
+        root.SetAttributeValue("width", parts[2]);
+        root.SetAttributeValue("height", parts[3]);
     }
 
     private static byte[] RenderSvgToPng(string svgContent, int widthPx, int heightPx)

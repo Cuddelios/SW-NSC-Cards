@@ -1,5 +1,33 @@
 Dieses Projekt erstellt mit Hilfe einer SVG-Vorlage und einer CSV-Tabelle eine mehrseitige PDF-Datei.
 
+## Aktuelle Standardpfade
+
+Ohne Parameter verwendet der Generator jetzt:
+
+- CSV: `data/test.csv`
+- SVG-Template: `templates/char_template.svg`
+- PDF-Ausgabe: `output/output.pdf`
+
+Starten:
+
+```powershell
+dotnet run --project nsc-cards-gen
+```
+
+Optional können CSV, Template und Ausgabedatei als Parameter übergeben werden:
+
+```powershell
+dotnet run --project nsc-cards-gen -- data/test.csv templates/char_template.svg output/output.pdf
+```
+
+Für `char_template.svg` berücksichtigt der Code zusätzlich:
+
+- Textfelder über `data-field`
+- Farbwerte für SVG-Elemente wie Kartenhintergrund und Level-Kreis
+- Sichtbarkeit von Gruppen, z. B. `wc_wound`
+- Würfelgruppen wie `agility_dices`, `skills_dices` usw. über Werte wie `d4`, `d6`, `d8`, `d10`, `d12`
+- den Karten-Ausschnitt `0 0 64 96`, damit nicht die komplette A4-SVG, sondern die eigentliche Karte gerendert wird
+
 ## Verwendete `data-field`-Felder im `char_template.svg`
 
 Die folgende Liste beschreibt alle `data-field`-Werte, die aktuell in [char_template.svg](./templates/char_template.svg) verwendet werden.
