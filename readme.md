@@ -1,4 +1,5 @@
 Dieses Projekt erstellt mit Hilfe einer SVG-Vorlage und einer CSV-Tabelle eine mehrseitige PDF-Datei.
+Es wird das Savage World Regelwerk (20210421) verwendet.
 
 ## Aktuelle Standardpfade
 
@@ -7,6 +8,8 @@ Ohne Parameter verwendet der Generator jetzt:
 - CSV: `data/test.csv`
 - SVG-Template: `templates/char_template.svg`
 - PDF-Ausgabe: `output/output.pdf`
+
+Eine vollständige Beispiel-CSV für das Character-Template liegt unter `data/char_template_example.csv`.
 
 Starten:
 
