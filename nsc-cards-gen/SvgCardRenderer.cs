@@ -469,7 +469,7 @@ public sealed class SvgCardRenderer
             XElement clone = new(templateGroup);
             clone.SetAttributeValue("display", null);
 
-            string extraTranslate = $"translate(0 {FormatNumber(lineHeight * index)})";
+            string extraTranslate = $"translate({FormatNumber((index%2)*2.5)} {FormatNumber(lineHeight * index)})";
             string? existingTransform = (string?)clone.Attribute("transform");
             clone.SetAttributeValue("transform", CombineTransforms(existingTransform, extraTranslate));
 
