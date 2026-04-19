@@ -46,7 +46,7 @@ Die folgende Liste beschreibt alle `data-field`-Werte, die aktuell in [char_temp
 | Beschreibung | `description` | Text | Beschreibung des Charakters. |
 | Talente | `edges` | Text | Talente / Edges des Charakters. |
 | Parade | `parry` | Zahl | Anzeigewert für Parade. |
-| Robustheit | `toughness` | Zahl oder kombinierter Text | Hauptwert für Robustheit. Das SVG enthält zusätzlich einen zweiten `tspan`, daher sind Formate wie `8` oder `8 (1)` denkbar, abhängig von eurer Ersetzungslogik. |
+| Robustheit | `toughness` | Zahl oder kombinierter Text | Hauptwert für Robustheit. Das SVG enthält zusätzlich einen zweiten `tspan`, Das Fromat ist hier `8,9`. |
 | Level | `level` | Zahl / kurzer Text | Sichtbarer Level-Wert im farbigen Kreis. |
 | Name | `name` | Text | Name des Charakters. |
 
