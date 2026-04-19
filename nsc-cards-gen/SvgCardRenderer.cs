@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using SkiaSharp;
 using Svg.Skia;
@@ -8,6 +9,9 @@ namespace SvgPdfGenerator;
 public sealed class SvgCardRenderer
 {
     private static readonly XNamespace SvgNs = "http://www.w3.org/2000/svg";
+    private static readonly Regex SkillDicePattern = new(
+        @"^(?<label>.*?)(?:\s+(?<dice>d(?:4|6|8|10|12)))?$",
+        RegexOptions.IgnoreCase | RegexOptions.Compiled);
     private static readonly HashSet<string> ShapeElementNames = new(StringComparer.OrdinalIgnoreCase)
     {
         "rect", "circle", "ellipse", "path", "polygon", "line", "polyline"
@@ -110,6 +114,9 @@ public sealed class SvgCardRenderer
         XElement templateClone,
         IReadOnlyDictionary<string, string> values)
     {
+        XElement? skillsTextElement = null;
+        XElement? skillsDiceElement = null;
+
         IEnumerable<XElement> elementsWithField = templateClone
             .DescendantsAndSelf()
             .Where(e => e.Attribute("data-field") != null);
@@ -122,11 +129,25 @@ public sealed class SvgCardRenderer
                 continue;
             }
 
+            if (string.Equals(fieldName, "skills_text", StringComparison.OrdinalIgnoreCase))
+            {
+                skillsTextElement = element;
+                continue;
+            }
+
+            if (string.Equals(fieldName, "skills_dices", StringComparison.OrdinalIgnoreCase))
+            {
+                skillsDiceElement = element;
+                continue;
+            }
+
             if (values.TryGetValue(fieldName, out string? value))
             {
                 ApplyFieldValue(element, value ?? string.Empty);
             }
         }
+
+        ApplySkillsField(skillsTextElement, skillsDiceElement, values);
     }
 
     private static void ApplyFieldValue(XElement element, string value)
@@ -220,24 +241,190 @@ public sealed class SvgCardRenderer
             return;
         }
 
-        List<XElement> tspans = element.Elements(SvgNs + "tspan").ToList();
-        if (tspans.Count == 0)
+        string[] lines = value.Replace("\r\n", "\n", StringComparison.Ordinal).Split('\n');
+        List<XElement> existingTspans = element.Elements(SvgNs + "tspan").ToList();
+
+        if (lines.Length <= 1 && existingTspans.Count == 0)
         {
             element.Value = value;
             return;
         }
 
-        string[] lines = value.Replace("\r\n", "\n", StringComparison.Ordinal).Split('\n');
+        string? textX = (string?)element.Attribute("x");
+        string? inheritedX = existingTspans
+            .Select(tspan => (string?)tspan.Attribute("x"))
+            .FirstOrDefault(x => !string.IsNullOrWhiteSpace(x));
+        string? lineX = textX ?? inheritedX;
 
-        for (int index = 0; index < tspans.Count; index++)
+        double lineHeight = GetLineHeight(element);
+
+        element.Nodes().Remove();
+
+        for (int index = 0; index < lines.Length; index++)
         {
-            tspans[index].Value = index < lines.Length ? lines[index] : string.Empty;
+            var tspan = new XElement(SvgNs + "tspan", lines[index]);
+
+            if (!string.IsNullOrWhiteSpace(lineX))
+            {
+                tspan.SetAttributeValue("x", lineX);
+            }
+
+            if (index > 0)
+            {
+                tspan.SetAttributeValue("dy", $"{lineHeight.ToString("0.###", System.Globalization.CultureInfo.InvariantCulture)}px");
+            }
+
+            element.Add(tspan);
+        }
+    }
+
+    private static double GetLineHeight(XElement textElement)
+    {
+        const double fallbackFontSize = 3.18;
+        const double lineHeightFactor = 1.2;
+
+        string? fontSizeText = (string?)textElement.Attribute("font-size");
+        if (string.IsNullOrWhiteSpace(fontSizeText))
+        {
+            return fallbackFontSize * lineHeightFactor;
         }
 
-        if (lines.Length > tspans.Count)
+        string normalized = fontSizeText.Replace("px", string.Empty, StringComparison.OrdinalIgnoreCase).Trim();
+        if (!double.TryParse(
+                normalized,
+                System.Globalization.NumberStyles.Float,
+                System.Globalization.CultureInfo.InvariantCulture,
+                out double fontSize))
         {
-            tspans[^1].Value = string.Join(Environment.NewLine, lines.Skip(tspans.Count - 1));
+            return fallbackFontSize * lineHeightFactor;
         }
+
+        return fontSize * lineHeightFactor;
+    }
+
+    private static void ApplySkillsField(
+        XElement? skillsTextElement,
+        XElement? skillsDiceElement,
+        IReadOnlyDictionary<string, string> values)
+    {
+        bool hasSkillsText = values.TryGetValue("skills_text", out string? rawSkillsText);
+        bool hasSkillsDice = values.TryGetValue("skills_dices", out string? fallbackSkillsDice);
+
+        if (!hasSkillsText && !hasSkillsDice)
+        {
+            return;
+        }
+
+        rawSkillsText ??= string.Empty;
+        List<SkillEntry> skillEntries = ParseSkillEntries(rawSkillsText);
+
+        if (skillsTextElement != null)
+        {
+            string displayText = skillEntries.Count > 0
+                ? string.Join('\n', skillEntries.Select(entry => entry.Label))
+                : rawSkillsText;
+
+            ApplyTextValue(skillsTextElement, displayText);
+        }
+
+        if (skillsDiceElement == null)
+        {
+            return;
+        }
+
+        if (skillEntries.Any(entry => !string.IsNullOrWhiteSpace(entry.Dice)))
+        {
+            double lineHeight = skillsTextElement != null ? GetLineHeight(skillsTextElement) : 3.18 * 1.2;
+            ApplySkillDiceIcons(skillsDiceElement, skillEntries, lineHeight);
+            return;
+        }
+
+        if (hasSkillsDice)
+        {
+            ApplyFieldValue(skillsDiceElement, fallbackSkillsDice ?? string.Empty);
+        }
+    }
+
+    private static List<SkillEntry> ParseSkillEntries(string rawSkillsText)
+    {
+        return rawSkillsText
+            .Split([',', '\r', '\n'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Select(ParseSkillEntry)
+            .Where(entry => !string.IsNullOrWhiteSpace(entry.Label))
+            .ToList();
+    }
+
+    private static SkillEntry ParseSkillEntry(string rawEntry)
+    {
+        Match match = SkillDicePattern.Match(rawEntry.Trim());
+        if (!match.Success)
+        {
+            return new SkillEntry(rawEntry.Trim(), null);
+        }
+
+        string label = match.Groups["label"].Value.Trim();
+        string? dice = match.Groups["dice"].Success
+            ? match.Groups["dice"].Value.ToLowerInvariant()
+            : null;
+
+        return new SkillEntry(label, dice);
+    }
+
+    private static void ApplySkillDiceIcons(
+        XElement skillsDiceElement,
+        IReadOnlyList<SkillEntry> skillEntries,
+        double lineHeight)
+    {
+        List<XElement> diceTemplates = skillsDiceElement
+            .Elements(SvgNs + "g")
+            .Where(child => child.Attribute("data-field") != null)
+            .ToList();
+
+        var diceTemplatesByField = diceTemplates.ToDictionary(
+            child => ((string?)child.Attribute("data-field") ?? string.Empty).ToLowerInvariant(),
+            child => child,
+            StringComparer.OrdinalIgnoreCase);
+
+        skillsDiceElement.Elements().Remove();
+        skillsDiceElement.SetAttributeValue("display", null);
+
+        for (int index = 0; index < skillEntries.Count; index++)
+        {
+            string? dice = skillEntries[index].Dice;
+            if (string.IsNullOrWhiteSpace(dice))
+            {
+                continue;
+            }
+
+            if (!diceTemplatesByField.TryGetValue(dice, out XElement? templateGroup))
+            {
+                continue;
+            }
+
+            XElement clone = new(templateGroup);
+            clone.SetAttributeValue("display", null);
+
+            string extraTranslate = $"translate(0 {FormatNumber(lineHeight * index)})";
+            string? existingTransform = (string?)clone.Attribute("transform");
+            clone.SetAttributeValue("transform", CombineTransforms(existingTransform, extraTranslate));
+
+            skillsDiceElement.Add(clone);
+        }
+    }
+
+    private static string CombineTransforms(string? first, string second)
+    {
+        if (string.IsNullOrWhiteSpace(first))
+        {
+            return second;
+        }
+
+        return $"{first} {second}";
+    }
+
+    private static string FormatNumber(double value)
+    {
+        return value.ToString("0.###", System.Globalization.CultureInfo.InvariantCulture);
     }
 
     private static bool TryParseBooleanLike(string value, out bool result)
@@ -287,6 +474,8 @@ public sealed class SvgCardRenderer
         root.SetAttributeValue("width", parts[2]);
         root.SetAttributeValue("height", parts[3]);
     }
+
+    private sealed record SkillEntry(string Label, string? Dice);
 
     private static byte[] RenderSvgToPng(string svgContent, int widthPx, int heightPx)
     {
