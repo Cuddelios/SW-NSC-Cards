@@ -110,44 +110,67 @@ public sealed class SvgCardRenderer
                 StringComparison.Ordinal));
     }
 
+
+    public enum TemplateFieldType
+    {
+        skills_text,
+        skills_dices,
+        description,
+        edges,
+    }
+
     private static void FillTemplateFields(
         XElement templateClone,
         IReadOnlyDictionary<string, string> values)
     {
-        XElement? skillsTextElement = null;
-        XElement? skillsDiceElement = null;
-
         IEnumerable<XElement> elementsWithField = templateClone
             .DescendantsAndSelf()
             .Where(e => e.Attribute("data-field") != null);
 
+        // Sondertypen zuerst ermitteln, damit die Daten bei den Elementen bereits verfügbar sind, wenn die Felder angewendet werden
+        List<SkillEntry> skillEntries = ParseSkillEntries(values.TryGetValue(nameof(TemplateFieldType.skills_text), out string? value) ? value : string.Empty);
+        double skillsLineHeight = 0;
+
         foreach (XElement element in elementsWithField)
         {
             string? fieldName = (string?)element.Attribute("data-field");
-            if (string.IsNullOrWhiteSpace(fieldName))
+            if (string.IsNullOrWhiteSpace(fieldName) || !values.TryGetValue(fieldName, out value))
             {
                 continue;
             }
 
-            if (string.Equals(fieldName, "skills_text", StringComparison.OrdinalIgnoreCase))
+            if(Enum.TryParse<TemplateFieldType>(fieldName, true, out TemplateFieldType fieldType))
             {
-                skillsTextElement = element;
-                continue;
+                switch (fieldType)
+                {
+                    case TemplateFieldType.skills_text:
+                        var displayText = skillEntries.Count > 0
+                                    ? string.Join('\n', skillEntries.Select(entry => entry.Label))
+                                    : value ?? string.Empty;
+                        skillsLineHeight = GetLineHeight(element);
+                        ApplyTextValue(element, displayText);
+                        continue;
+
+                    case TemplateFieldType.skills_dices:
+                        ApplySkillDiceIcons(element, skillEntries, skillsLineHeight);
+                        continue;
+
+                    case TemplateFieldType.description:
+                        displayText = string.Join('\n', SplitTextLength(value, 29));
+                        ApplyTextValue(element, displayText);
+                        continue;
+    
+                    case TemplateFieldType.edges:  
+                        displayText = string.Join('\n', SplitTextParts(value)); 
+                        ApplyTextValue(element, displayText);
+                        continue;
+                    default:
+                        break;
+                }
             }
 
-            if (string.Equals(fieldName, "skills_dices", StringComparison.OrdinalIgnoreCase))
-            {
-                skillsDiceElement = element;
-                continue;
-            }
-
-            if (values.TryGetValue(fieldName, out string? value))
-            {
-                ApplyFieldValue(element, value ?? string.Empty);
-            }
+            ApplyFieldValue(element, value ?? string.Empty);
         }
-
-        ApplySkillsField(skillsTextElement, skillsDiceElement, values);
     }
 
     private static void ApplyFieldValue(XElement element, string value)
@@ -242,7 +265,7 @@ public sealed class SvgCardRenderer
         }
 
         List<XElement> existingTspans = element.Elements(SvgNs + "tspan").ToList();
-        if (existingTspans.Count > 0)
+        if (existingTspans.Count > 1)
         {
             string[] parts = SplitTextParts(value);
 
@@ -326,46 +349,64 @@ public sealed class SvgCardRenderer
             .Split([',', '\n'], StringSplitOptions.TrimEntries);
     }
 
-    private static void ApplySkillsField(
-        XElement? skillsTextElement,
-        XElement? skillsDiceElement,
-        IReadOnlyDictionary<string, string> values)
+    private static IEnumerable<string> SplitTextLength(string value, int maxLength)
     {
-        bool hasSkillsText = values.TryGetValue("skills_text", out string? rawSkillsText);
-        bool hasSkillsDice = values.TryGetValue("skills_dices", out string? fallbackSkillsDice);
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            yield break;
+        }
 
-        if (!hasSkillsText && !hasSkillsDice)
+        if (maxLength <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(maxLength));
+        }
+
+        string remaining = value.Trim();
+        while (remaining.Length > maxLength)
+        {
+            int splitIndex = remaining.LastIndexOf(' ', maxLength);
+            if (splitIndex <= 0)
+            {
+                splitIndex = maxLength;
+            }
+
+            string line = remaining[..splitIndex].Trim();
+            if (line.Length > 0)
+            {
+                yield return line;
+            }
+
+            remaining = remaining[splitIndex..].TrimStart();
+        }
+
+        if (remaining.Length > 0)
+        {
+            yield return remaining;
+        }
+
+    }
+
+
+    private static void ApplySkillsField(
+        XElement? skillsTextElement,       
+        string skillsText)
+    {
+        bool hasSkillsText = !string.IsNullOrEmpty(skillsText);
+
+        if (!hasSkillsText)
         {
             return;
         }
 
-        rawSkillsText ??= string.Empty;
-        List<SkillEntry> skillEntries = ParseSkillEntries(rawSkillsText);
+        List<SkillEntry> skillEntries = ParseSkillEntries(skillsText);
 
         if (skillsTextElement != null)
         {
             string displayText = skillEntries.Count > 0
                 ? string.Join('\n', skillEntries.Select(entry => entry.Label))
-                : rawSkillsText;
+                : skillsText;
 
             ApplyTextValue(skillsTextElement, displayText);
-        }
-
-        if (skillsDiceElement == null)
-        {
-            return;
-        }
-
-        if (skillEntries.Any(entry => !string.IsNullOrWhiteSpace(entry.Dice)))
-        {
-            double lineHeight = skillsTextElement != null ? GetLineHeight(skillsTextElement) : 3.18 * 1.2;
-            ApplySkillDiceIcons(skillsDiceElement, skillEntries, lineHeight);
-            return;
-        }
-
-        if (hasSkillsDice)
-        {
-            ApplyFieldValue(skillsDiceElement, fallbackSkillsDice ?? string.Empty);
         }
     }
 
