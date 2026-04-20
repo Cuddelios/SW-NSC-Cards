@@ -28,7 +28,8 @@ var layoutOptions = new PdfLayoutOptions
     GapXPt = 10,
     GapYPt = 10,
     CardWidthPt = usesCharacterTemplate ? MmToPt(64) : 220,
-    CardHeightPt = usesCharacterTemplate ? MmToPt(96) : 90
+    CardHeightPt = usesCharacterTemplate ? MmToPt(96) : 90,
+    RenderDpi = 300
 };
 
 var pdfWriter = new PdfLayoutWriter();

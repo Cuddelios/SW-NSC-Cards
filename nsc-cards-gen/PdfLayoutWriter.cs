@@ -45,6 +45,7 @@ public sealed class PdfLayoutWriter
         {
             currentPage = pdf.AddPage();
             currentPage.Size = PdfSharpCore.PageSize.A4;
+            currentPage.Orientation = PdfSharpCore.PageOrientation.Landscape;
 
             graphics = XGraphics.FromPdfPage(currentPage);
 
@@ -77,8 +78,8 @@ public sealed class PdfLayoutWriter
             double x = layoutOptions.MarginPt + column * (layoutOptions.CardWidthPt + layoutOptions.GapXPt);
             double y = layoutOptions.MarginPt + row * (layoutOptions.CardHeightPt + layoutOptions.GapYPt);
 
-            int renderWidthPx = (int)Math.Round(layoutOptions.CardWidthPt * 2);
-            int renderHeightPx = (int)Math.Round(layoutOptions.CardHeightPt * 2);
+            int renderWidthPx = ConvertPointsToPixels(layoutOptions.CardWidthPt, layoutOptions.RenderDpi);
+            int renderHeightPx = ConvertPointsToPixels(layoutOptions.CardHeightPt, layoutOptions.RenderDpi);
 
             byte[] pngBytes = cardRenderer.RenderCardAsPng(
                 rows[index],
@@ -103,5 +104,21 @@ public sealed class PdfLayoutWriter
         }
 
         pdf.Save(outputPdfPath);
+    }
+
+    private static int ConvertPointsToPixels(double points, double dpi)
+    {
+        if (points <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(points));
+        }
+
+        if (dpi <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(dpi));
+        }
+
+        double inches = points / 72.0;
+        return Math.Max(1, (int)Math.Ceiling(inches * dpi));
     }
 }

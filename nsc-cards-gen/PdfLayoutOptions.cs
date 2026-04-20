@@ -7,4 +7,5 @@ public sealed class PdfLayoutOptions
     public double GapYPt { get; set; } = 12;
     public double CardWidthPt { get; set; } = 220;
     public double CardHeightPt { get; set; } = 90;
+    public double RenderDpi { get; set; } = 300;
 }

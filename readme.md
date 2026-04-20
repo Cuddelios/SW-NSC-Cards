@@ -30,7 +30,7 @@ dotnet run --project nsc-cards-gen
 Optional können CSV, Template und Ausgabedatei als Parameter übergeben werden:
 
 ```powershell
-dotnet run --project nsc-cards-gen -- data/test.csv templates/char_template.svg output/output.pdf
+dotnet run --project nsc-cards-gen -- data/char_template_example.csv templates/char_template.svg output/output.pdf
 ```
 
 Für `char_template.svg` berücksichtigt der Code zusätzlich:
