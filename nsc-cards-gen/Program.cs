@@ -35,6 +35,31 @@ var layoutOptions = new PdfLayoutOptions
 var pdfWriter = new PdfLayoutWriter();
 pdfWriter.WriteCards(outputPdfPath, rows, cardRenderer, layoutOptions);
 
+var meinspielFrontOutputPath = BuildMeinspielFrontOutputPath(outputPdfPath);
+var meinspielLayoutOptions = new PdfLayoutOptions
+{
+    MarginPt = 0,
+    GapXPt = 0,
+    GapYPt = 0,
+    CardWidthPt = MmToPt(65),
+    CardHeightPt = MmToPt(97),
+    RenderDpi = 300,
+    PageWidthPt = MmToPt(65),
+    PageHeightPt = MmToPt(97)
+};
+
+pdfWriter.WriteCards(meinspielFrontOutputPath, rows, cardRenderer, meinspielLayoutOptions);
+
 Console.WriteLine($"PDF erzeugt: {Path.GetFullPath(outputPdfPath)}");
+Console.WriteLine($"MeinSpiel Front-PDF erzeugt: {Path.GetFullPath(meinspielFrontOutputPath)}");
 
 static double MmToPt(double millimeters) => millimeters * 72.0 / 25.4;
+
+static string BuildMeinspielFrontOutputPath(string outputPdfPath)
+{
+    string fullPath = Path.GetFullPath(outputPdfPath);
+    string directory = Path.GetDirectoryName(fullPath) ?? Environment.CurrentDirectory;
+    string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fullPath);
+
+    return Path.Combine(directory, $"{fileNameWithoutExtension}.meinspiel-front.pdf");
+}

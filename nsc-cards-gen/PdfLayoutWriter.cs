@@ -44,8 +44,7 @@ public sealed class PdfLayoutWriter
         void StartNewPage()
         {
             currentPage = pdf.AddPage();
-            currentPage.Size = PdfSharpCore.PageSize.A4;
-            currentPage.Orientation = PdfSharpCore.PageOrientation.Landscape;
+            ApplyPageSize(currentPage, layoutOptions);
 
             graphics = XGraphics.FromPdfPage(currentPage);
 
@@ -104,6 +103,19 @@ public sealed class PdfLayoutWriter
         }
 
         pdf.Save(outputPdfPath);
+    }
+
+    private static void ApplyPageSize(PdfPage page, PdfLayoutOptions layoutOptions)
+    {
+        if (layoutOptions.PageWidthPt is > 0 && layoutOptions.PageHeightPt is > 0)
+        {
+            page.Width = PdfSharpCore.Drawing.XUnit.FromPoint(layoutOptions.PageWidthPt.Value);
+            page.Height = PdfSharpCore.Drawing.XUnit.FromPoint(layoutOptions.PageHeightPt.Value);
+            return;
+        }
+
+        page.Size = PdfSharpCore.PageSize.A4;
+        page.Orientation = PdfSharpCore.PageOrientation.Landscape;
     }
 
     private static int ConvertPointsToPixels(double points, double dpi)

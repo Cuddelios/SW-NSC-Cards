@@ -33,6 +33,25 @@ Optional können CSV, Template und Ausgabedatei als Parameter übergeben werden:
 dotnet run --project nsc-cards-gen -- data/char_template_example.csv templates/char_template.svg output/output.pdf
 ```
 
+Zusätzlich zur normalen A4-Ausgabe erzeugt der Generator automatisch ein MeinSpiel-kompatibles Fronten-PDF:
+
+- Standard-Ausgabe: `output/output.pdf`
+- MeinSpiel Front-PDF: `output/output.meinspiel-front.pdf`
+
+Das MeinSpiel-PDF ist für Spielkarten im Format `59 x 91 mm` aufbereitet und folgt der Dokumentgröße `65 x 97 mm` mit 3 mm Beschnitt, also:
+
+- 1 Karte pro PDF-Seite
+- Seitengröße `65 x 97 mm`
+- 300 DPI Rasterung
+- ohne Druckmarken
+
+Hinweis: Für den Upload bei MeinSpiel werden in der Regel zwei Dateien benötigt:
+
+- ein PDF mit allen Vorderseiten
+- ein PDF mit allen Rückseiten
+
+Aktuell erzeugt das Projekt automatisch das Fronten-PDF. Falls du auch die Rückseiten automatisiert generieren möchtest, braucht das Projekt dafür zusätzlich eine Rückseiten-Vorlage.
+
 Für `char_template.svg` berücksichtigt der Code zusätzlich:
 
 - Textfelder über `data-field`
