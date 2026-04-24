@@ -1,5 +1,7 @@
+using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml;
 using System.Xml.Linq;
 using SkiaSharp;
 using Svg.Skia;
@@ -123,13 +125,22 @@ public sealed class SvgCardRenderer
         XElement templateClone,
         IReadOnlyDictionary<string, string> values)
     {
-        IEnumerable<XElement> elementsWithField = templateClone
+        List<XElement> elementsWithField = templateClone
             .DescendantsAndSelf()
-            .Where(e => e.Attribute("data-field") != null);
+            .Where(e => e.Attribute("data-field") != null)
+            .ToList();
 
         // Sondertypen zuerst ermitteln, damit die Daten bei den Elementen bereits verfügbar sind, wenn die Felder angewendet werden
         List<SkillEntry> skillEntries = ParseSkillEntries(values.TryGetValue(nameof(TemplateFieldType.skills_text), out string? value) ? value : string.Empty);
-        double skillsLineHeight = 0;
+        double skillsLineHeight = 7.5; // Fallback-Wert, wird später ggf. überschrieben
+
+        skillsLineHeight = elementsWithField
+            .FirstOrDefault(e => string.Equals(
+                (string?)e.Attribute("data-field"),
+                nameof(TemplateFieldType.skills_text),
+                StringComparison.OrdinalIgnoreCase)) is { } skillsTextElement
+            ? GetLineHeight(skillsTextElement)
+            : skillsLineHeight;
 
         foreach (XElement element in elementsWithField)
         {
@@ -147,7 +158,7 @@ public sealed class SvgCardRenderer
                         var displayText = skillEntries.Count > 0
                                     ? string.Join('\n', skillEntries.Select(entry => entry.Label))
                                     : value ?? string.Empty;
-                        skillsLineHeight = GetLineHeight(element);
+                        //skillsLineHeight = GetLineHeight(element);
                         ApplyTextValue(element, displayText);
                         continue;
 
@@ -440,6 +451,8 @@ public sealed class SvgCardRenderer
         IReadOnlyList<SkillEntry> skillEntries,
         double lineHeight)
     {
+        double localLineHeight = lineHeight / GetTransformScaleY((string?)skillsDiceElement.Attribute("transform"));
+
         List<XElement> diceTemplates = skillsDiceElement
             .Elements(SvgNs + "g")
             .Where(child => child.Attribute("data-field") != null)
@@ -469,12 +482,91 @@ public sealed class SvgCardRenderer
             XElement clone = new(templateGroup);
             clone.SetAttributeValue("display", null);
 
-            string extraTranslate = $"translate({FormatNumber((index%2)*2.5)} {FormatNumber(lineHeight * index)})";
             string? existingTransform = (string?)clone.Attribute("transform");
-            clone.SetAttributeValue("transform", CombineTransforms(existingTransform, extraTranslate));
+            clone.SetAttributeValue("transform", CombineTransforms(existingTransform, localLineHeight * index));
 
             skillsDiceElement.Add(clone);
         }
+    }
+
+    private static string CombineTransforms(string? existingTransform, double dy)
+    {
+        if (string.IsNullOrWhiteSpace(existingTransform))
+        {
+            return $"translate(0 {FormatNumber(dy)})";
+        }
+
+        if (TryParseSingleTranslate(existingTransform, out double x, out double y))
+        {
+            return $"translate({FormatNumber(x)} {FormatNumber(y + dy)})";
+        }
+
+        string extraTranslate = $"translate(0 {FormatNumber(dy)})";
+        return CombineTransforms(existingTransform, extraTranslate);
+    }
+
+    private static bool TryParseSingleTranslate(string transform, out double x, out double y)
+    {
+        x = 0;
+        y = 0;
+
+        Match match = Regex.Match(
+            transform.Trim(),
+            @"^translate\(\s*(?<x>[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?)\s*(?:(?:,|\s)\s*(?<y>[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?))?\s*\)$",
+            RegexOptions.IgnoreCase);
+
+        if (!match.Success)
+        {
+            return false;
+        }
+
+        if (!double.TryParse(match.Groups["x"].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out x))
+        {
+            return false;
+        }
+
+        return !match.Groups["y"].Success
+            || double.TryParse(match.Groups["y"].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out y);
+    }
+
+    private static double GetTransformScaleY(string? transform)
+    {
+        if (string.IsNullOrWhiteSpace(transform))
+        {
+            return 1;
+        }
+
+        Match matrix = Regex.Match(
+            transform,
+            @"matrix\(\s*(?<a>[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?)\s*(?:,|\s)\s*(?<b>[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?)\s*(?:,|\s)\s*(?<c>[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?)\s*(?:,|\s)\s*(?<d>[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?)",
+            RegexOptions.IgnoreCase);
+
+        if (matrix.Success
+            && double.TryParse(matrix.Groups["c"].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double c)
+            && double.TryParse(matrix.Groups["d"].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double d))
+        {
+            double scaleY = Math.Sqrt((c * c) + (d * d));
+            return scaleY > 0 ? scaleY : 1;
+        }
+
+        Match scale = Regex.Match(
+            transform,
+            @"scale\(\s*(?<x>[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?)(?:\s*(?:,|\s)\s*(?<y>[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?))?",
+            RegexOptions.IgnoreCase);
+
+        if (scale.Success)
+        {
+            string value = scale.Groups["y"].Success
+                ? scale.Groups["y"].Value
+                : scale.Groups["x"].Value;
+
+            if (double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out double scaleY) && scaleY != 0)
+            {
+                return Math.Abs(scaleY);
+            }
+        }
+
+        return 1;
     }
 
     private static string CombineTransforms(string? first, string second)

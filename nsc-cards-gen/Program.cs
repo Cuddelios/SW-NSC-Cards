@@ -2,12 +2,14 @@
 using SvgPdfGenerator.Models;
 
 string csvPath = args.Length > 0 ? args[0] : Path.Combine("data", "char_template_example.csv");
-string svgTemplatePath = args.Length > 1 ? args[1] : Path.Combine("templates", "char_template.svg");
+//string svgTemplatePath = args.Length > 1 ? args[1] : Path.Combine("templates", "char_template.svg");
+string svgTemplatePath = args.Length > 1 ? args[1] : Path.Combine("templates", "CharTemplate_Dice_opt.svg");
 string outputPdfPath = args.Length > 2 ? args[2] : Path.Combine("output", "output.pdf");
-bool usesCharacterTemplate = string.Equals(
-    Path.GetFileName(svgTemplatePath),
-    "char_template.svg",
-    StringComparison.OrdinalIgnoreCase);
+bool usesCharacterTemplate = true;
+// bool usesCharacterTemplate = string.Equals(
+//Path.GetFileName(svgTemplatePath),
+//    "char_template.svg",
+//    StringComparison.OrdinalIgnoreCase);
 
 var csvReader = new CsvReaderService();
 List<Dictionary<string, string>> rows = csvReader.Read(csvPath, ';');
