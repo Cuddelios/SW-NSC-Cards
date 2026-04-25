@@ -68,6 +68,8 @@ public sealed class SvgCardRenderer
             throw new ArgumentOutOfRangeException(nameof(targetHeightPx));
         }
 
+        Console.WriteLine($"Creating SVG of {(values.TryGetValue("name", out var name)?name:"<unknown>")}");
+
         string svgContent = BuildFilledSvg(values);
         return RenderSvgToPng(svgContent, targetWidthPx, targetHeightPx);
     }
@@ -119,6 +121,7 @@ public sealed class SvgCardRenderer
         skills_dices,
         description,
         edges,
+        weapons
     }
 
     private static void FillTemplateFields(
@@ -145,7 +148,7 @@ public sealed class SvgCardRenderer
         foreach (XElement element in elementsWithField)
         {
             string? fieldName = (string?)element.Attribute("data-field");
-            if (string.IsNullOrWhiteSpace(fieldName) || !values.TryGetValue(fieldName, out value))
+            if (string.IsNullOrWhiteSpace(fieldName))
             {
                 continue;
             }
@@ -167,20 +170,30 @@ public sealed class SvgCardRenderer
                         continue;
 
                     case TemplateFieldType.description:
-                        displayText = string.Join('\n', SplitTextLength(value, 29));
-                        ApplyTextValue(element, displayText);
+                        if(values.TryGetValue(fieldName, out value))
+                        {
+                            displayText = string.Join('\n', SplitTextLength(value, 29));
+                            ApplyTextValue(element, displayText);
+                        }
                         continue;
     
                     case TemplateFieldType.edges:  
-                        displayText = string.Join('\n', SplitTextParts(value)); 
-                        ApplyTextValue(element, displayText);
+                    case TemplateFieldType.weapons:  
+                        if(values.TryGetValue(fieldName, out value))
+                        {
+                            displayText = string.Join('\n', SplitTextParts(value)); 
+                            ApplyTextValue(element, displayText);
+                        }
                         continue;
                     default:
                         break;
                 }
             }
 
-            ApplyFieldValue(element, value ?? string.Empty);
+            if(values.TryGetValue(fieldName, out value))
+            {
+                ApplyFieldValue(element, value ?? string.Empty);
+            }
         }
     }
 

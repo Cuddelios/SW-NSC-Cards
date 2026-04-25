@@ -12,9 +12,10 @@ bool usesCharacterTemplate = true;
 //    StringComparison.OrdinalIgnoreCase);
 
 var csvReader = new CsvReaderService();
-List<Dictionary<string, string>> rows = csvReader.Read(csvPath, ';');
+List<Dictionary<string, string>> rows = csvReader.Read(csvPath, ',');
+List<Dictionary<string, string>> cards = ExpandRowsByCount(rows, "count");
 
-if (rows.Count == 0)
+if (cards.Count == 0)
 {
     Console.WriteLine("Die CSV enthält keine Daten.");
     return;
@@ -35,7 +36,7 @@ var layoutOptions = new PdfLayoutOptions
 };
 
 var pdfWriter = new PdfLayoutWriter();
-pdfWriter.WriteCards(outputPdfPath, rows, cardRenderer, layoutOptions);
+pdfWriter.WriteCards(outputPdfPath, cards, cardRenderer, layoutOptions);
 
 var meinspielFrontOutputPath = BuildMeinspielFrontOutputPath(outputPdfPath);
 var meinspielLayoutOptions = new PdfLayoutOptions
@@ -50,12 +51,56 @@ var meinspielLayoutOptions = new PdfLayoutOptions
     PageHeightPt = MmToPt(97)
 };
 
-pdfWriter.WriteCards(meinspielFrontOutputPath, rows, cardRenderer, meinspielLayoutOptions);
+pdfWriter.WriteCards(meinspielFrontOutputPath, cards, cardRenderer, meinspielLayoutOptions);
 
 Console.WriteLine($"PDF erzeugt: {Path.GetFullPath(outputPdfPath)}");
 Console.WriteLine($"MeinSpiel Front-PDF erzeugt: {Path.GetFullPath(meinspielFrontOutputPath)}");
 
 static double MmToPt(double millimeters) => millimeters * 72.0 / 25.4;
+
+static List<Dictionary<string, string>> ExpandRowsByCount(
+    IReadOnlyList<Dictionary<string, string>> rows,
+    string countFieldName)
+{
+    var expandedRows = new List<Dictionary<string, string>>();
+
+    foreach (Dictionary<string, string> row in rows)
+    {
+        int count = GetCardCount(row, countFieldName);
+
+        for (int copyIndex = 0; copyIndex < count; copyIndex++)
+        {
+            expandedRows.Add(row);
+        }
+    }
+
+    return expandedRows;
+}
+
+static int GetCardCount(
+    IReadOnlyDictionary<string, string> row,
+    string countFieldName)
+{
+    if (!row.TryGetValue(countFieldName, out string? rawCount)
+        || string.IsNullOrWhiteSpace(rawCount))
+    {
+        return 1;
+    }
+
+    if (!int.TryParse(rawCount, out int count))
+    {
+        throw new InvalidOperationException(
+            $"Der Wert in der Spalte '{countFieldName}' muss eine ganze Zahl sein: '{rawCount}'.");
+    }
+
+    if (count < 0)
+    {
+        throw new InvalidOperationException(
+            $"Der Wert in der Spalte '{countFieldName}' darf nicht negativ sein: '{rawCount}'.");
+    }
+
+    return count;
+}
 
 static string BuildMeinspielFrontOutputPath(string outputPdfPath)
 {
