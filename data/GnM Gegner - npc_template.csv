@@ -1,82 +1,82 @@
-card_back_color,level_color,wc_wound,skills_text,description,edges,weapons,parry,toughness,level,name,agility_dices,vigor_dices,st_dices,smarts_dices,spirit_dices,count
-#f9cb9c,#e69138,TRUE,"Zaubern d10, Wissen(Magie) d10, Einschüchtern d8",Bleibt weit hinter Verbündeten und kontrolliert das Schlachtfeld mit Flächenzaubern.,"Feuerball (2W6), Teleport, Bann",Ritualstab St+W4,5,"5,7",4,Erzmagier,d6,d6,d4,d10,d10,1
-#f69090,#cc0000,TRUE,"Kämpfen d10, Einschüchtern d10, Athletik d8",Stürmt direkt auf den stärksten Gegner zu und versucht ihn im Duell zu besiegen.,"Berserker, Bedrohlich,",Zweihandaxt St+W10 PB2,6,"7,11",5,Halbork-Kriegsherr,d8,d10,d10,d6,d8,1
-#e283cf,#c837ab,TRUE,"Kämpfen d10, Wahrnehmung d8",Springt zwischen Zielen und nutzt Atemattacken gegen Gruppen.,"Groß,Feueratem (2W6)","Klauen St+W6, Biss St+W8",7,"8,13",6,Chimärenkönig,d10,d10,d10,d6,d8,1
-#f69090,#cc0000,TRUE,"Heimlichkeit d10, Kämpfen d10, Athletik d8",Greift isolierte Gegner an und verschwindet danach wieder.,"Beidhändiger Kampf, Schnell,Unsichtbarkeit","Dolch St+W4, Dolch St+W4",7,"5,6",5,Schattenassassine,d10,d6,d6,d8,d8,1
-#e283cf,#c837ab,TRUE,Kämpfen d10,Zerstört Deckung und zwingt Gegner in offenen Kampf.,"Riesig,Erdbeben (Chaos)",Faust St+W10,7,"10,16",6,Arkankonstrukt-Titan,d4,d12,d12,d4,d8,1
-#f9cb9c,#e69138,TRUE,"Schießen d12, Heimlichkeit d8, Athletik d8",Bleibt ständig in Bewegung und schießt auf mehrere Ziele.,"Beidhändiger Fernkampf, Schnellziehen,","Revolver 2W6, Revolver 2W6",3,"6,8",4,Halb-Goblin Revolverheld,d10,d8,d6,d6,d8,1
-#f9cb9c,#e69138,TRUE,"Zaubern d10, Heimlichkeit d10",Kontrolliert Gegner mit Magie statt sie direkt zu töten.,"Fliegen,Schlaf, Verwirren, Illusion",Feenstab St+W4/2,3,"5,5",4,Pixie-Königin,d10,d6,d4,d10,d10,1
-#f69090,#cc0000,TRUE,"Kämpfen d10, Schießen d8, Einschüchtern d8",Greift aggressiv an und motiviert Verbündete.,"Anführer,","Säbel St+W6, Pistole 2W6",7,"7,10",5,Söldnerkapitän,d8,d8,d8,d6,d6,1
-#f9cb9c,#e69138,TRUE,"Kämpfen d10, Athletik d8",Greift aggressiv den nächsten Gegner an.,"Rundumschlag,",Zweihandstreitkolben St+W10,6,"7,9",4,Halbork-Arena-Champion,d8,d8,d10,d6,d6,1
-#9fc5e8,#3d85c6,FALSE,"Zaubern d8, Schießen d8",Kombiniert Magie und Schüsse.,"Blitz (2W6), Telekinese",Pistole 2W6,3,"5,6",2,Pistolenmagier,d6,d6,d4,d8,d8,1
-#f9cb9c,#e69138,TRUE,"Kämpfen d8, Wissen(Runen) d8",Unterstützt Verbündete mit Runen.,"Runenmagie,Eigenschaft erhöhen, Waffe verbessern",Runenhammer St+W6,5,"5,8",4,Runenschmied,d6,d8,d8,d8,d6,1
-#9fc5e8,#3d85c6,FALSE,"Zaubern d10, Heimlichkeit d6",Schwächt Gegner mit Furcht.,"Dunkelheit, Angst",Schattenstab St+W4,4,"5,6",2,Schattenhexer,d6,d6,d4,d10,d8,1
-#f9cb9c,#e69138,TRUE,"Zaubern d8, Überleben d8, Kämpfen d8",Beschwört Tiere und bleibt defensiv.,"Tier beschwören, Tierfreund",Speer St+W6,6,"5,7",4,Bestienrufer,d6,d6,d6,d8,d8,1
-#f9cb9c,#e69138,TRUE,"Schießen d10, Heimlichkeit d8, Kämpfen d6",Bleibt versteckt und schießt gezielt.,"Meisterschütze,",Präzisionsgewehr 2W10,5,"5,9",4,Halb-Goblin Scharfschütze,d8,d6,d6,d6,d6,1
-#f9cb9c,#e69138,TRUE,"Überreden d10, Einschüchtern d8, Kämpfen d6",Treibt seine Kultisten zum Angriff an.,"Anführer,Furcht",Dolch St+W4,5,"6,7",4,Kultführer,d6,d6,d4,d8,d8,1
-#f9cb9c,#e69138,TRUE,"Kämpfen d8, Einschüchtern d8, Schießen d8",Greift selbst an und nutzt Schläger.,,"Schlagring St+W4, Pistole 2W6",6,"6,8",4,Straßenkönig,d8,d8,d6,d6,d6,1
-#f9cb9c,#e69138,TRUE,"Zaubern d10, Wissen(Magie) d8, Kämpfen d6",Kämpft offensiv mit Magie.,Feuerstrahl (2W6),Stab St+W4,6,"5,7",4,Kriegsmagier,d6,d6,d4,d10,d8,1
-#e283cf,#c837ab,TRUE,"Kampfen d8, Einschüchtern d6","Greift Frontal an, versucht Gegner mit Flammen zu überrennen.","Riesig,Schadensfeld 2W6",Flammenfaust St+W10,6,"10,14",6,Feuergolem,d6,d10,d12,d4,d6,1
-#e283cf,#c837ab,TRUE,"Kampfen d8, Einschüchtern d6","Sucht Gegner mit hoher Rüstung, schlägt um sich.","Riesig, Rundumschlag,",Klingenhand St+W10 PB2,6,"10,16",6,Eisengolem,d6,d10,d12,d4,d6,1
-#e283cf,#c837ab,TRUE,"Kampfen d8, Einschüchtern d6","Treffer mit Steigerung wirken Betäuben, geht von Ziel zu Ziel.","Riesig,Betäuben",Faust St+W10,6,"10,16",6,Steingolem,d6,d10,d12,d4,d6,1
-#f9cb9c,#e69138,TRUE,"Kämpfen d8, Schießen d6, Wahrnehmung d6",Arbeitet im Team und konzentriert Feuer auf ein Ziel.,,"Sturmrevolver 2W6+1, Kampfmesser St+W4",6,"6,9",4,Elite-Söldner,d6,d8,d8,d6,d6,1
-#f9cb9c,#e69138,TRUE,"Kämpfen d8, Schießen d6, Einschüchtern d6",Bleibt ruhig unter Druck und hält die Frontlinie.,,"Säbel St+W6, Pistole 2W6",6,"6,9",4,Veteranen-Söldner,d6,d8,d8,d6,d6,1
-#ffe599,#f1c232,FALSE,"Kämpfen d8, Einschüchtern d6",Stürmt direkt in den Nahkampf.,,Keule St+W4,6,"7,9",3,Halbork-Schläger,d6,d8,d10,d4,d6,3
-#9fc5e8,#3d85c6,FALSE,"Kämpfen d6, Wahrnehmung d6",Verteidigt Positionen und blockiert Durchgänge.,,Speer St+W6,7,"6,8",2,Halbork-Wache,d6,d8,d8,d4,d6,3
-#9fc5e8,#3d85c6,FALSE,"Schießen d8, Heimlichkeit d6, Kämpfen d6",Schießt aus kurzer Distanz und versteckt sich danach.,,"Schrotflinte 1-3W6, Messer St+W4",5,"5,7",2,Goblin-Schrotflintenschütze,d8,d6,d4,d6,d6,3
-#9fc5e8,#3d85c6,FALSE,"Schießen d8, Heimlichkeit d8",Bleibt versteckt und sucht gezielte Treffer.,"Meisterschütze,",Gewehr 2W8,3,"5,7",2,Goblin-Scharfschütze,d8,d6,d4,d6,d6,1
-#9fc5e8,#3d85c6,FALSE,"Kämpfen d8, Einschüchtern d6",Greift ohne Rücksicht auf Verluste an.,,Dolch St+W4,6,"6,7",2,Kultfanatiker,d6,d6,d6,d4,d8,1
-#9fc5e8,#3d85c6,FALSE,"Kämpfen d6, Wahrnehmung d6",Beschützt den Kultführer.,,Speer St+W6,5,"6,8",2,Kultwache,d6,d8,d6,d4,d6,1
-#9fc5e8,#3d85c6,FALSE,"Schießen d8, Heimlichkeit d6, Kämpfen d4",Schießt und wechselt Deckung.,"Schnellfeuer,","Revolver 2W6, Messer St+W4",4,"5,7",2,Pistolenbandit,d8,d6,d6,d4,d6,2
-#9fc5e8,#3d85c6,FALSE,"Kämpfen d8, Einschüchtern d6",Greift in Gruppen an.,,"Keule St+W4, Pistole 2W6",6,"5,6",2,Straßenräuber,d6,d6,d6,d4,d6,3
-#ffe599,#f1c232,FALSE,"Kämpfen d8, Athletik d6",Kämpft diszipliniert und defensiv.,,Speer St+W6,8,"6,8",3,Arena-Kämpfer,d6,d8,d8,d4,d6,1
-#9fc5e8,#3d85c6,FALSE,Kämpfen d8,Versucht Gegner schnell auszuschalten.,,Zweihandaxt St+W10 PB2,6,"7,8",2,Arena-Schlächter,d6,d8,d10,d4,d6,1
-#ffe599,#f1c232,FALSE,Kämpfen d8,Bewacht magische Orte.,"Konstrukt,",Faust St+W8,6,"9,12",3,Kleiner Stein-Golem,d4,d10,d10,d4,d6,1
-#9fc5e8,#3d85c6,FALSE,"Athletik d8, Heimlichkeit d6",Wirft Bomben aus Deckung.,,Sprengbomben 3W6,3,"5,6",2,Goblin-Bombenwerfer,d8,d6,d4,d6,d6,1
-#9fc5e8,#3d85c6,FALSE,"Kämpfen d8, Heimlichkeit d6, Schießen d6",Greift schwächere Gegner zuerst an.,,"Säbel St+W6, Pistole 2W6",6,"5,6",2,Goblin-Plünderer,d6,d6,d6,d4,d6,1
-#9fc5e8,#3d85c6,FALSE,"Schießen d8, Heimlichkeit d6",Bleibt mobil und sucht Deckung.,,Revolver 2W6,3,"5,7",2,Halb-Goblin Revolverschütze,d8,d6,d6,d4,d6,3
-#9fc5e8,#3d85c6,FALSE,"Kämpfen d8, Einschüchtern d6",Greift gemeinsam mit anderen Banditen an.,,Säbel St+W6,6,"5,7",2,Halb-Goblin Bandit,d8,d6,d6,d4,d6,3
-#9fc5e8,#3d85c6,FALSE,"Zaubern d8, Wissen(Magie) d6, Kämpfen d6",Unterstützt Verbündete aus der Distanz.,Blitz (2W6),Zauberstab St+W4,6,"5,6",2,Zauberlehrling,d6,d6,d4,d8,d8,2
-#9fc5e8,#3d85c6,FALSE,"Zaubern d8, Heimlichkeit d6, Kämpfen d6",Verunsichert Gegner mit Magie.,Furcht,Dolch St+W4,5,"5,6",2,Hexenschüler,d6,d6,d4,d8,d8,1
-#9fc5e8,#3d85c6,FALSE,"Heimlichkeit d8, Kämpfen d6, Schießen d6",Nutzt Gelände und Hinterhalte.,,"Dolch St+W4, Pistole 2W6",5,"5,6",2,Ruinenplünderer,d6,d6,d6,d6,d6,1
-#9fc5e8,#3d85c6,FALSE,"Kämpfen d8, Wahrnehmung d6",Hält defensive Formationen.,,Speer St+W6,6,"6,9",2,Stadtmiliz-Veteran,d6,d8,d8,d4,d6,2
-#9fc5e8,#3d85c6,FALSE,"Heimlichkeit d8, Kämpfen d6",Greift aus Hinterhalten an.,,Dolch St+W4,5,"5,7",2,Schattenkultist,d6,d6,d6,d6,d8,1
-#9fc5e8,#3d85c6,FALSE,"Schießen d8, Heimlichkeit d8",Schießt gezielt auf Anführer.,"Schnellfeuer,",Pistole 2W6,3,"5,7",2,Pistolenassassine,d8,d6,d6,d6,d6,1
-#9fc5e8,#3d85c6,FALSE,"Schießen d8, Heimlichkeit d6",Nutzt Deckung in engen Räumen.,,Pistole 2W6,3,"5,7",2,Schmuggler-Schütze,d6,d6,d6,d6,d6,1
-#9fc5e8,#3d85c6,FALSE,"Athletik d8, Reparieren d6",Wirft Sprengstoff auf Gruppen.,,Dynamit 3W6-2,3,"5,8",2,Goblin-Sprengmeister,d8,d6,d4,d6,d6,1
-#9fc5e8,#3d85c6,FALSE,"Kämpfen d6, Einschüchtern d6",Greift meist in Gruppen an und sucht einfache Ziele.,,"Keule St+W4, Pistole 2W6",5,"6,8",2,Straßenbandit,d6,d6,d6,d4,d4,3
-#b6d7a8,#6aa84f,FALSE,"Kämpfen d6, Heimlichkeit d6",Greift schnell an und flieht bei Gegenwehr.,,Messer St+W4,5,"5,6",1,Goblin-Plünderer,d6,d6,d4,d4,d4,5
-#b6d7a8,#6aa84f,FALSE,"Schießen d6, Heimlichkeit d6",Schießt aus Deckung und bleibt auf Distanz.,,Pistole 2W6,3,"5,7",1,Goblin-Pistolenschütze,d6,d6,d4,d4,d4,4
-#9fc5e8,#3d85c6,FALSE,"Kämpfen d6, Einschüchtern d6",Stürmt ohne viel Planung in den Nahkampf.,,Baseballschläger St+W6,5,"5,7",2,Halbork-Schläger,d6,d6,d8,d4,d4,4
-#b6d7a8,#6aa84f,FALSE,Kämpfen d6,Versucht Gegner zu umzingeln.,,Messer St+W4,5,"5,6",1,Dorfbandit,d6,d6,d6,d4,d4,3
-#9fc5e8,#3d85c6,FALSE,"Schießen d6, Heimlichkeit d6",Kämpft nur wenn er keine Fluchtmöglichkeit sieht.,,Pistole 2W6,3,"5,7",2,Schmugglergehilfe,d6,d6,d6,d4,d4,1
-#b6d7a8,#6aa84f,FALSE,Athletik d6,Bleibt auf Distanz und wirft Messer.,,Wurfmesser St+W4,3,"5,6",1,Goblin-Werfer,d6,d6,d4,d4,d4,1
-#9fc5e8,#3d85c6,FALSE,"Athletik d8, Heimlichkeit d6, Kämpfen d6",Greift aus erhöhter Position an.,,Dolch St+W4,5,"5,6",2,Goblin-Kletterer,d8,d6,d4,d4,d4,1
-#9fc5e8,#3d85c6,FALSE,"Kämpfen d6, Einschüchtern d6",Greift mutig an um seine Loyalität zu beweisen.,,Dolch St+W4,5,"5,6",2,Kultnovize,d6,d6,d4,d4,d6,2
-#9fc5e8,#3d85c6,FALSE,"Kämpfen d6, Reparieren d6",Versucht improvisierte Waffen zu nutzen.,,Schraubenschlüssel St+W4,5,"5,7",2,Goblin-Bastler,d6,d6,d4,d6,d4,2
-#b6d7a8,#6aa84f,FALSE,Schießen d6,Schießt einmal und sucht sofort Deckung.,,Schrotflinte 1-3W6,3,"5,7",1,Goblin-Schrotflinte,d6,d6,d4,d4,d4,3
-#9fc5e8,#3d85c6,FALSE,"Kämpfen d6, Wahrnehmung d6",Bewacht primitive Lager.,,Speer St+W6,5,"5,7",2,Goblin-Wache,d6,d6,d4,d4,d4,3
-#9fc5e8,#3d85c6,FALSE,Kämpfen d6,Greift aggressiv aber unkoordiniert an.,,Baseballschläger St+W6,5,"5,7",2,Schläger,d6,d6,d6,d4,d4,4
-#b6d7a8,#6aa84f,FALSE,Schießen d6,Schießt nervös aus der Entfernung.,,Pistole 2W4,3,"5,6",1,Goblin-Pistolenkid,d6,d6,d4,d4,d4,2
-#9fc5e8,#3d85c6,FALSE,Kämpfen d6,Verteidigt Eingänge oder Tore.,,Speer St+W6,5,"5,7",2,Dorfwache,d6,d6,d6,d4,d4,2
-#b6d7a8,#6aa84f,FALSE,Athletik d6,Wirft kleine Explosionen zur Ablenkung.,,Feuerwerksbomben,3,"5,7",1,Goblin-Feuerwerker,d6,d6,d4,d6,d4,1
-#9fc5e8,#3d85c6,FALSE,Kämpfen d6,Greift unorganisiert an.,,Baseballschläger St+W6,5,"5,6",2,Dorfplünderer,d6,d6,d6,d4,d4,2
-#9fc5e8,#3d85c6,FALSE,"Wunder d8, Heimlichkeit d6",Bleibt hinter anderen Goblins und zaubert.,"Blitz (2W6), Furcht",Knochenstab St+W4,4,"5,6",2,Goblin-Schamane,d6,d6,d4,d8,d8,2
-#9fc5e8,#3d85c6,FALSE,"Kämpfen d6, Wahrnehmung d8, Heimlichkeit d6","Umzingeln Gegner, lassen nicht los, Jagen fliehende SC.","An die Gurgel,",Biss St+W6,5,"6,6",2,Wachhund,d8,d6,d6,d2,d6,4
-#9fc5e8,#3d85c6,FALSE,"Kämpfen d8, Athletik d6, Heimlichkeit d6","Bilden einen Kreis, greifen koordiniert an, werfen Sterne aus der Distanz","Akrobat,","Fäuste St+W6, Wurfsterne 2W4",6,"6,7",2,Kampfmönche,d8,d6,d6,d6,d6,3
-#ffe599,#f1c232,FALSE,"Kämpfen d10, Wahrnehmung d8, Heimlichkeit d8",Nutzt Rücksichtsloser Angriff und Rundumschlag. Sucht Gruppen.,"An die Gurgel, Rundumschlag,","Klauen St+W4, Biss St+W6",7,"7,8",3,Schreckenswolf,d10,d10,d8,d4,d6,1
-#9fc5e8,#3d85c6,FALSE,"Heimlichkeit d10, Zaubern d6","Fliegt herum, blendet Gegner und lacht dabei ständig.","Fliegen,Blendung, Illusion",winziger Dolch St+W4/2,3,"5,5",2,Freche Pixie,d10,d6,d4,d8,d8,1
-#9fc5e8,#3d85c6,FALSE,"Heimlichkeit d10, Zaubern d6",Versetzt Gegner kurzzeitig in Schlaf und versteckt sich dann.,"Fliegen,Schlaf",Feenstaub,3,"5,5",2,Pixie-Streichespieler,d10,d6,d4,d8,d8,1
-#9fc5e8,#3d85c6,FALSE,"Zaubern d8, Heimlichkeit d8","Erzeugt falsche Geräusche oder Bilder, um Gegner zu verwirren.",Illusion,Zauberstab St+W4,3,"5,5",2,Kobold-Illusionist,d8,d6,d4,d8,d8,1
-#9fc5e8,#3d85c6,FALSE,"Kämpfen d4, Heimlichkeit d10, Athletik d6",Versucht während des Kampfes Ausrüstung zu stehlen.,,versteckter Dolch St+W4,4,"5,6",2,Goblin-Taschendieb,d6,d6,d4,d6,d6,1
-#b6d7a8,#6aa84f,FALSE,Athletik d8,"Wirft grelle Explosionen, die Gegner kurzzeitig ablenken.",,Feuerwerksbomben,3,"5,6",1,Goblin-Feuerwerkswerfer,d6,d6,d4,d6,d4,1
-#9fc5e8,#3d85c6,FALSE,"Kämpfen d4, Einschüchtern d8, Heimlichkeit d6","Beleidigt und provoziert Gegner, um sie aus der Deckung zu locken.",,Stock St+W4,4,"5,5",2,Nerviger Kobold,d8,d6,d4,d6,d6,1
-#9fc5e8,#3d85c6,FALSE,"Kämpfen d4, Wahrnehmung d8, Heimlichkeit d8",Kreist über dem Kampf und pickt nach Augen oder Ausrüstung.,"Fliegen,",Schnabel St+W4,4,"5,5",2,Magischer Rabe,d10,d6,d4,d4,d6,1
-#b6d7a8,#6aa84f,FALSE,"Kämpfen d4, Einschüchtern d8","Trommelt laut und motiviert Verbündete, während er sich versteckt.",,"Trommel, Dolch St+W4",4,"5,6",1,Goblin-Trommler,d6,d6,d4,d4,d4,1
-#9fc5e8,#3d85c6,FALSE,"Zaubern d8, Heimlichkeit d10",Bringt Gegner durcheinander und fliegt danach außer Reichweite.,"Fliegen,Verwirren",Feenstab St+W4/2,3,"5,5",2,Pixie-Verwirrer,d10,d6,d4,d8,d8,1
-#b6d7a8,#6aa84f,FALSE,"Überleben d8, Heimlichkeit d6",Legt während des Kampfes improvisierte Stolperfallen.,,kleine Fallen 2W6+2,3,"5,6",1,Kobold-Fallensteller,d6,d6,d4,d6,d4,1
-#b6d7a8,#6aa84f,FALSE,Athletik d8,"Hüllt das Schlachtfeld in Rauch, um Sicht zu blockieren.",,Rauchbomben,3,"5,6",1,Goblin-Rauchwerfer,d6,d6,d4,d6,d4,1
-#9fc5e8,#3d85c6,FALSE,"Zaubern d8, Heimlichkeit d10",Bewegt kleine Gegenstände und Waffen mit Magie.,"Fliegen,Telekinese",Feenstab St+W4/2,3,"5,5",2,Chaos-Pixie,d10,d6,d4,d8,d8,1
-#9fc5e8,#3d85c6,FALSE,"Kämpfen d4, Überreden d8, Heimlichkeit d6",Versucht Gegner gegeneinander auszuspielen.,,Dolch St+W4,4,"5,6",2,Kobold-Gerüchtemacher,d6,d6,d4,d6,d6,1
-#9fc5e8,#3d85c6,FALSE,"Kämpfen d4, Einschüchtern d10",Schreit ständig Warnungen oder Beleidigungen und lenkt Gegner ab.,,Dolch St+W4/2,4,"5,6",2,Goblin-Schreihals,d6,d6,d4,d4,d4,1
-#9fc5e8,#3d85c6,FALSE,"Zaubern d8, Heimlichkeit d10",Erzeugt schaurige Erscheinungen und verschwindet sofort wieder.,"Fliegen,Furcht, Illusion",,3,"5,5",2,Magischer Irrwicht,d10,d6,d4,d8,d8,1
+card_back_color,level_color,wc_wound,skills_text,description,edges,weapons,parry,toughness,level,name,type,agility_dices,vigor_dices,st_dices,smarts_dices,spirit_dices,count,speed
+#f9cb9c,#e69138,TRUE,"Zaubern d10, Wissen(Magie) d10, Einschüchtern d8",Bleibt weit hinter Verbündeten und kontrolliert das Schlachtfeld mit Flächenzaubern.,"Feuerball (2W6), Teleport, Bann,Ritualstab St+W4",Ritualstab St+W4,5,"5,7",4,Erzmagier,,d6,d6,d4,d10,d10,1,6
+#f69090,#cc0000,TRUE,"Kämpfen d10, Einschüchtern d10, Athletik d8",Stürmt direkt auf den stärksten Gegner zu und versucht ihn im Duell zu besiegen.,"Berserker, Bedrohlich,Zweihandaxt St+W10 PB2",Zweihandaxt St+W10 PB2,6,"7,11",5,Kriegsherr,Halbork,d8,d10,d10,d6,d8,1,6
+#e283cf,#c837ab,TRUE,"Kämpfen d10, Wahrnehmung d8",Springt zwischen Zielen und nutzt Atemattacken gegen Gruppen.,"Groß,Feueratem (2W6),Klauen St+W6, Biss St+W8","Klauen St+W6, Biss St+W8",7,"8,13",6,Chimärenkönig,,d10,d10,d10,d6,d8,1,6
+#f69090,#cc0000,TRUE,"Heimlichkeit d10, Kämpfen d10, Athletik d8",Greift isolierte Gegner an und verschwindet danach wieder.,"Beidhändiger Kampf, Schnell,Unsichtbarkeit,Dolch St+W4, Dolch St+W4","Dolch St+W4, Dolch St+W4",7,"5,6",5,Schattenassassine,,d10,d6,d6,d8,d8,1,6
+#e283cf,#c837ab,TRUE,Kämpfen d10,Zerstört Deckung und zwingt Gegner in offenen Kampf.,"Riesig,Erdbeben (Chaos),Faust St+W10",Faust St+W10,7,"10,16",6,Arkankonstrukt,Titan,d4,d12,d12,d4,d8,1,6
+#f9cb9c,#e69138,TRUE,"Schießen d12, Heimlichkeit d8, Athletik d8",Bleibt ständig in Bewegung und schießt auf mehrere Ziele.,"Beidhändiger Fernkampf, Schnellziehen,Revolver 2W6, Revolver 2W6","Revolver 2W6, Revolver 2W6",3,"6,8",4,Revolverheld,Halb-Goblin,d10,d8,d6,d6,d8,1,6
+#f9cb9c,#e69138,TRUE,"Zaubern d10, Heimlichkeit d10",Kontrolliert Gegner mit Magie statt sie direkt zu töten.,"Fliegen,Schlaf / Verwirren / Illusion,Feenstab St+W4/2",Feenstab St+W4/2,3,"5,5",4,Pixie-Königin,,d10,d6,d4,d10,d10,1,12
+#f69090,#cc0000,TRUE,"Kämpfen d10, Schießen d8, Einschüchtern d8",Greift aggressiv an und motiviert Verbündete.,"Anführer,Säbel St+W6, Pistole 2W6","Säbel St+W6, Pistole 2W6",7,"7,10",5,Söldnerkapitän,,d8,d8,d8,d6,d6,1,6
+#f9cb9c,#e69138,TRUE,"Kämpfen d10, Athletik d8",Greift aggressiv den nächsten Gegner an.,"Rundumschlag,Zweihandstreitkolben St+W10",Zweihandstreitkolben St+W10,6,"7,9",4,Arena-Champion,Halbork,d8,d8,d10,d6,d6,1,6
+#9fc5e8,#3d85c6,FALSE,"Zaubern d8, Schießen d8",Kombiniert Magie und Schüsse.,"Blitz (2W6), Telekinese,Pistole 2W6",Pistole 2W6,3,"5,6",2,Pistolenmagier,,d6,d6,d4,d8,d8,1,6
+#f9cb9c,#e69138,TRUE,"Kämpfen d8, Wissen(Runen) d8",Unterstützt Verbündete mit Runen.,"Runenmagie,Eigenschaft erhöhen, Waffe verbessern,Runenhammer St+W6",Runenhammer St+W6,5,"5,8",4,Runenschmied,,d6,d8,d8,d8,d6,1,6
+#9fc5e8,#3d85c6,FALSE,"Zaubern d10, Heimlichkeit d6",Schwächt Gegner mit Furcht.,"Dunkelheit, Angst,Schattenstab St+W4",Schattenstab St+W4,4,"5,6",2,Schattenhexer,,d6,d6,d4,d10,d8,1,6
+#f9cb9c,#e69138,TRUE,"Zaubern d8, Überleben d8, Kämpfen d8",Beschwört Tiere und bleibt defensiv.,"Tier beschwören, Tierfreund,Speer St+W6",Speer St+W6,6,"5,7",4,Bestienrufer,,d6,d6,d6,d8,d8,1,6
+#f9cb9c,#e69138,TRUE,"Schießen d10, Heimlichkeit d8, Kämpfen d6",Bleibt versteckt und schießt gezielt.,"Meisterschütze,Präzisionsgewehr 2W10",Präzisionsgewehr 2W10,5,"5,9",4,Scharfschütze,Halb-Goblin,d8,d6,d6,d6,d6,1,6
+#f9cb9c,#e69138,TRUE,"Überreden d10, Einschüchtern d8, Kämpfen d6",Treibt seine Kultisten zum Angriff an.,"Anführer,Furcht,Dolch St+W4",Dolch St+W4,5,"6,7",4,Kultführer,,d6,d6,d4,d8,d8,1,6
+#f9cb9c,#e69138,TRUE,"Kämpfen d8, Einschüchtern d8, Schießen d8",Greift selbst an und nutzt Schläger.,"Schlagring St+W4, Pistole 2W6","Schlagring St+W4, Pistole 2W6",6,"6,8",4,Straßenkönig,,d8,d8,d6,d6,d6,1,6
+#f9cb9c,#e69138,TRUE,"Zaubern d10, Wissen(Magie) d8, Kämpfen d6",Kämpft offensiv mit Magie.,"Feuerstrahl (2W6),Stab St+W4",Stab St+W4,6,"5,7",4,Kriegsmagier,,d6,d6,d4,d10,d8,1,6
+#e283cf,#c837ab,TRUE,"Kampfen d8, Einschüchtern d6","Greift Frontal an, versucht Gegner mit Flammen zu überrennen.","Riesig,Schadensfeld 2W6,Flammenfaust St+W10",Flammenfaust St+W10,6,"10,14",6,Feuergolem,,d6,d10,d12,d4,d6,1,6
+#e283cf,#c837ab,TRUE,"Kampfen d8, Einschüchtern d6","Sucht Gegner mit hoher Rüstung, schlägt um sich.","Riesig, Rundumschlag,Klingenhand St+W10 PB2",Klingenhand St+W10 PB2,6,"10,16",6,Eisengolem,,d6,d10,d12,d4,d6,1,6
+#e283cf,#c837ab,TRUE,"Kampfen d8, Einschüchtern d6","Treffer mit Steigerung wirken Betäuben, geht von Ziel zu Ziel.","Riesig,Betäuben,Faust St+W10",Faust St+W10,6,"10,16",6,Steingolem,,d6,d10,d12,d4,d6,1,6
+#f9cb9c,#e69138,TRUE,"Kämpfen d8, Schießen d6, Wahrnehmung d6",Arbeitet im Team und konzentriert Feuer auf ein Ziel.,"Sturmrevolver 2W6+1, Kampfmesser St+W4","Sturmrevolver 2W6+1, Kampfmesser St+W4",6,"6,9",4,Elite-Söldner,,d6,d8,d8,d6,d6,1,6
+#f9cb9c,#e69138,TRUE,"Kämpfen d8, Schießen d6, Einschüchtern d6",Bleibt ruhig unter Druck und hält die Frontlinie.,"Säbel St+W6, Pistole 2W6","Säbel St+W6, Pistole 2W6",6,"6,9",4,Veteranen-Söldner,,d6,d8,d8,d6,d6,1,6
+#ffe599,#f1c232,FALSE,"Kämpfen d8, Einschüchtern d6",Stürmt direkt in den Nahkampf.,Keule St+W4,Keule St+W4,6,"7,9",3,Schläger,Halbork,d6,d8,d10,d4,d6,3,6
+#9fc5e8,#3d85c6,FALSE,"Kämpfen d6, Wahrnehmung d6",Verteidigt Positionen und blockiert Durchgänge.,Speer St+W6,Speer St+W6,7,"6,8",2,Wache,Halbork,d6,d8,d8,d4,d6,3,6
+#9fc5e8,#3d85c6,FALSE,"Schießen d8, Heimlichkeit d6, Kämpfen d6",Schießt aus kurzer Distanz und versteckt sich danach.,"Schrotflinte 1-3W6, Messer St+W4","Schrotflinte 1-3W6, Messer St+W4",5,"5,7",2,Schrotflintenschütze,Goblin,d8,d6,d4,d6,d6,3,6
+#9fc5e8,#3d85c6,FALSE,"Schießen d8, Heimlichkeit d8",Bleibt versteckt und sucht gezielte Treffer.,"Meisterschütze,Gewehr 2W8",Gewehr 2W8,3,"5,7",2,Scharfschütze,Goblin,d8,d6,d4,d6,d6,1,6
+#9fc5e8,#3d85c6,FALSE,"Kämpfen d8, Einschüchtern d6",Greift ohne Rücksicht auf Verluste an.,Dolch St+W4,Dolch St+W4,6,"6,7",2,Kultfanatiker,,d6,d6,d6,d4,d8,1,6
+#9fc5e8,#3d85c6,FALSE,"Kämpfen d6, Wahrnehmung d6",Beschützt den Kultführer.,Speer St+W6,Speer St+W6,5,"6,8",2,Kultwache,,d6,d8,d6,d4,d6,1,6
+#9fc5e8,#3d85c6,FALSE,"Schießen d8, Heimlichkeit d6, Kämpfen d4",Schießt und wechselt Deckung.,"Schnellfeuer,Revolver 2W6, Messer St+W4","Revolver 2W6, Messer St+W4",4,"5,7",2,Pistolenbandit,,d8,d6,d6,d4,d6,2,6
+#9fc5e8,#3d85c6,FALSE,"Kämpfen d8, Einschüchtern d6",Greift in Gruppen an.,"Keule St+W4, Pistole 2W6","Keule St+W4, Pistole 2W6",6,"5,6",2,Straßenräuber,,d6,d6,d6,d4,d6,3,6
+#ffe599,#f1c232,FALSE,"Kämpfen d8, Athletik d6",Kämpft diszipliniert und defensiv.,Speer St+W6,Speer St+W6,8,"6,8",3,Arena-Kämpfer,,d6,d8,d8,d4,d6,1,6
+#9fc5e8,#3d85c6,FALSE,Kämpfen d8,Versucht Gegner schnell auszuschalten.,Zweihandaxt St+W10 PB2,Zweihandaxt St+W10 PB2,6,"7,8",2,Arena-Schlächter,,d6,d8,d10,d4,d6,1,6
+#ffe599,#f1c232,FALSE,Kämpfen d8,Bewacht magische Orte.,"Konstrukt,Faust St+W8",Faust St+W8,6,"9,12",3,Kleiner Stein-Golem,,d4,d10,d10,d4,d6,1,6
+#9fc5e8,#3d85c6,FALSE,"Athletik d8, Heimlichkeit d6",Wirft Bomben aus Deckung.,Sprengbomben 3W6,Sprengbomben 3W6,3,"5,6",2,Bombenwerfer,Goblin,d8,d6,d4,d6,d6,1,6
+#9fc5e8,#3d85c6,FALSE,"Kämpfen d8, Heimlichkeit d6, Schießen d6",Greift schwächere Gegner zuerst an.,"Säbel St+W6, Pistole 2W6","Säbel St+W6, Pistole 2W6",6,"5,6",2,Plünderer,Goblin,d6,d6,d6,d4,d6,1,6
+#9fc5e8,#3d85c6,FALSE,"Schießen d8, Heimlichkeit d6",Bleibt mobil und sucht Deckung.,Revolver 2W6,Revolver 2W6,3,"5,7",2,Revolverschütze,Halb-Goblin,d8,d6,d6,d4,d6,3,6
+#9fc5e8,#3d85c6,FALSE,"Kämpfen d8, Einschüchtern d6",Greift gemeinsam mit anderen Banditen an.,Säbel St+W6,Säbel St+W6,6,"5,7",2,Bandit,Halb-Goblin,d8,d6,d6,d4,d6,3,6
+#9fc5e8,#3d85c6,FALSE,"Zaubern d8, Wissen(Magie) d6, Kämpfen d6",Unterstützt Verbündete aus der Distanz.,"Blitz (2W6),Zauberstab St+W4",Zauberstab St+W4,6,"5,6",2,Zauberlehrling,,d6,d6,d4,d8,d8,2,6
+#9fc5e8,#3d85c6,FALSE,"Zaubern d8, Heimlichkeit d6, Kämpfen d6",Verunsichert Gegner mit Magie.,"Furcht,Dolch St+W4",Dolch St+W4,5,"5,6",2,Hexenschüler,,d6,d6,d4,d8,d8,1,6
+#9fc5e8,#3d85c6,FALSE,"Heimlichkeit d8, Kämpfen d6, Schießen d6",Nutzt Gelände und Hinterhalte.,"Dolch St+W4, Pistole 2W6","Dolch St+W4, Pistole 2W6",5,"5,6",2,Ruinenplünderer,,d6,d6,d6,d6,d6,1,6
+#9fc5e8,#3d85c6,FALSE,"Kämpfen d8, Wahrnehmung d6",Hält defensive Formationen.,Speer St+W6,Speer St+W6,6,"6,9",2,Stadtmiliz-Veteran,,d6,d8,d8,d4,d6,2,6
+#9fc5e8,#3d85c6,FALSE,"Heimlichkeit d8, Kämpfen d6",Greift aus Hinterhalten an.,Dolch St+W4,Dolch St+W4,5,"5,7",2,Schattenkultist,,d6,d6,d6,d6,d8,1,6
+#9fc5e8,#3d85c6,FALSE,"Schießen d8, Heimlichkeit d8",Schießt gezielt auf Anführer.,"Schnellfeuer,Pistole 2W6",Pistole 2W6,3,"5,7",2,Pistolenassassine,,d8,d6,d6,d6,d6,1,6
+#9fc5e8,#3d85c6,FALSE,"Schießen d8, Heimlichkeit d6",Nutzt Deckung in engen Räumen.,Pistole 2W6,Pistole 2W6,3,"5,7",2,Schütze,Schmuggler,d6,d6,d6,d6,d6,1,6
+#9fc5e8,#3d85c6,FALSE,"Athletik d8, Reparieren d6",Wirft Sprengstoff auf Gruppen.,Dynamit 3W6-2,Dynamit 3W6-2,3,"5,8",2,Sprengmeister,Goblin,d8,d6,d4,d6,d6,1,6
+#9fc5e8,#3d85c6,FALSE,"Kämpfen d6, Einschüchtern d6",Greift meist in Gruppen an und sucht einfache Ziele.,"Keule St+W4, Pistole 2W6","Keule St+W4, Pistole 2W6",5,"6,8",2,Straßenbandit,,d6,d6,d6,d4,d4,3,6
+#b6d7a8,#6aa84f,FALSE,"Kämpfen d6, Heimlichkeit d6",Greift schnell an und flieht bei Gegenwehr.,Messer St+W4,Messer St+W4,5,"5,6",1,Plünderer,Goblin,d6,d6,d4,d4,d4,5,6
+#b6d7a8,#6aa84f,FALSE,"Schießen d6, Heimlichkeit d6",Schießt aus Deckung und bleibt auf Distanz.,Pistole 2W6,Pistole 2W6,3,"5,7",1,Pistolenschütze,Goblin,d6,d6,d4,d4,d4,4,6
+#9fc5e8,#3d85c6,FALSE,"Kämpfen d6, Einschüchtern d6",Stürmt ohne viel Planung in den Nahkampf.,Baseballschläger St+W6,Baseballschläger St+W6,5,"5,7",2,Schläger,Halbork,d6,d6,d8,d4,d4,4,6
+#b6d7a8,#6aa84f,FALSE,Kämpfen d6,Versucht Gegner zu umzingeln.,Messer St+W4,Messer St+W4,5,"5,6",1,Dorfbandit,,d6,d6,d6,d4,d4,3,6
+#9fc5e8,#3d85c6,FALSE,"Schießen d6, Heimlichkeit d6",Kämpft nur wenn er keine Fluchtmöglichkeit sieht.,Pistole 2W6,Pistole 2W6,3,"5,7",2,Gehilfe,Schmuggler,d6,d6,d6,d4,d4,1,6
+#b6d7a8,#6aa84f,FALSE,Athletik d6,Bleibt auf Distanz und wirft Messer.,Wurfmesser St+W4,Wurfmesser St+W4,3,"5,6",1,Werfer,Goblin,d6,d6,d4,d4,d4,1,6
+#9fc5e8,#3d85c6,FALSE,"Athletik d8, Heimlichkeit d6, Kämpfen d6",Greift aus erhöhter Position an.,Dolch St+W4,Dolch St+W4,5,"5,6",2,Kletterer,Goblin,d8,d6,d4,d4,d4,1,6
+#9fc5e8,#3d85c6,FALSE,"Kämpfen d6, Einschüchtern d6",Greift mutig an um seine Loyalität zu beweisen.,Dolch St+W4,Dolch St+W4,5,"5,6",2,Kultnovize,,d6,d6,d4,d4,d6,2,6
+#9fc5e8,#3d85c6,FALSE,"Kämpfen d6, Reparieren d6",Versucht improvisierte Waffen zu nutzen.,Schraubenschlüssel St+W4,Schraubenschlüssel St+W4,5,"5,7",2,Bastler,Goblin,d6,d6,d4,d6,d4,2,6
+#b6d7a8,#6aa84f,FALSE,Schießen d6,Schießt einmal und sucht sofort Deckung.,Schrotflinte 1-3W6,Schrotflinte 1-3W6,3,"5,7",1,Schrotflinte,Goblin,d6,d6,d4,d4,d4,3,6
+#9fc5e8,#3d85c6,FALSE,"Kämpfen d6, Wahrnehmung d6",Bewacht primitive Lager.,Speer St+W6,Speer St+W6,5,"5,7",2,Wache,Goblin,d6,d6,d4,d4,d4,3,6
+#9fc5e8,#3d85c6,FALSE,Kämpfen d6,Greift aggressiv aber unkoordiniert an.,Baseballschläger St+W6,Baseballschläger St+W6,5,"5,7",2,Schläger,,d6,d6,d6,d4,d4,4,6
+#b6d7a8,#6aa84f,FALSE,Schießen d6,Schießt nervös aus der Entfernung.,Pistole 2W4,Pistole 2W4,3,"5,6",1,Pistolenkid,Goblin,d6,d6,d4,d4,d4,2,6
+#9fc5e8,#3d85c6,FALSE,Kämpfen d6,Verteidigt Eingänge oder Tore.,Speer St+W6,Speer St+W6,5,"5,7",2,Dorfwache,,d6,d6,d6,d4,d4,2,6
+#b6d7a8,#6aa84f,FALSE,Athletik d6,Wirft kleine Explosionen zur Ablenkung.,Feuerwerksbomben,Feuerwerksbomben,3,"5,7",1,Feuerwerker,Goblin,d6,d6,d4,d6,d4,1,6
+#9fc5e8,#3d85c6,FALSE,Kämpfen d6,Greift unorganisiert an.,Baseballschläger St+W6,Baseballschläger St+W6,5,"5,6",2,Dorfplünderer,,d6,d6,d6,d4,d4,2,6
+#9fc5e8,#3d85c6,FALSE,"Wunder d8, Heimlichkeit d6",Bleibt hinter anderen Goblins und zaubert.,"Blitz (2W6), Furcht,Knochenstab St+W4",Knochenstab St+W4,4,"5,6",2,Schamane,Goblin,d6,d6,d4,d8,d8,2,6
+#9fc5e8,#3d85c6,FALSE,"Kämpfen d6, Wahrnehmung d8, Heimlichkeit d6","Umzingeln Gegner, lassen nicht los, Jagen fliehende SC.","An die Gurgel,Biss St+W6",Biss St+W6,5,"6,6",2,Wachhund,,d8,d6,d6,d2,d6,4,10
+#9fc5e8,#3d85c6,FALSE,"Kämpfen d8, Athletik d6, Heimlichkeit d6","Bilden einen Kreis, greifen koordiniert an, werfen Sterne aus der Distanz","Akrobat,Fäuste St+W6, Wurfsterne 2W4","Fäuste St+W6, Wurfsterne 2W4",6,"6,7",2,Kampfmönche,,d8,d6,d6,d6,d6,3,6
+#ffe599,#f1c232,FALSE,"Kämpfen d10, Wahrnehmung d8, Heimlichkeit d8",Nutzt Rücksichtsloser Angriff und Rundumschlag. Sucht Gruppen.,"An die Gurgel, Rundumschlag,Klauen St+W4, Biss St+W6","Klauen St+W4, Biss St+W6",7,"7,8",3,Schreckenswolf,,d10,d10,d8,d4,d6,1,10
+#9fc5e8,#3d85c6,FALSE,"Heimlichkeit d10, Zaubern d6","Fliegt herum, blendet Gegner und lacht dabei ständig.","Fliegen,Blendung / Illusion,winziger Dolch St+W4/2",winziger Dolch St+W4/2,3,"5,5",2,Frechdax,Pixie,d10,d6,d4,d8,d8,1,12
+#9fc5e8,#3d85c6,FALSE,"Heimlichkeit d10, Zaubern d6",Versetzt Gegner kurzzeitig in Schlaf und versteckt sich dann.,"Fliegen,Schlaf,Feenstaub",Feenstaub,3,"5,5",2,Streichespieler,Pixie,d10,d6,d4,d8,d8,1,12
+#9fc5e8,#3d85c6,FALSE,"Zaubern d8, Heimlichkeit d8","Erzeugt falsche Geräusche oder Bilder, um Gegner zu verwirren.","Illusion,Zauberstab St+W4",Zauberstab St+W4,3,"5,5",2,Illusionist,Kobold,d8,d6,d4,d8,d8,1,6
+#9fc5e8,#3d85c6,FALSE,"Kämpfen d4, Heimlichkeit d10, Athletik d6",Versucht während des Kampfes Ausrüstung zu stehlen.,versteckter Dolch St+W4,versteckter Dolch St+W4,4,"5,6",2,Taschendieb,Goblin,d6,d6,d4,d6,d6,1,6
+#b6d7a8,#6aa84f,FALSE,Athletik d8,"Wirft grelle Explosionen, die Gegner kurzzeitig ablenken.",Feuerwerksbomben,Feuerwerksbomben,3,"5,6",1,Feuerwerkswerfer,Goblin,d6,d6,d4,d6,d4,1,6
+#9fc5e8,#3d85c6,FALSE,"Kämpfen d4, Einschüchtern d8, Heimlichkeit d6","Beleidigt und provoziert Gegner, um sie aus der Deckung zu locken.",Stock St+W4,Stock St+W4,4,"5,5",2,Nervtöter,Kobold,d8,d6,d4,d6,d6,1,6
+#9fc5e8,#3d85c6,FALSE,"Kämpfen d4, Wahrnehmung d8, Heimlichkeit d8",Kreist über dem Kampf und pickt nach Augen oder Ausrüstung.,"Fliegen,Schnabel St+W4",Schnabel St+W4,4,"5,5",2,Magischer Rabe,,d10,d6,d4,d4,d6,1,6
+#b6d7a8,#6aa84f,FALSE,"Kämpfen d4, Einschüchtern d8","Trommelt laut und motiviert Verbündete, während er sich versteckt.","Trommel, Dolch St+W4","Trommel, Dolch St+W4",4,"5,6",1,Trommler,Goblin,d6,d6,d4,d4,d4,1,6
+#9fc5e8,#3d85c6,FALSE,"Zaubern d8, Heimlichkeit d10",Bringt Gegner durcheinander und fliegt danach außer Reichweite.,"Fliegen,Verwirren,Feenstab St+W4/2",Feenstab St+W4/2,3,"5,5",2,Verwirrer,Pixie,d10,d6,d4,d8,d8,1,6
+#b6d7a8,#6aa84f,FALSE,"Überleben d8, Heimlichkeit d6",Legt während des Kampfes improvisierte Stolperfallen.,kleine Fallen 2W6+2,kleine Fallen 2W6+2,3,"5,6",1,Fallensteller,Kobold,d6,d6,d4,d6,d4,1,6
+#b6d7a8,#6aa84f,FALSE,Athletik d8,"Hüllt das Schlachtfeld in Rauch, um Sicht zu blockieren.",Rauchbomben,Rauchbomben,3,"5,6",1,Rauchwerfer,Goblin,d6,d6,d4,d6,d4,1,6
+#9fc5e8,#3d85c6,FALSE,"Zaubern d8, Heimlichkeit d10",Bewegt kleine Gegenstände und Waffen mit Magie.,"Fliegen,Telekinese,Feenstab St+W4/2",Feenstab St+W4/2,3,"5,5",2,Chaos-,Pixie,d10,d6,d4,d8,d8,1,12
+#9fc5e8,#3d85c6,FALSE,"Kämpfen d4, Überreden d8, Heimlichkeit d6",Versucht Gegner gegeneinander auszuspielen.,Dolch St+W4,Dolch St+W4,4,"5,6",2,Gerüchtemacher,Kobold,d6,d6,d4,d6,d6,1,6
+#9fc5e8,#3d85c6,FALSE,"Kämpfen d4, Einschüchtern d10",Schreit ständig Warnungen oder Beleidigungen und lenkt Gegner ab.,Dolch St+W4/2,Dolch St+W4/2,4,"5,6",2,Schreihals,Goblin,d6,d6,d4,d4,d4,1,6
+#9fc5e8,#3d85c6,FALSE,"Zaubern d8, Heimlichkeit d10",Erzeugt schaurige Erscheinungen und verschwindet sofort wieder.,"Fliegen,Furcht, Illusion,",,3,"5,5",2,Magischer Irrwicht,,d10,d6,d4,d8,d8,1,10
