@@ -7,6 +7,7 @@ Die Farbe der Spielkarte richtet sich nach diesem Wert.
 ## Berechnung
 
 Der Wert wird aktuell mit der nachfollgenden Formel bestimmt:
+
 $$
 ROUND \left( \left( \frac{\sum Eigenschaften}{2}-10 + Fertigkeitengewichtung + Talentegewichtung + Mächtegewichtung + Ausrüstunggewichtung + (Parade - 2) + (Robustheit - 2) + Rüstung \right) * \frac{1 + wildcard * 0,5}{10} \right)
 $$
