@@ -26,9 +26,7 @@ mit $Offset = 20$ und $Divisor=5,5$ erreicht man Werte zwischen 1 und 10 für di
 
 Beim Betreten einer Spielkarte wird zuerst ermittelt, wie viele Karten gezogen werden müssen.
 
-$
-Spielkartenwert+ \sum Spielerlevel
-$
+$Spielkartenwert+ \sum Spielerlevel$
 
 Würfeln mit dem W4: Ergibt die Anzahl der Wildcard-Gegner.
 Anschliessend werden die restlichen Gegner von dem andern Stapel gezogen, bis oben ermittelte Wert erreicht oder überschritten wurde.
