@@ -1,13 +1,15 @@
 Dieses Projekt erstellt mit Hilfe einer SVG-Vorlage und einer CSV-Tabelle eine mehrseitige PDF-Datei.
 Es wird das Savage World Regelwerk (20210421) verwendet.
 
-## Aktuelle Standardpfade
+## Interaktive Auswahl
 
-Ohne Parameter verwendet der Generator jetzt:
+Ohne Parameter fragt der Generator jetzt in der Kommandozeile zuerst die CSV-Datei aus `data/` und danach die SVG-Vorlage aus `templates/` ab.
 
-- CSV: `data/test.csv`
-- SVG-Template: `templates/char_template.svg`
-- PDF-Ausgabe: `output/output.pdf`
+Der Name der PDF-Ausgabe orientiert sich immer am Namen der gewaehlten CSV-Datei:
+
+- Daten: `data/GnM Gegner - npc_template.csv`
+- Standard-Ausgabe: `output/GnM Gegner - npc_template.pdf`
+- MeinSpiel Front-PDF: `output/GnM Gegner - npc_template.meinspiel-front.pdf`
 
 Eine vollständige Beispiel-CSV für das Character-Template liegt unter `data/char_template_example.csv`.
 
@@ -27,16 +29,16 @@ Starten:
 dotnet run --project nsc-cards-gen
 ```
 
-Optional können CSV, Template und Ausgabedatei als Parameter übergeben werden:
+Optional koennen CSV und Template als Parameter uebergeben werden. Der Ausgabename wird weiterhin aus der CSV-Datei gebildet:
 
 ```powershell
-dotnet run --project nsc-cards-gen -- data/char_template_example.csv templates/char_template.svg output/output.pdf
+dotnet run --project nsc-cards-gen -- data/char_template_example.csv templates/char_template.svg
 ```
 
 Zusätzlich zur normalen A4-Ausgabe erzeugt der Generator automatisch ein MeinSpiel-kompatibles Fronten-PDF:
 
-- Standard-Ausgabe: `output/output.pdf`
-- MeinSpiel Front-PDF: `output/output.meinspiel-front.pdf`
+- Standard-Ausgabe: `output/<datenname>.pdf`
+- MeinSpiel Front-PDF: `output/<datenname>.meinspiel-front.pdf`
 
 Das MeinSpiel-PDF ist für Spielkarten im Format `59 x 91 mm` aufbereitet und folgt der Dokumentgröße `65 x 97 mm` mit 3 mm Beschnitt, also:
 
