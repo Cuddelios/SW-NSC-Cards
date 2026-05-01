@@ -134,8 +134,16 @@ public sealed class SvgCardRenderer
             .ToList();
 
         // Sondertypen zuerst ermitteln, damit die Daten bei den Elementen bereits verfügbar sind, wenn die Felder angewendet werden
-        List<SkillEntry> skillEntries = ParseSkillEntries(values.TryGetValue(nameof(TemplateFieldType.skills_text), out string? value) ? value : string.Empty);
+        string rawSkillsText = values.TryGetValue(nameof(TemplateFieldType.skills_text), out string? value)
+            ? value
+            : string.Empty;
+        string rawEdgesText = values.TryGetValue(nameof(TemplateFieldType.edges), out value)
+            ? value
+            : string.Empty;
+
+        List<SkillEntry> skillEntries = ParseSkillEntries(rawSkillsText);
         double skillsLineHeight = 7.5; // Fallback-Wert, wird später ggf. überschrieben
+        double edgesLineHeight = skillsLineHeight;
 
         skillsLineHeight = elementsWithField
             .FirstOrDefault(e => string.Equals(
@@ -144,6 +152,21 @@ public sealed class SvgCardRenderer
                 StringComparison.OrdinalIgnoreCase)) is { } skillsTextElement
             ? GetLineHeight(skillsTextElement)
             : skillsLineHeight;
+
+        edgesLineHeight = elementsWithField
+            .FirstOrDefault(e => string.Equals(
+                (string?)e.Attribute("data-field"),
+                nameof(TemplateFieldType.edges),
+                StringComparison.OrdinalIgnoreCase)) is { } edgesElement
+            ? GetLineHeight(edgesElement)
+            : edgesLineHeight;
+
+        int skillsLineCount = skillEntries.Count > 0
+            ? skillEntries.Count
+            : CountTextLines(rawSkillsText);
+        int edgesLineCount = CountTextLines(string.Join('\n', SplitTextParts(rawEdgesText)));
+        double edgesOffsetY = Math.Max(0, skillsLineCount - 1) * skillsLineHeight;
+        double descriptionOffsetY = edgesOffsetY + (Math.Max(0, edgesLineCount - 1) * edgesLineHeight) + 0.5;
 
         foreach (XElement element in elementsWithField)
         {
@@ -173,6 +196,7 @@ public sealed class SvgCardRenderer
                         if(values.TryGetValue(fieldName, out value))
                         {
                             displayText = string.Join('\n', SplitTextLength(value, 29));
+                            ApplyVerticalOffset(element, descriptionOffsetY);
                             ApplyTextValue(element, displayText);
                         }
                         continue;
@@ -182,6 +206,11 @@ public sealed class SvgCardRenderer
                         if(values.TryGetValue(fieldName, out value))
                         {
                             displayText = string.Join('\n', SplitTextParts(value)); 
+                            if (fieldType == TemplateFieldType.edges)
+                            {
+                                ApplyVerticalOffset(element, edgesOffsetY);
+                            }
+
                             ApplyTextValue(element, displayText);
                         }
                         continue;
@@ -340,6 +369,32 @@ public sealed class SvgCardRenderer
 
             element.Add(tspan);
         }
+    }
+
+    private static int CountTextLines(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return 0;
+        }
+
+        return value
+            .Replace("\r\n", "\n", StringComparison.Ordinal)
+            .Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Length;
+    }
+
+    private static void ApplyVerticalOffset(XElement element, double offsetY)
+    {
+        if (offsetY <= 0)
+        {
+            return;
+        }
+
+        string offsetTransform = $"translate(0 {FormatNumber(offsetY)})";
+        element.SetAttributeValue(
+            "transform",
+            CombineTransforms((string?)element.Attribute("transform"), offsetTransform));
     }
 
     private static double GetLineHeight(XElement textElement)
