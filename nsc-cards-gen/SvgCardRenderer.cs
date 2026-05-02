@@ -193,9 +193,9 @@ public sealed class SvgCardRenderer
                         continue;
 
                     case TemplateFieldType.description:
-                        if(values.TryGetValue(fieldName, out value))
+                        if(TryGetTemplateValue(values, fieldName, out value))
                         {
-                            displayText = string.Join('\n', SplitTextLength(value, 29));
+                            displayText = string.Join('\n', SplitTextLength(value ?? string.Empty, 29));
                             ApplyVerticalOffset(element, descriptionOffsetY);
                             ApplyTextValue(element, displayText);
                         }
@@ -203,9 +203,9 @@ public sealed class SvgCardRenderer
     
                     case TemplateFieldType.edges:  
                     case TemplateFieldType.weapons:  
-                        if(values.TryGetValue(fieldName, out value))
+                        if(TryGetTemplateValue(values, fieldName, out value))
                         {
-                            displayText = string.Join('\n', SplitTextParts(value)); 
+                            displayText = string.Join('\n', SplitTextParts(value ?? string.Empty)); 
                             if (fieldType == TemplateFieldType.edges)
                             {
                                 ApplyVerticalOffset(element, edgesOffsetY);
@@ -219,11 +219,34 @@ public sealed class SvgCardRenderer
                 }
             }
 
-            if(values.TryGetValue(fieldName, out value))
+            if(TryGetTemplateValue(values, fieldName, out value))
             {
                 ApplyFieldValue(element, value ?? string.Empty);
             }
         }
+    }
+
+    private static bool TryGetTemplateValue(
+        IReadOnlyDictionary<string, string> values,
+        string fieldName,
+        out string? value)
+    {
+        if (values.TryGetValue(fieldName, out value))
+        {
+            return true;
+        }
+
+        if (string.Equals(fieldName, "consumption", StringComparison.OrdinalIgnoreCase))
+        {
+            return values.TryGetValue("consumtion", out value);
+        }
+
+        if (string.Equals(fieldName, "consumtion", StringComparison.OrdinalIgnoreCase))
+        {
+            return values.TryGetValue("consumption", out value);
+        }
+
+        return false;
     }
 
     private static void ApplyFieldValue(XElement element, string value)
@@ -248,30 +271,25 @@ public sealed class SvgCardRenderer
 
     private static bool TryApplyGroupSelection(XElement element, string value)
     {
-        List<XElement> directChildGroups = element
-            .Elements(SvgNs + "g")
+        List<XElement> directSelectionElements = element
+            .Elements()
             .Where(child => child.Attribute("data-field") != null)
             .ToList();
 
-        if (directChildGroups.Count == 0)
+        if (directSelectionElements.Count == 0)
         {
             return false;
         }
 
-        XElement? matchingGroup = directChildGroups.FirstOrDefault(child => string.Equals(
+        XElement? matchingElement = directSelectionElements.FirstOrDefault(child => string.Equals(
             (string?)child.Attribute("data-field"),
             value,
             StringComparison.OrdinalIgnoreCase));
 
-        if (matchingGroup == null)
+        foreach (XElement childElement in directSelectionElements)
         {
-            return false;
-        }
-
-        foreach (XElement childGroup in directChildGroups)
-        {
-            bool isMatch = ReferenceEquals(childGroup, matchingGroup);
-            childGroup.SetAttributeValue("display", isMatch ? null : "none");
+            bool isMatch = ReferenceEquals(childElement, matchingElement);
+            childElement.SetAttributeValue("display", isMatch ? null : "none");
         }
 
         return true;
