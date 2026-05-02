@@ -57,3 +57,4 @@ nunit-*.xml
 .dotnet-home/
 output/
 nsc-cards-gen/Properties/launchSettings.json
+generate.lnk
