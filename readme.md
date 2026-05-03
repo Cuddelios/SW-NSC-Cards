@@ -54,7 +54,7 @@ Hinweis: Für den Upload bei MeinSpiel werden in der Regel zwei Dateien benötig
 
 Aktuell erzeugt das Projekt automatisch das Fronten-PDF. Falls du auch die Rückseiten automatisiert generieren möchtest, braucht das Projekt dafür zusätzlich eine Rückseiten-Vorlage.
 
-Für `char_template.svg` berücksichtigt der Code zusätzlich:
+Für `npc_template_enemy.svg` berücksichtigt der Code zusätzlich:
 
 - Textfelder über `data-field`
 - Farbwerte für SVG-Elemente wie Kartenhintergrund und Level-Kreis
@@ -62,11 +62,48 @@ Für `char_template.svg` berücksichtigt der Code zusätzlich:
 - Würfelgruppen wie `agility_dices`, `skills_dices` usw. über Werte wie `d4`, `d6`, `d8`, `d10`, `d12`
 - den Karten-Ausschnitt `0 0 64 96`, damit nicht die komplette A4-SVG, sondern die eigentliche Karte gerendert wird
 
-## Verwendete `data-field`-Felder im `char_template.svg`
+## Aktuell verwendete Felder im `npc_template_enemy.svg`
 
-Die folgende Liste beschreibt alle `data-field`-Werte, die aktuell in [char_template.svg](./templates/char_template.svg) verwendet werden.
+Die folgende Liste beschreibt die CSV-Spalten aus [npc_template_enemies.csv](./data/npc_template_enemies.csv) und die dazu passenden `data-field`-Werte in [npc_template_enemy.svg](./templates/npc_template_enemy.svg).
+
+## Aktuelle CSV-Spalten
+
+| CSV-Spalte | Inhalt | Rendering |
+|---|---|---|
+| `card_back_color` | Hex-Farbe fuer den Kartenhintergrund, z. B. `#f6b26b`. | Fuellt das SVG-Element `data-field="card_back_color"`. |
+| `level_color` | Hex-Farbe fuer die Level-Markierung. | Fuellt das SVG-Element `data-field="level_color"`. |
+| `wc_wound` | Boolean-Wert wie `TRUE` oder `FALSE`. | Blendet die Wildcard-Wundabzuege ein oder aus. |
+| `skills_text` | Komma-getrennte Fertigkeiten, optional mit Wuerfelwert, z. B. `Kaempfen d10, Athletik d8`. | Wird in Zeilen zerlegt; Wuerfelwerte werden als Icons ueber `skills_dices` gesetzt. |
+| `description` | Kurzer Beschreibungstext fuer Verhalten, Taktik oder Besonderheit. | Wird auf kurze Zeilen umgebrochen. |
+| `edges` | Komma-getrennte Talente, Aktionen oder Sonderregeln. | Wird unter den Fertigkeiten platziert. |
+| `weapons` | Komma-getrennte Waffen oder Angriffe. | Datenfeld ist vorhanden; wird nur sichtbar, wenn die Vorlage ein `data-field="weapons"` enthaelt. |
+| `parry` | Parade-Wert. | Textfeld `data-field="parry"`. |
+| `toughness` | Robustheit-Wert. | Textfeld `data-field="toughness"`. |
+| `armor` | Ruestungsbonus, z. B. `+2`. | Textfeld `data-field="armor"`. |
+| `level` | Level oder Rangwert; ein- oder zweistellig moeglich. | Zentriertes Textfeld `data-field="level"`. |
+| `name` | Name des Gegners. | Textfeld `data-field="name"`. |
+| `type` | Typus / Kategorie als Text, z. B. `Halbork`. | Textfeld `data-field="type"`. |
+| `type_image` | Auswahlwert fuer die Silhouette. | Aktiviert eine Untergruppe in `data-field="type_image"`. |
+| `agility_dices` | Geschicklichkeits-Wuerfel: `d4`, `d6`, `d8`, `d10` oder `d12`. | Aktiviert die passende Wuerfel-Untergruppe. |
+| `vigor_dices` | Konstitutions-Wuerfel: `d4`, `d6`, `d8`, `d10` oder `d12`. | Aktiviert die passende Wuerfel-Untergruppe. |
+| `st_dices` | Staerke-Wuerfel: `d4`, `d6`, `d8`, `d10` oder `d12`. | Aktiviert die passende Wuerfel-Untergruppe. |
+| `smarts_dices` | Verstands-Wuerfel: `d4`, `d6`, `d8`, `d10` oder `d12`. | Aktiviert die passende Wuerfel-Untergruppe. |
+| `spirit_dices` | Willenskraft-Wuerfel: `d4`, `d6`, `d8`, `d10` oder `d12`. | Aktiviert die passende Wuerfel-Untergruppe. |
+| `count` | Anzahl der zu erzeugenden Kopien. Leer bedeutet `1`. | Kein SVG-Feld; wird vor dem Rendern ausgewertet. |
+| `speed` | Bewegungswert; ein- oder zweistellig moeglich. | Zentriertes Textfeld `data-field="speed"`. |
+| `consumption` | Auswahlwert fuer Verbrauch / Ressource. | Aktiviert eine Untergruppe in `data-field="consumption"`. |
+
+## Auswahlwerte
+
+| Gruppe | Erlaubte Werte in der CSV |
+|---|---|
+| Wuerfelgruppen | `d4`, `d6`, `d8`, `d10`, `d12` |
+| `consumption` | `ammo`, `ammo_2`, `ammo_4`, `ammo_8`, `magic`, `magic_ammo` |
+| `type_image` | `Assasine`, `Bandit`, `Chimäre`, `Goblin`, `Golem`, `Halb-Goblin`, `Halbork`, `Hund`, `Irrwicht`, `Kobold`, `Kultist`, `Magier`, `Militz`, `Mönch`, `Pixie`, `Rabe`, `Söldner`, `Schmuggler`, `Titan`, `Wolf` |
 
 ## Einfache Felder
+
+Die vollstaendige aktuelle CSV-Liste steht oben. Die folgenden Tabellen beschreiben die technische `data-field`-Behandlung des Renderers.
 
 | Feld | `data-field` | Typ | Beschreibung |
 |---|---|---|---|
