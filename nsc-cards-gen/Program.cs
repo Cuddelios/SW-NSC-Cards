@@ -74,6 +74,9 @@ pdfWriter.WriteCards(meinspielFrontOutputPath, cards, cardRenderer, meinspielLay
 Console.WriteLine($"PDF erzeugt: {Path.GetFullPath(outputPdfPath)}");
 Console.WriteLine($"MeinSpiel Front-PDF erzeugt: {Path.GetFullPath(meinspielFrontOutputPath)}");
 
+ConvertPdfToCmykIfPossible(outputPdfPath);
+ConvertPdfToCmykIfPossible(meinspielFrontOutputPath);
+
 static double MmToPt(double millimeters) => millimeters * 72.0 / 25.4;
 
 static char DetectDelimiter(string csvPath)
@@ -181,6 +184,53 @@ static string BuildMeinspielFrontOutputPath(string outputPdfPath)
     string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fullPath);
 
     return Path.Combine(directory, $"{fileNameWithoutExtension}.meinspiel-front.pdf");
+}
+
+static void ConvertPdfToCmykIfPossible(string inputPdfPath)
+{
+    string cmykOutputPath = BuildCmykOutputPath(inputPdfPath);
+    string iccProfilePath = Path.Combine("profiles", "ISOcoated_v2_300_eci.icc");
+
+    var converter = new PdfColorConverter();
+    PdfColorConversionResult result = converter.ConvertToCmyk(
+        inputPdfPath,
+        cmykOutputPath,
+        iccProfilePath);
+
+    switch (result.Status)
+    {
+        case PdfColorConversionStatus.Converted:
+            Console.WriteLine(result.Message);
+            break;
+
+        case PdfColorConversionStatus.Skipped:
+            Console.WriteLine($"CMYK-Konvertierung uebersprungen: {result.Message}");
+            break;
+
+        case PdfColorConversionStatus.Failed:
+            Console.WriteLine($"CMYK-Konvertierung fehlgeschlagen: {result.Message}");
+            if (!string.IsNullOrWhiteSpace(result.StandardOutput))
+            {
+                Console.WriteLine("Ghostscript-Ausgabe:");
+                Console.WriteLine(result.StandardOutput.Trim());
+            }
+
+            if (!string.IsNullOrWhiteSpace(result.StandardError))
+            {
+                Console.WriteLine("Ghostscript-Fehlerausgabe:");
+                Console.WriteLine(result.StandardError.Trim());
+            }
+            break;
+    }
+}
+
+static string BuildCmykOutputPath(string inputPdfPath)
+{
+    string fullPath = Path.GetFullPath(inputPdfPath);
+    string directory = Path.GetDirectoryName(fullPath) ?? Environment.CurrentDirectory;
+    string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fullPath);
+
+    return Path.Combine(directory, $"{fileNameWithoutExtension}.cmyk.pdf");
 }
 
 static string BuildOutputPathFromData(string csvPath)
