@@ -40,23 +40,30 @@ if (cards.Count == 0)
 }
 
 var cardRenderer = new SvgCardRenderer(
-    svgTemplatePath,
-    templateViewBox: usesCharacterTemplate ? "0 0 64 96" : null);
+    svgTemplatePath);
+Dictionary<string, SvgCardRenderer> cardBackRenderers = LoadCardBackRenderers(svgTemplatePath);
 
 var layoutOptions = new PdfLayoutOptions
 {
-    MarginPt = 20,
-    GapXPt = 10,
-    GapYPt = 10,
-    CardWidthPt = usesCharacterTemplate ? MmToPt(64) : 220,
-    CardHeightPt = usesCharacterTemplate ? MmToPt(96) : 90,
+    MarginPt = MmToPt(5),
+    GapXPt = MmToPt(3),
+    GapYPt = MmToPt(3),
+    CardWidthPt = usesCharacterTemplate ? MmToPt(65) : 220,
+    CardHeightPt = usesCharacterTemplate ? MmToPt(97) : 90,
     RenderDpi = 300
 };
 
 var pdfWriter = new PdfLayoutWriter();
-pdfWriter.WriteCards(outputPdfPath, cards, cardRenderer, layoutOptions);
+pdfWriter.WriteCardsWithInterleavedBacks(
+    outputPdfPath,
+    cards,
+    cardRenderer.RenderCardAsPng,
+    RenderCardBackAsPng,
+    layoutOptions,
+    mirrorBackPageHorizontally: true);
 
 var meinspielFrontOutputPath = BuildMeinspielFrontOutputPath(outputPdfPath);
+var meinspielBackOutputPath = BuildMeinspielBackOutputPath(outputPdfPath);
 var meinspielLayoutOptions = new PdfLayoutOptions
 {
     MarginPt = 0,
@@ -70,12 +77,28 @@ var meinspielLayoutOptions = new PdfLayoutOptions
 };
 
 pdfWriter.WriteCards(meinspielFrontOutputPath, cards, cardRenderer, meinspielLayoutOptions);
+pdfWriter.WriteCards(meinspielBackOutputPath, cards, RenderCardBackAsPng, meinspielLayoutOptions);
 
 Console.WriteLine($"PDF erzeugt: {Path.GetFullPath(outputPdfPath)}");
 Console.WriteLine($"MeinSpiel Front-PDF erzeugt: {Path.GetFullPath(meinspielFrontOutputPath)}");
+Console.WriteLine($"MeinSpiel Back-PDF erzeugt: {Path.GetFullPath(meinspielBackOutputPath)}");
 
 ConvertPdfToCmykIfPossible(outputPdfPath);
 ConvertPdfToCmykIfPossible(meinspielFrontOutputPath);
+ConvertPdfToCmykIfPossible(meinspielBackOutputPath);
+
+byte[] RenderCardBackAsPng(
+    IReadOnlyDictionary<string, string> row,
+    int targetWidthPx,
+    int targetHeightPx)
+{
+    SvgCardRenderer renderer = ResolveCardBackRenderer(row, cardBackRenderers);
+
+    return renderer.RenderCardAsPng(
+        row,
+        targetWidthPx,
+        targetHeightPx);
+}
 
 static double MmToPt(double millimeters) => millimeters * 72.0 / 25.4;
 
@@ -184,6 +207,146 @@ static string BuildMeinspielFrontOutputPath(string outputPdfPath)
     string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fullPath);
 
     return Path.Combine(directory, $"{fileNameWithoutExtension}.meinspiel-front.pdf");
+}
+
+static string BuildMeinspielBackOutputPath(string outputPdfPath)
+{
+    string fullPath = Path.GetFullPath(outputPdfPath);
+    string directory = Path.GetDirectoryName(fullPath) ?? Environment.CurrentDirectory;
+    string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fullPath);
+
+    return Path.Combine(directory, $"{fileNameWithoutExtension}.meinspiel-back.pdf");
+}
+
+static Dictionary<string, SvgCardRenderer> LoadCardBackRenderers(string frontTemplatePath)
+{
+    string templateDirectory = Path.GetDirectoryName(Path.GetFullPath(frontTemplatePath))
+        ?? Path.GetFullPath("templates");
+
+    string[] cardBackTemplatePaths = Directory
+        .GetFiles(templateDirectory, "npc_card_back_*.svg")
+        .OrderBy(Path.GetFileName, StringComparer.CurrentCultureIgnoreCase)
+        .ToArray();
+
+    if (cardBackTemplatePaths.Length == 0)
+    {
+        throw new InvalidOperationException(
+            $"Keine Rueckseiten-Vorlagen in {templateDirectory} gefunden. Erwartet werden Dateien wie npc_card_back_spades.svg.");
+    }
+
+    var renderers = new Dictionary<string, SvgCardRenderer>(StringComparer.OrdinalIgnoreCase);
+
+    foreach (string cardBackTemplatePath in cardBackTemplatePaths)
+    {
+        string key = NormalizeCardBackKey(Path.GetFileNameWithoutExtension(cardBackTemplatePath));
+        var renderer = new SvgCardRenderer(cardBackTemplatePath);
+
+        renderers[key] = renderer;
+
+        if (key.StartsWith("sprades", StringComparison.OrdinalIgnoreCase))
+        {
+            renderers["spades" + key["sprades".Length..]] = renderer;
+        }
+    }
+
+    return renderers;
+}
+
+static SvgCardRenderer ResolveCardBackRenderer(
+    IReadOnlyDictionary<string, string> row,
+    IReadOnlyDictionary<string, SvgCardRenderer> cardBackRenderers)
+{
+    string[] explicitFieldNames =
+    [
+        "card_back_template",
+        "back_template",
+        "card_back",
+        "back",
+        "card_suit",
+        "suit"
+    ];
+
+    foreach (string fieldName in explicitFieldNames)
+    {
+        if (row.TryGetValue(fieldName, out string? rawValue)
+            && TryResolveCardBackRenderer(rawValue, cardBackRenderers, out SvgCardRenderer? explicitRenderer))
+        {
+            return explicitRenderer!;
+        }
+    }
+
+    if (IsTruthy(row, "wc_wound")
+        && TryResolveCardBackRenderer("spades_wc", cardBackRenderers, out SvgCardRenderer? wildCardRenderer))
+    {
+        return wildCardRenderer!;
+    }
+
+    if (TryResolveCardBackRenderer("spades", cardBackRenderers, out SvgCardRenderer? spadesRenderer))
+    {
+        return spadesRenderer!;
+    }
+
+    if (TryResolveCardBackRenderer("sprades", cardBackRenderers, out SvgCardRenderer? spradesRenderer))
+    {
+        return spradesRenderer!;
+    }
+
+    return cardBackRenderers.Values.First();
+}
+
+static bool TryResolveCardBackRenderer(
+    string? rawValue,
+    IReadOnlyDictionary<string, SvgCardRenderer> cardBackRenderers,
+    out SvgCardRenderer? renderer)
+{
+    renderer = null;
+
+    if (string.IsNullOrWhiteSpace(rawValue))
+    {
+        return false;
+    }
+
+    string key = NormalizeCardBackKey(rawValue);
+
+    if (cardBackRenderers.TryGetValue(key, out renderer))
+    {
+        return true;
+    }
+
+    string keyWithoutExtension = NormalizeCardBackKey(Path.GetFileNameWithoutExtension(rawValue));
+
+    return cardBackRenderers.TryGetValue(keyWithoutExtension, out renderer);
+}
+
+static string NormalizeCardBackKey(string value)
+{
+    string key = Path
+        .GetFileNameWithoutExtension(value.Trim())
+        .Replace('-', '_')
+        .Replace(' ', '_')
+        .ToLowerInvariant();
+
+    const string prefix = "npc_card_back_";
+    if (key.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+    {
+        key = key[prefix.Length..];
+    }
+
+    if (key == "wildcard")
+    {
+        return "spades_wc";
+    }
+
+    return key;
+}
+
+static bool IsTruthy(IReadOnlyDictionary<string, string> row, string fieldName)
+{
+    return row.TryGetValue(fieldName, out string? value)
+        && (string.Equals(value, "true", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(value, "yes", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(value, "ja", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(value, "1", StringComparison.OrdinalIgnoreCase));
 }
 
 static void ConvertPdfToCmykIfPossible(string inputPdfPath)

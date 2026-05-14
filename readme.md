@@ -10,6 +10,7 @@ Der Name der PDF-Ausgabe orientiert sich immer am Namen der gewaehlten CSV-Datei
 - Daten: `data/GnM Gegner - npc_template.csv`
 - Standard-Ausgabe: `output/GnM Gegner - npc_template.pdf`
 - MeinSpiel Front-PDF: `output/GnM Gegner - npc_template.meinspiel-front.pdf`
+- MeinSpiel Back-PDF: `output/GnM Gegner - npc_template.meinspiel-back.pdf`
 
 Eine vollständige Beispiel-CSV für das Character-Template liegt unter `data/char_template_example.csv`.
 
@@ -35,10 +36,11 @@ Optional koennen CSV und Template als Parameter uebergeben werden. Der Ausgabena
 dotnet run --project nsc-cards-gen -- data/char_template_example.csv templates/char_template.svg
 ```
 
-Zusätzlich zur normalen A4-Ausgabe erzeugt der Generator automatisch ein MeinSpiel-kompatibles Fronten-PDF:
+Zusaetzlich zur normalen A4-Ausgabe erzeugt der Generator automatisch MeinSpiel-kompatible Fronten- und Rueckseiten-PDFs. In der normalen A4-Ausgabe wechseln sich Vorderseiten- und Rueckseiten-Seiten ab.
 
 - Standard-Ausgabe: `output/<datenname>.pdf`
 - MeinSpiel Front-PDF: `output/<datenname>.meinspiel-front.pdf`
+- MeinSpiel Back-PDF: `output/<datenname>.meinspiel-back.pdf`
 
 Das MeinSpiel-PDF ist für Spielkarten im Format `59 x 91 mm` aufbereitet und folgt der Dokumentgröße `65 x 97 mm` mit 3 mm Beschnitt, also:
 
@@ -52,7 +54,9 @@ Hinweis: Für den Upload bei MeinSpiel werden in der Regel zwei Dateien benötig
 - ein PDF mit allen Vorderseiten
 - ein PDF mit allen Rückseiten
 
-Aktuell erzeugt das Projekt automatisch das Fronten-PDF. Falls du auch die Rückseiten automatisiert generieren möchtest, braucht das Projekt dafür zusätzlich eine Rückseiten-Vorlage.
+Die Rueckseiten kommen aus `templates/npc_card_back_*.svg`. Pro CSV-Zeile kann eine Rueckseite ueber Spalten wie `card_back_template`, `card_back`, `back`, `card_suit` oder `suit` gesetzt werden, z. B. `clubs`, `diamonds`, `hearts`, `spades` oder `spades_wc`. Ohne Angabe nutzt der Generator fuer Wildcards `spades_wc` und sonst `spades`.
+
+Beim Duplexdruck der normalen A4-Ausgabe im Querformat sollte der Drucker ueber die kurze Kante wenden. Die Rueckseiten-Seiten sind dafuer horizontal gespiegelt angeordnet.
 
 Für `npc_template_enemy.svg` berücksichtigt der Code zusätzlich:
 
