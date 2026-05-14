@@ -1,5 +1,4 @@
-using PdfSharpCore.Drawing;
-using PdfSharpCore.Pdf;
+using SkiaSharp;
 using SvgPdfGenerator.Models;
 
 namespace SvgPdfGenerator;
@@ -93,10 +92,17 @@ public sealed class PdfLayoutWriter
             throw new ArgumentNullException(nameof(layoutOptions));
         }
 
-        using var pdf = new PdfDocument();
+        string? outputDirectory = Path.GetDirectoryName(Path.GetFullPath(outputPdfPath));
+        if (!string.IsNullOrWhiteSpace(outputDirectory))
+        {
+            Directory.CreateDirectory(outputDirectory);
+        }
 
-        PdfPage? currentPage = null;
-        XGraphics? graphics = null;
+        using SKDocument pdf = SKDocument.CreatePdf(outputPdfPath);
+
+        SKCanvas? canvas = null;
+        double pageWidthPt = 0;
+        double pageHeightPt = 0;
 
         int columnsPerPage = 0;
         int rowsPerPage = 0;
@@ -104,19 +110,22 @@ public sealed class PdfLayoutWriter
 
         void StartNewPage()
         {
-            currentPage = pdf.AddPage();
-            ApplyPageSize(currentPage, layoutOptions);
+            if (canvas != null)
+            {
+                pdf.EndPage();
+            }
 
-            graphics = XGraphics.FromPdfPage(currentPage);
+            (pageWidthPt, pageHeightPt) = GetPageSize(layoutOptions);
+            canvas = pdf.BeginPage((float)pageWidthPt, (float)pageHeightPt);
 
             columnsPerPage = Math.Max(
                 1,
-                (int)((currentPage.Width.Point - 2 * layoutOptions.MarginPt + layoutOptions.GapXPt)
+                (int)((pageWidthPt - 2 * layoutOptions.MarginPt + layoutOptions.GapXPt)
                     / (layoutOptions.CardWidthPt + layoutOptions.GapXPt)));
 
             rowsPerPage = Math.Max(
                 1,
-                (int)((currentPage.Height.Point - 2 * layoutOptions.MarginPt + layoutOptions.GapYPt)
+                (int)((pageHeightPt - 2 * layoutOptions.MarginPt + layoutOptions.GapYPt)
                     / (layoutOptions.CardHeightPt + layoutOptions.GapYPt)));
 
             itemsPerPage = columnsPerPage * rowsPerPage;
@@ -138,9 +147,9 @@ public sealed class PdfLayoutWriter
                 cardsOnPage,
                 columnsPerPage,
                 frontRenderer,
-                graphics!,
+                canvas!,
                 layoutOptions,
-                currentPage!.Width.Point,
+                pageWidthPt,
                 mirrorHorizontally: false);
 
             if (backRenderer != null)
@@ -152,20 +161,19 @@ public sealed class PdfLayoutWriter
                     cardsOnPage,
                     columnsPerPage,
                     backRenderer,
-                    graphics!,
+                    canvas!,
                     layoutOptions,
-                    currentPage!.Width.Point,
+                    pageWidthPt,
                     mirrorHorizontally: mirrorBackPageHorizontally);
             }
         }
 
-        string? outputDirectory = Path.GetDirectoryName(Path.GetFullPath(outputPdfPath));
-        if (!string.IsNullOrWhiteSpace(outputDirectory))
+        if (canvas != null)
         {
-            Directory.CreateDirectory(outputDirectory);
+            pdf.EndPage();
         }
 
-        pdf.Save(outputPdfPath);
+        pdf.Close();
     }
 
     private static void DrawCardPage(
@@ -174,7 +182,7 @@ public sealed class PdfLayoutWriter
         int cardsOnPage,
         int columnsPerPage,
         CardRenderDelegate renderer,
-        XGraphics graphics,
+        SKCanvas canvas,
         PdfLayoutOptions layoutOptions,
         double pageWidthPt,
         bool mirrorHorizontally)
@@ -200,30 +208,33 @@ public sealed class PdfLayoutWriter
                 renderWidthPx,
                 renderHeightPx);
 
-            using var imageStream = new MemoryStream(pngBytes);
-            using XImage image = XImage.FromStream(() => imageStream);
+            using SKData imageData = SKData.CreateCopy(pngBytes);
+            using SKImage image = SKImage.FromEncodedData(imageData)
+                ?? throw new InvalidOperationException("Rendered card PNG could not be decoded.");
 
-            graphics.DrawImage(
+            var destination = new SKRect(
+                (float)x,
+                (float)y,
+                (float)(x + layoutOptions.CardWidthPt),
+                (float)(y + layoutOptions.CardHeightPt));
+
+            canvas.DrawImage(
                 image,
-                x,
-                y,
-                layoutOptions.CardWidthPt,
-                layoutOptions.CardHeightPt);
+                destination);
         }
     }
 
-    private static void ApplyPageSize(PdfPage page, PdfLayoutOptions layoutOptions)
+    private static (double WidthPt, double HeightPt) GetPageSize(PdfLayoutOptions layoutOptions)
     {
         if (layoutOptions.PageWidthPt is > 0 && layoutOptions.PageHeightPt is > 0)
         {
-            page.Width = PdfSharpCore.Drawing.XUnit.FromPoint(layoutOptions.PageWidthPt.Value);
-            page.Height = PdfSharpCore.Drawing.XUnit.FromPoint(layoutOptions.PageHeightPt.Value);
-            return;
+            return (layoutOptions.PageWidthPt.Value, layoutOptions.PageHeightPt.Value);
         }
 
-        page.Size = PdfSharpCore.PageSize.A4;
-        page.Orientation = PdfSharpCore.PageOrientation.Landscape;
+        return (MmToPt(297), MmToPt(210));
     }
+
+    private static double MmToPt(double millimeters) => millimeters * 72.0 / 25.4;
 
     private static int ConvertPointsToPixels(double points, double dpi)
     {
