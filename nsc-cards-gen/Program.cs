@@ -7,7 +7,7 @@ string csvPath = args.Length > 0
 
 string svgTemplatePath = args.Length > 1
     ? args[1]
-    : SelectInputFile("templates", "*.svg", "Vorlage");
+    : SelectInputFile("templates", "npc_template_*.svg", "Vorlage");
 
 string backTemplatePath = args.Length > 2
     ? args[2]
@@ -141,6 +141,12 @@ static string SelectInputFile(string directoryPath, string searchPattern, string
     for (int index = 0; index < files.Count; index++)
     {
         Console.WriteLine($"  {index + 1}. {Path.GetFileName(files[index])}");
+    }
+
+    if(files.Count == 1)
+    {
+        Console.WriteLine($"Nur eine Option verfuegbar, automatisch ausgewaehlt: {Path.GetFileName(files[0])}");
+        return files[0];
     }
 
     while (true)
