@@ -3,7 +3,7 @@ Es wird das Savage World Regelwerk (20210421) verwendet.
 
 ## Interaktive Auswahl
 
-Ohne Parameter fragt der Generator jetzt in der Kommandozeile zuerst die CSV-Datei aus `data/` und danach die SVG-Vorlage aus `templates/` ab.
+Ohne Parameter fragt der Generator jetzt in der Kommandozeile zuerst die CSV-Datei aus `data/`, danach die SVG-Vorderseiten-Vorlage aus `templates/` und zuletzt die Rueckseiten-Vorlage aus `templates/npc_card_back_*.svg` ab.
 
 Der Name der PDF-Ausgabe orientiert sich immer am Namen der gewaehlten CSV-Datei:
 
@@ -30,10 +30,10 @@ Starten:
 dotnet run --project nsc-cards-gen
 ```
 
-Optional koennen CSV und Template als Parameter uebergeben werden. Der Ausgabename wird weiterhin aus der CSV-Datei gebildet:
+Optional koennen CSV, Vorderseiten-Template und Rueckseiten-Template als Parameter uebergeben werden. Der Ausgabename wird weiterhin aus der CSV-Datei gebildet:
 
 ```powershell
-dotnet run --project nsc-cards-gen -- data/char_template_example.csv templates/char_template.svg
+dotnet run --project nsc-cards-gen -- data/char_template_example.csv templates/char_template.svg templates/npc_card_back_clubs.svg
 ```
 
 Zusaetzlich zur normalen A4-Ausgabe erzeugt der Generator automatisch MeinSpiel-kompatible Fronten- und Rueckseiten-PDFs. In der normalen A4-Ausgabe wechseln sich Vorderseiten- und Rueckseiten-Seiten ab.
@@ -54,7 +54,7 @@ Hinweis: Für den Upload bei MeinSpiel werden in der Regel zwei Dateien benötig
 - ein PDF mit allen Vorderseiten
 - ein PDF mit allen Rückseiten
 
-Die Rueckseiten kommen aus `templates/npc_card_back_*.svg`. Pro CSV-Zeile kann eine Rueckseite ueber Spalten wie `card_back_template`, `card_back`, `back`, `card_suit` oder `suit` gesetzt werden, z. B. `clubs`, `diamonds`, `hearts`, `spades` oder `spades_wc`. Ohne Angabe nutzt der Generator fuer Wildcards `spades_wc` und sonst `spades`.
+Die Rueckseiten kommen aus `templates/npc_card_back_*.svg`. Pro Deck wird beim Start genau eine Rueckseiten-Vorlage ausgewaehlt und fuer alle Karten verwendet.
 
 Beim Duplexdruck der normalen A4-Ausgabe im Querformat sollte der Drucker ueber die kurze Kante wenden. Die Rueckseiten-Seiten sind dafuer horizontal gespiegelt angeordnet.
 
