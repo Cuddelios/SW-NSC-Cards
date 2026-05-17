@@ -7,7 +7,7 @@ string csvPath = args.Length > 0
 
 string svgTemplatePath = args.Length > 1
     ? args[1]
-    : SelectInputFile("templates", "npc_template_*.svg", "Vorlage");
+    : SelectInputFile("templates", "*_template*.svg", "Vorlage");
 
 string backTemplatePath = args.Length > 2
     ? args[2]

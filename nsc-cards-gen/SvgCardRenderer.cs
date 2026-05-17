@@ -121,7 +121,8 @@ public sealed class SvgCardRenderer
         skills_dices,
         description,
         edges,
-        weapons
+        weapons,
+        name_short,
     }
 
     private static void FillTemplateFields(
@@ -197,6 +198,14 @@ public sealed class SvgCardRenderer
                         {
                             displayText = string.Join('\n', SplitTextLength(value ?? string.Empty, 29));
                             ApplyVerticalOffset(element, descriptionOffsetY);
+                            ApplyTextValue(element, displayText);
+                        }
+                        continue;
+
+                    case TemplateFieldType.name_short:
+                        if(TryGetTemplateValue(values, fieldName, out value))
+                        {
+                            displayText = string.Join('\n', SplitTextLength(value ?? string.Empty, 15));
                             ApplyTextValue(element, displayText);
                         }
                         continue;
