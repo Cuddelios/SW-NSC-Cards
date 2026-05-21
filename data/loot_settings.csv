@@ -1,33 +1,65 @@
 card_back_color,name_short,test,test_mallus,type_image,consumption,damage_text,mallus_text,bonus_text,description,count
-#93c47d,Verlorener Geldbeutel,Wahrnehmung,,Beutel,Bonus,,,2W6 × 10 $,Normale Beute,4
-#6d9eeb,Brandöl,Naturwissenschaften,,Regal,Schaden,2W6,,,Ziel brennt 2 Runden,2
-#93c47d,Nebelkapsel,Wahrnehmung,,Kiste,Mallus,,-2 Fernkampf,,Erzeugt Sichtblockade für 3 Runden,4
-#6d9eeb,Edelsteine,Wahrnehmung,,Beutel,Bonus,,,150 $,Klein und leicht versteckbar,2
-#6d9eeb,Durchschlags- munition,Kriegskunst,,Kiste,Bonus,,,+2 Durchdringung,Ignoriert 2 Punkte Panzerung,2
-#6d9eeb,Heiltrank,Naturwissenschaften,,Regal,Bonus,,,- 1 Wunde,Heilt 1 Wunde und hebt Angeschlagen auf,2
-#6d9eeb,Magietrank,Naturwissenschaften,,Regal,Bonus,,,+5 Magie,Regeneriert 5 Magiepunkte,2
-#6d9eeb,Blendbombe,Naturwissenschaften,,Kiste,Abgelenkt,,,,Gegner erhalten Ablenkung,2
-#6d9eeb,Dietrich-Set,Diebeskunst,,Kommode,Bonus,,,+1 Diebeskunst,+1 auf Schloss öffnen,2
-#6d9eeb,Feldmedizin-Kit,Heilen,,Regal,Bonus,,,+1 Heilen,+1 auf Heilen,2
-#6d9eeb,Alchemistische Feuerflasche,Naturwissenschaften,,Regal,Schaden,2W6 Feuer,,,"Wurfwaffe, verursacht 2W6 Feuerschaden",2
-#6d9eeb,Blendgranate,Kriegskunst,,Kiste,Abgelenkt,,,,Gegner erhalten Ablenkung,2
-#6d9eeb,Säureampulle,Naturwissenschaften,,Regal,Bonus,,,+4 Durchdringung,Ignoriert 4 Punkte Panzerung für alle Angriffe,2
-#6d9eeb,Giftpfeil,Überleben,,Kiste,Mallus,,-1 auf Proben,,Ein Treffer verursacht zusätzlich Müdigkeit,2
-#6d9eeb,Elektro- schockstab,Reparieren,,Kiste,Angeschlagen,,,,Ein Treffer kann Ziel Benommen machen (Willenskraft),2
-#6d9eeb,Jagdfalle zum Werfen,Überleben,,Kiste,Gebunden,,,,Ziel wird Bewegungsunfähig bei Treffer,2
-#f6b26b,Verstecktes Depot,Wahrnehmung,-2,Spezial,Bonus,,,2 extra Karten,2 Fundkarten extra,2
-#6d9eeb,Schatzkarte,Recherche,,Karte,,,,,Führt zu Geheimraum,1
-#ffd966,Adrenalin- injektion,Heilen,,Regal,Bonus,,,+2 Stärke,+2 Stärke für 5 Kampfrunden,2
-#ffd966,Fokuskristall,Zaubern,,Truhe,Bonus,,,+1 Zaubern,+1 auf arkane Probe für 5 Kampfrunden,2
-#ffd966,Runenstein,Zaubern,,Truhe,Bonus,,,,Reagiert auf Magie,0
-#ffd966,Geheim- dokumente,Recherche,-1,Kommode,Bonus,,,-1 Zielkarte,Enthält wichtige Hinweise,1
-#ffd966,Schmuggler- kiste,Wahrnehmung,-1,Truhe,Bonus,,,1 extra Karte,Zusätzlich 1 weiterer Fund,1
-#ffd966,Kultmaske,Willenskraft,-1,Truhe,Abgelenkt,,,,+1 Einschüchtern gegen Kultisten (Willenskraft),1
-#ffd966,Improvisierte Rohrbombe,Reparieren,-1,Regal,,2W8 Explosion,,,"Kleine Schablone, 2W8 Schaden",1
-#ffd966,Frostkugel,Zaubern,-1,Truhe,Festgehalten,,,,Ziel erhält Zustand „Langsam“,1
-#ffd966,Donnerstein,Zaubern,-1,Truhe,Benommen,,,,"Kleine Schablone, Gegner müssen Konstitutionsprobe bestehen oder sind Benommen",1
-#ffd966,Explosiver Munition,Reparieren,-1,Kiste,Bonus,,,+2W6 Schaden,Munition mit +2W6 Explosionsschaden,1
-#ffd966,Schallkapsel,Elektronik,,Kiste,Benommen,,,,Gegner im kleinen Radius müssen Willenskraftprobe bestehen,1
-#f6b26b,Magische Splitterkugel,Zaubern,-2,Beutel,Schaden,2W6,,,"Mittlere Schablone, magischer Schaden",1
-#f6b26b,Runensiegel der Verbrennung,Zaubern,-2,Truhe,Schaden,2W6,,,Einmaliger magischer Flächenangriff,1
-#6d9eeb,Antikes Buch,Geisteswissenschaften,,Regal,,,,,Enthält verborgenes Wissen,0
+#93c47d,Verlorener Geldbeutel,Wahrnehmung,,Beutel,Bonus,,,2W6 × 10 $,"Ein abgenutzter Lederbeutel voller Münzen, oft unter Möbeln oder zwischen Knochen versteckt.
+Normale Beute",4
+#6d9eeb,Brandöl,Naturwissenschaften,,Regal,Schaden,2W6,,,"Dickflüssiges Öl, das sich nach Entzündung nur schwer löschen lässt.
+Ziel brennt 2 Runden",2
+#93c47d,Nebelkapsel,Wahrnehmung,,Kiste,Mallus,,-2 Fernkampf,,"Eine zerbrechliche Kugel mit dichtem Rauchpulver.
+Erzeugt Sichtblockade für 3 Runden",4
+#6d9eeb,Edelsteine,Wahrnehmung,,Beutel,Bonus,,,150 $,"Kleine rohe oder geschliffene Edelsteine, häufig in geheimen Fächern versteckt.
+Klein und leicht versteckbar",2
+#6d9eeb,Durchschlags- munition,Kriegskunst,,Kiste,Bonus,,,+2 Durchdringung,"Speziell gehärtete Munition gegen schwere Rüstung.
+Ignoriert 2 Punkte Panzerung",2
+#6d9eeb,Heiltrank,Naturwissenschaften,,Regal,Bonus,,,- 1 Wunde,"Eine rote Flüssigkeit in einer Glasphiole mit leichtem Kräutergeruch.
+Heilt 1 Wunde und hebt Angeschlagen auf",2
+#6d9eeb,Magietrank,Zaubern,,Regal,Bonus,,,+5 Magie,"Eine fliederfarbene Flüssigkeit in einer Glasphiole riecht nach nichts (ohne Arkanan Fähigkeiten)
+Regeneriert 5 Magiepunkte",2
+#6d9eeb,Blendbombe,Naturwissenschaften,,Kiste,Abgelenkt,,,,"Eine kleine Metallkugel mit blendendem Magnesiumkern.
+Gegner erhalten Ablenkung",2
+#6d9eeb,Dietrich-Set,Diebeskunst,,Kommode,Bonus,,,+1 Diebeskunst,"Fein gearbeitete Werkzeuge zum Öffnen von Schlössern.
++1 auf Schloss öffnen",2
+#6d9eeb,Feldmedizin-Kit,Heilen,,Regal,Bonus,,,+1 Heilen,"Enthält Verbände, Kräuter und chirurgisches Werkzeug.
++1 auf Heilen",2
+#6d9eeb,Alchemistische Feuerflasche,Naturwissenschaften,,Regal,Schaden,2W6 Feuer,,,"Eine Glasflasche voller brennbarer Flüssigkeit mit Stoffdocht.
+Wurfwaffe, verursacht 2W6 Feuerschaden",2
+#6d9eeb,Blendgranate,Kriegskunst,,Kiste,Abgelenkt,,,,"Eine metallene Kugel, die beim Zünden grelles Licht erzeugt.
+Gegner erhalten Ablenkung",2
+#6d9eeb,Säureampulle,Naturwissenschaften,,Regal,Bonus,,,+4 Durchdringung,"Ein Glasbehälter mit aggressiver grüner Flüssigkeit.
+Ignoriert 4 Punkte Panzerung für alle Angriffe",2
+#6d9eeb,Giftpfeil,Überleben,,Kiste,Mallus,,-1 auf Proben,,"Ein leichter Pfeil mit toxischer Beschichtung.
+Ein Treffer verursacht zusätzlich Müdigkeit",2
+#6d9eeb,Elektro- schockstab,Reparieren,,Kiste,Angeschlagen,,,,"Ein einfacher Nahkampfstab mit einmaliger Stromladung.
+Ein Treffer kann Ziel Benommen machen (Willenskraft)",2
+#6d9eeb,Jagdfalle zum Werfen,Überleben,,Kiste,Gebunden,,,,"Zusammenklappbare Metallfalle mit Kettenmechanismus.
+Ziel wird Bewegungsunfähig bei Treffer",2
+#f6b26b,Verstecktes Depot,Wahrnehmung,-2,Spezial,Bonus,,,2 extra Karten,"Ein geheimer Lagerraum hinter falschen Wänden oder Böden.
+2 Fundkarten extra",2
+#6d9eeb,Schatzkarte,Recherche,,Karte,,,,,"Eine vergilbte Karte mit geheimen Markierungen.
+Führt zu Geheimraum",1
+#ffd966,Adrenalin- injektion,Heilen,,Regal,Bonus,,,+2 Stärke,"Eine Spritze mit leistungssteigernder Substanz.
++2 Stärke für 5 Kampfrunden",2
+#ffd966,Fokuskristall,Zaubern,,Truhe,Bonus,,,+1 Zaubern,"Ein leuchtender Kristall, der arkane Energien bündelt.
++1 auf arkane Probe für 5 Kampfrunden",2
+#ffd966,Runenstein,Zaubern,,Truhe,Bonus,,,,"Ein uralter Stein mit schwach glühenden Symbolen.
+Reagiert auf Magie",0
+#ffd966,Geheim- dokumente,Recherche,-1,Kommode,Bonus,,,-1 Zielkarte,"Schriftrollen oder Briefe mit brisanten Informationen.
+Enthält wichtige Hinweise",1
+#ffd966,Schmuggler- kiste,Wahrnehmung,-1,Truhe,Bonus,,,1 extra Karte,"Eine versteckte Kiste voller verbotener Waren.
+Zusätzlich 1 weiterer Fund",1
+#ffd966,Kultmaske,Willenskraft,-1,Truhe,Abgelenkt,,,,"Eine furchteinflößende Maske eines alten Kultes.
++1 Einschüchtern gegen Kultisten (Willenskraft)",1
+#ffd966,Improvisierte Rohrbombe,Reparieren,-1,Regal,,2W8 Explosion,,,"Grob zusammengebauter Sprengsatz aus Metallrohren und Schwarzpulver.
+Kleine Schablone, 2W8 Schaden",1
+#ffd966,Frostkugel,Zaubern,-1,Truhe,Festgehalten,,,,"Eine eisig kalte Kugel mit magischen Frostsymbolen.
+Ziel erhält Zustand „Langsam“",1
+#ffd966,Donnerstein,Zaubern,-1,Truhe,Benommen,,,,"Ein Runenstein, der beim Aufprall ohrenbetäubend explodiert.
+Kleine Schablone, Gegner müssen Konstitutionsprobe bestehen oder sind Benommen",1
+#ffd966,Explosive Munition,Reparieren,-1,Kiste,Bonus,,,+2W6 Schaden,"Eine Patrone mit kleiner Sprengladung.
+Munition mit +2W6 Explosionsschaden",1
+#ffd966,Schallkapsel,Elektronik,,Kiste,Benommen,,,,"Ein technischer Sprengsatz mit extrem lauter Druckwelle.
+Gegner im kleinen Radius müssen Willenskraftprobe bestehen",1
+#f6b26b,Magische Splitterkugel,Zaubern,-2,Beutel,Schaden,2W6,,,"Eine Kugel voller arkan geladener Splitter.
+Mittlere Schablone, magischer Schaden",1
+#f6b26b,Runensiegel der Verbrennung,Zaubern,-2,Truhe,Schaden,2W6,,,"Ein magisches Pergament mit eingravierten Feuerglyphen.
+Einmaliger magischer Flächenangriff",1
+#6d9eeb,Antikes Buch,Geisteswissenschaften,,Regal,,,,,"Ein schweres staubiges Buch voller vergessenen Wissens.
+Enthält verborgenes Wissen",0

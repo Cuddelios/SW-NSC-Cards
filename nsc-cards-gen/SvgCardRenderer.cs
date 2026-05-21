@@ -68,7 +68,7 @@ public sealed class SvgCardRenderer
             throw new ArgumentOutOfRangeException(nameof(targetHeightPx));
         }
 
-        Console.WriteLine($"Creating SVG of {(values.TryGetValue("name", out var name)?name:"<unknown>")}");
+        Console.WriteLine($"Creating SVG of {(values.TryGetValue("name", out var name) || values.TryGetValue("name_short", out name) ? name : "<unknown>")}");
 
         string svgContent = BuildFilledSvg(values);
         return RenderSvgToPng(svgContent, targetWidthPx, targetHeightPx);
@@ -123,6 +123,7 @@ public sealed class SvgCardRenderer
         edges,
         weapons,
         name_short,
+        fail_text
     }
 
     private static void FillTemplateFields(
@@ -205,7 +206,15 @@ public sealed class SvgCardRenderer
                     case TemplateFieldType.name_short:
                         if(TryGetTemplateValue(values, fieldName, out value))
                         {
-                            displayText = string.Join('\n', SplitTextLength(value ?? string.Empty, 15));
+                            displayText = string.Join('\n', SplitTextLength(value ?? string.Empty, 16));
+                            ApplyTextValue(element, displayText);
+                        }
+                        continue;
+
+                    case TemplateFieldType.fail_text:
+                        if(TryGetTemplateValue(values, fieldName, out value))
+                        {
+                            displayText = string.Join('\n', SplitTextLength(value ?? string.Empty, 20));
                             ApplyTextValue(element, displayText);
                         }
                         continue;
