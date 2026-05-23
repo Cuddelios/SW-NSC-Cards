@@ -1,0 +1,44 @@
+{
+    "configurations": [
+        {
+        "name": "Loot Cards",
+        "template": "loot_template.svg",
+        "backcard": "npc_card_back_diamonds.svg",
+        "titlecard": "title_loot.svg",
+        "data": "loot_settings.csv",
+        "output": "loot_cards"
+        },
+        {
+        "name": "Barrier Cards",
+        "template": "barrier_template.svg",
+        "backcard": "npc_card_back_clubs.svg",
+        "titlecard": "title_barriers.svg",
+        "data": "barrier_settings.csv",
+        "output": "barrier_cards"
+        },
+        {
+        "name": "Enemy Cards",
+        "template": "npc_template_enemy.svg",
+        "backcard": "npc_card_back_sprades.svg",
+        "titlecard": "title_enemies.svg",
+        "data": "npc_settings_nomal.csv",
+        "output": "enemy_cards"
+        },
+        {
+        "name": "Wildcard Enemy Cards",
+        "template": "npc_template_enemy.svg",
+        "backcard": "npc_card_back_sprades_wc.svg",
+        "titlecard": "title_enemies_wc.svg",
+        "data": "npc_settings_wc.csv",
+        "output": "wildcard_enemy_cards"
+        },
+        {
+        "name": "Encounter Cards",
+        "template": "npc_template_encounter.svg",
+        "backcard": "npc_card_back_hearts.svg",
+        "titlecard": "title_encounters.svg",
+        "data": "npc_settings_encounter.csv",
+        "output": "encounter_cards"
+        }
+    ]
+}
