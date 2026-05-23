@@ -10,7 +10,7 @@
         },
         {
         "name": "Barrier Cards",
-        "template": "barrier_template.svg",
+        "template": "barriers_template.svg",
         "backcard": "npc_card_back_clubs.svg",
         "titlecard": "title_barriers.svg",
         "data": "barrier_settings.csv",
@@ -21,7 +21,7 @@
         "template": "npc_template_enemy.svg",
         "backcard": "npc_card_back_sprades.svg",
         "titlecard": "title_enemies.svg",
-        "data": "npc_settings_nomal.csv",
+        "data": "npc_settings_normal.csv",
         "output": "enemy_cards"
         },
         {

@@ -1,19 +1,40 @@
 ﻿using SvgPdfGenerator;
 using SvgPdfGenerator.Models;
+using System.Text.Json;
 
-string csvPath = args.Length > 0
-    ? args[0]
-    : SelectInputFile("data", "*.csv", "Daten");
+string csvPath;
+string svgTemplatePath;
+string backTemplatePath;
+string outputPdfPath;
 
-string svgTemplatePath = args.Length > 1
-    ? args[1]
-    : SelectInputFile("templates", "*_template*.svg", "Vorlage");
+if (args.Length == 0)
+{
+    CardConfiguration selectedConfiguration = SelectCardConfiguration(Path.Combine("data", "card_configuration.json"));
+    csvPath = Path.Combine("data", selectedConfiguration.Data);
+    svgTemplatePath = Path.Combine("templates", selectedConfiguration.Template);
+    backTemplatePath = Path.Combine("templates", selectedConfiguration.Backcard);
+    outputPdfPath = BuildOutputPath(selectedConfiguration.Output);
+}
+else
+{
+    csvPath = args.Length > 0
+        ? args[0]
+        : SelectInputFile("data", "*.csv", "Daten");
 
-string backTemplatePath = args.Length > 2
-    ? args[2]
-    : SelectInputFile("templates", "npc_card_back_*.svg", "Rueckseiten-Vorlage");
+    svgTemplatePath = args.Length > 1
+        ? args[1]
+        : SelectInputFile("templates", "*_template*.svg", "Vorlage");
 
-string outputPdfPath = BuildOutputPathFromData(csvPath);
+    backTemplatePath = args.Length > 2
+        ? args[2]
+        : SelectInputFile("templates", "npc_card_back_*.svg", "Rueckseiten-Vorlage");
+
+    outputPdfPath = BuildOutputPathFromData(csvPath);
+}
+
+EnsureFileExists(csvPath, "Daten");
+EnsureFileExists(svgTemplatePath, "Vorlage");
+EnsureFileExists(backTemplatePath, "Rueckseiten-Vorlage");
 bool usesCharacterTemplate = true;
 // bool usesCharacterTemplate = string.Equals(
 //Path.GetFileName(svgTemplatePath),
@@ -165,6 +186,96 @@ static string SelectInputFile(string directoryPath, string searchPattern, string
     }
 }
 
+static CardConfiguration SelectCardConfiguration(string configurationPath)
+{
+    string fullConfigurationPath = Path.GetFullPath(configurationPath);
+    if (!File.Exists(fullConfigurationPath))
+    {
+        throw new FileNotFoundException("Die Karten-Konfiguration wurde nicht gefunden.", fullConfigurationPath);
+    }
+
+    string configurationJson = File.ReadAllText(fullConfigurationPath);
+    var jsonOptions = new JsonSerializerOptions
+    {
+        PropertyNameCaseInsensitive = true
+    };
+
+    CardConfigurationFile? configurationFile = JsonSerializer.Deserialize<CardConfigurationFile>(
+        configurationJson,
+        jsonOptions);
+
+    List<CardConfiguration> configurations = configurationFile?.Configurations?
+        .Where(configuration => !string.IsNullOrWhiteSpace(configuration.Name))
+        .ToList()
+        ?? [];
+
+    if (configurations.Count == 0)
+    {
+        throw new InvalidOperationException($"Keine Karten-Konfigurationen in {fullConfigurationPath} gefunden.");
+    }
+
+    Console.WriteLine("Karten-Konfiguration auswaehlen:");
+    for (int index = 0; index < configurations.Count; index++)
+    {
+        Console.WriteLine($"  {index + 1}. {configurations[index].Name}");
+    }
+
+    if (configurations.Count == 1)
+    {
+        Console.WriteLine($"Nur eine Option verfuegbar, automatisch ausgewaehlt: {configurations[0].Name}");
+        return ValidateCardConfiguration(configurations[0], fullConfigurationPath);
+    }
+
+    while (true)
+    {
+        Console.Write("Nummer fuer Karten-Konfiguration: ");
+        string? input = Console.ReadLine();
+
+        if (int.TryParse(input, out int selection)
+            && selection >= 1
+            && selection <= configurations.Count)
+        {
+            return ValidateCardConfiguration(configurations[selection - 1], fullConfigurationPath);
+        }
+
+        Console.WriteLine($"Bitte eine Zahl zwischen 1 und {configurations.Count} eingeben.");
+    }
+}
+
+static CardConfiguration ValidateCardConfiguration(
+    CardConfiguration configuration,
+    string configurationPath)
+{
+    RequireConfigurationValue(configuration.Name, "name", configurationPath);
+    RequireConfigurationValue(configuration.Template, "template", configurationPath);
+    RequireConfigurationValue(configuration.Backcard, "backcard", configurationPath);
+    RequireConfigurationValue(configuration.Data, "data", configurationPath);
+    RequireConfigurationValue(configuration.Output, "output", configurationPath);
+
+    return configuration;
+}
+
+static void RequireConfigurationValue(
+    string value,
+    string fieldName,
+    string configurationPath)
+{
+    if (string.IsNullOrWhiteSpace(value))
+    {
+        throw new InvalidOperationException(
+            $"Das Feld '{fieldName}' darf in {configurationPath} nicht leer sein.");
+    }
+}
+
+static void EnsureFileExists(string filePath, string label)
+{
+    string fullPath = Path.GetFullPath(filePath);
+    if (!File.Exists(fullPath))
+    {
+        throw new FileNotFoundException($"{label}-Datei wurde nicht gefunden.", fullPath);
+    }
+}
+
 static List<Dictionary<string, string>> ExpandRowsByCount(
     IReadOnlyList<Dictionary<string, string>> rows,
     string countFieldName)
@@ -289,4 +400,41 @@ static string BuildOutputPathFromData(string csvPath)
     }
 
     return Path.Combine("output", $"{fileNameWithoutExtension}.pdf");
+}
+
+static string BuildOutputPath(string outputName)
+{
+    string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(outputName);
+
+    if (string.IsNullOrWhiteSpace(fileNameWithoutExtension))
+    {
+        fileNameWithoutExtension = "output";
+    }
+
+    foreach (char invalidChar in Path.GetInvalidFileNameChars())
+    {
+        fileNameWithoutExtension = fileNameWithoutExtension.Replace(invalidChar, '_');
+    }
+
+    return Path.Combine("output", $"{fileNameWithoutExtension}.pdf");
+}
+
+sealed class CardConfigurationFile
+{
+    public List<CardConfiguration>? Configurations { get; set; }
+}
+
+sealed class CardConfiguration
+{
+    public string Name { get; set; } = string.Empty;
+
+    public string Template { get; set; } = string.Empty;
+
+    public string Backcard { get; set; } = string.Empty;
+
+    public string Titlecard { get; set; } = string.Empty;
+
+    public string Data { get; set; } = string.Empty;
+
+    public string Output { get; set; } = string.Empty;
 }
