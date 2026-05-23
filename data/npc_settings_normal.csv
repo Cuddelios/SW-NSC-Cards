@@ -21,7 +21,7 @@ card_back_color,level_color,wc_wound,skills_text,description,edges,weapons,parry
 #e06666,#e06666,FALSE,"Kampfen d8, Einschüchtern d6","Treffer mit Steigerung wirken Betäuben, geht von Ziel zu Ziel.","Riesig,Betäuben,Faust St+W10",Faust St+W10,6,10,+6,7,Steingolem,,Golem,d6,d10,d12,d4,d6,1,6,
 #ffd966,#ffd966,FALSE,"Kämpfen d8, Einschüchtern d6",Stürmt direkt in den Nahkampf.,Keule St+W6,Keule St+W6,6,7,+2,4,Schläger,Halbork,Halbork,d6,d8,d10,d4,d6,3,6,
 #ffd966,#ffd966,FALSE,"Kämpfen d6, Wahrnehmung d6",Verteidigt Positionen und blockiert Durchgänge.,Speer St+W6,Speer St+W6,7,6,+2,4,Wache,Halbork,Halbork,d6,d8,d8,d4,d6,3,6,
-#ffd966,#ffd966,FALSE,"Schießen d8, Heimlichkeit d6, Kämpfen d6",Schießt aus kurzer Distanz und versteckt sich danach.,"Schrotflinte 1-3W6, Messer St+W4","Schrotflinte 1-3W6, Messer St+W4",5,5,+2,4,Schrotschütze,Goblin,Goblin,d8,d6,d4,d6,d6,3,6,ammo_2
+#ffd966,#ffd966,FALSE,"Schießen d8, Heimlichkeit d6, Kämpfen d6",Schießt aus kurzer Distanz und versteckt sich danach.,"Schrotflinte 1-3W6, Messer St+W4","Schrotflinte 1-3W6, Messer St+W4",5,5,+2,4,Schrotschütze,Goblin,Goblin,d8,d6,d4,d6,d6,2,6,ammo_2
 #6d9eeb,#6d9eeb,FALSE,"Schießen d8, Heimlichkeit d8",Bleibt versteckt und sucht gezielte Treffer.,"Meisterschütze,Gewehr 2W8",Gewehr 2W8,3,5,+2,3,Scharfschütze,Goblin,Goblin,d8,d6,d4,d6,d6,1,6,ammo
 #6d9eeb,#6d9eeb,FALSE,"Kämpfen d8, Einschüchtern d6",Greift ohne Rücksicht auf Verluste an.,Dolch St+W4,Dolch St+W4,6,6,+1,3,Kultfanatiker,,Kultist,d6,d6,d6,d4,d8,2,6,
 #6d9eeb,#6d9eeb,FALSE,"Kämpfen d6, Wahrnehmung d6",Beschützt den Kultführer.,Speer St+W6,Speer St+W6,5,6,+2,3,Kultwache,,Kultist,d6,d8,d6,d4,d6,2,6,

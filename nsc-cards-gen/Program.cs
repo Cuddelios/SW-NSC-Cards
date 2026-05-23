@@ -6,6 +6,7 @@ string csvPath;
 string svgTemplatePath;
 string backTemplatePath;
 string outputPdfPath;
+string? titleTemplatePath = null;
 
 if (args.Length == 0)
 {
@@ -13,6 +14,7 @@ if (args.Length == 0)
     csvPath = Path.Combine("data", selectedConfiguration.Data);
     svgTemplatePath = Path.Combine("templates", selectedConfiguration.Template);
     backTemplatePath = Path.Combine("templates", selectedConfiguration.Backcard);
+    titleTemplatePath = Path.Combine("templates", selectedConfiguration.Titlecard);
     outputPdfPath = BuildOutputPath(selectedConfiguration.Output);
 }
 else
@@ -35,6 +37,11 @@ else
 EnsureFileExists(csvPath, "Daten");
 EnsureFileExists(svgTemplatePath, "Vorlage");
 EnsureFileExists(backTemplatePath, "Rueckseiten-Vorlage");
+if (!string.IsNullOrWhiteSpace(titleTemplatePath))
+{
+    EnsureFileExists(titleTemplatePath, "Titelkarten-Vorlage");
+}
+
 bool usesCharacterTemplate = true;
 // bool usesCharacterTemplate = string.Equals(
 //Path.GetFileName(svgTemplatePath),
@@ -52,6 +59,11 @@ if (args.Length > 2)
 Console.WriteLine($"Daten: {Path.GetFullPath(csvPath)}");
 Console.WriteLine($"Vorlage: {Path.GetFullPath(svgTemplatePath)}");
 Console.WriteLine($"Rueckseite: {Path.GetFullPath(backTemplatePath)}");
+if (!string.IsNullOrWhiteSpace(titleTemplatePath))
+{
+    Console.WriteLine($"Titelkarte: {Path.GetFullPath(titleTemplatePath)}");
+}
+
 Console.WriteLine($"Ausgabe: {Path.GetFullPath(outputPdfPath)}");
 Console.WriteLine();
 
@@ -68,6 +80,9 @@ if (cards.Count == 0)
 var cardRenderer = new SvgCardRenderer(
     svgTemplatePath);
 var cardBackRenderer = new SvgCardRenderer(backTemplatePath);
+SvgCardRenderer? titleCardRenderer = !string.IsNullOrWhiteSpace(titleTemplatePath)
+    ? new SvgCardRenderer(titleTemplatePath)
+    : null;
 
 var layoutOptions = new PdfLayoutOptions
 {
@@ -102,8 +117,12 @@ var meinspielLayoutOptions = new PdfLayoutOptions
     PageHeightPt = MmToPt(97)
 };
 
-pdfWriter.WriteCards(meinspielFrontOutputPath, cards, cardRenderer, meinspielLayoutOptions);
-pdfWriter.WriteCards(meinspielBackOutputPath, cards, RenderCardBackAsPng, meinspielLayoutOptions);
+List<Dictionary<string, string>> meinspielCards = titleCardRenderer != null
+    ? AddMeinspielTitleCard(cards)
+    : cards;
+
+pdfWriter.WriteCards(meinspielFrontOutputPath, meinspielCards, RenderMeinspielFrontCardAsPng, meinspielLayoutOptions);
+pdfWriter.WriteCards(meinspielBackOutputPath, meinspielCards, RenderCardBackAsPng, meinspielLayoutOptions);
 
 Console.WriteLine($"PDF erzeugt: {Path.GetFullPath(outputPdfPath)}");
 Console.WriteLine($"MeinSpiel Front-PDF erzeugt: {Path.GetFullPath(meinspielFrontOutputPath)}");
@@ -119,6 +138,25 @@ byte[] RenderCardBackAsPng(
     int targetHeightPx)
 {
     return cardBackRenderer.RenderCardAsPng(
+        row,
+        targetWidthPx,
+        targetHeightPx);
+}
+
+byte[] RenderMeinspielFrontCardAsPng(
+    IReadOnlyDictionary<string, string> row,
+    int targetWidthPx,
+    int targetHeightPx)
+{
+    if (titleCardRenderer != null && IsMeinspielTitleCard(row))
+    {
+        return titleCardRenderer.RenderCardAsPng(
+            row,
+            targetWidthPx,
+            targetHeightPx);
+    }
+
+    return cardRenderer.RenderCardAsPng(
         row,
         targetWidthPx,
         targetHeightPx);
@@ -249,6 +287,7 @@ static CardConfiguration ValidateCardConfiguration(
     RequireConfigurationValue(configuration.Name, "name", configurationPath);
     RequireConfigurationValue(configuration.Template, "template", configurationPath);
     RequireConfigurationValue(configuration.Backcard, "backcard", configurationPath);
+    RequireConfigurationValue(configuration.Titlecard, "titlecard", configurationPath);
     RequireConfigurationValue(configuration.Data, "data", configurationPath);
     RequireConfigurationValue(configuration.Output, "output", configurationPath);
 
@@ -274,6 +313,28 @@ static void EnsureFileExists(string filePath, string label)
     {
         throw new FileNotFoundException($"{label}-Datei wurde nicht gefunden.", fullPath);
     }
+}
+
+static List<Dictionary<string, string>> AddMeinspielTitleCard(
+    IReadOnlyList<Dictionary<string, string>> cards)
+{
+    var cardsWithTitle = new List<Dictionary<string, string>>(cards.Count + 1)
+    {
+        new()
+        {
+            ["name"] = "Titelkarte",
+            ["__card_type"] = "meinspiel-title"
+        }
+    };
+
+    cardsWithTitle.AddRange(cards);
+    return cardsWithTitle;
+}
+
+static bool IsMeinspielTitleCard(IReadOnlyDictionary<string, string> row)
+{
+    return row.TryGetValue("__card_type", out string? cardType)
+        && string.Equals(cardType, "meinspiel-title", StringComparison.Ordinal);
 }
 
 static List<Dictionary<string, string>> ExpandRowsByCount(

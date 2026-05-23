@@ -34,7 +34,7 @@
         },
         {
         "name": "Encounter Cards",
-        "template": "npc_template_encounter.svg",
+        "template": "npc_template_enemy.svg",
         "backcard": "npc_card_back_hearts.svg",
         "titlecard": "title_encounters.svg",
         "data": "npc_settings_encounter.csv",
