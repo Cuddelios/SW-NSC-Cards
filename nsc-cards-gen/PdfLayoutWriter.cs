@@ -70,12 +70,14 @@ public sealed class PdfLayoutWriter
         CardRenderDelegate frontRenderer,
         CardRenderDelegate? backRenderer,
         PdfLayoutOptions layoutOptions,
-        bool mirrorBackPageHorizontally = false)
+        bool? mirrorBackPageHorizontally = null)
     {
         if (string.IsNullOrWhiteSpace(outputPdfPath))
         {
             throw new ArgumentException("Output PDF path must not be empty.", nameof(outputPdfPath));
         }
+
+        var fileName = Path.GetFileName(outputPdfPath);
 
         if (rows == null)
         {
@@ -99,6 +101,8 @@ public sealed class PdfLayoutWriter
         }
 
         using SKDocument pdf = SKDocument.CreatePdf(outputPdfPath);
+
+        Console.Write($"Creating PDF {fileName} ");
 
         SKCanvas? canvas = null;
         double pageWidthPt = 0;
@@ -135,6 +139,8 @@ public sealed class PdfLayoutWriter
 
         for (int pageStartIndex = 0; pageStartIndex < rows.Count; pageStartIndex += itemsPerPage)
         {
+            Console.Write(".");
+
             if (pageStartIndex > 0)
             {
                 StartNewPage();
@@ -149,8 +155,7 @@ public sealed class PdfLayoutWriter
                 frontRenderer,
                 canvas!,
                 layoutOptions,
-                pageWidthPt,
-                mirrorHorizontally: false);
+                (pageWidthPt, pageHeightPt));
 
             if (backRenderer != null)
             {
@@ -163,7 +168,7 @@ public sealed class PdfLayoutWriter
                     backRenderer,
                     canvas!,
                     layoutOptions,
-                    pageWidthPt,
+                    (pageWidthPt, pageHeightPt),
                     mirrorHorizontally: mirrorBackPageHorizontally);
             }
         }
@@ -174,6 +179,9 @@ public sealed class PdfLayoutWriter
         }
 
         pdf.Close();
+
+        Console.WriteLine(" done");
+        Console.WriteLine($"with {rows.Count} cards and {(rows.Count + itemsPerPage - 1) / itemsPerPage} pages.");
     }
 
     private static void DrawCardPage(
@@ -184,8 +192,8 @@ public sealed class PdfLayoutWriter
         CardRenderDelegate renderer,
         SKCanvas canvas,
         PdfLayoutOptions layoutOptions,
-        double pageWidthPt,
-        bool mirrorHorizontally)
+        (double Width, double Height) pageSizePt,
+        bool? mirrorHorizontally = null)
     {
         for (int pageIndex = 0; pageIndex < cardsOnPage; pageIndex++)
         {
@@ -195,9 +203,12 @@ public sealed class PdfLayoutWriter
             double x = layoutOptions.MarginPt + column * (layoutOptions.CardWidthPt + layoutOptions.GapXPt);
             double y = layoutOptions.MarginPt + row * (layoutOptions.CardHeightPt + layoutOptions.GapYPt);
 
-            if (mirrorHorizontally)
+            if (mirrorHorizontally!= null)
             {
-                x = pageWidthPt - x - layoutOptions.CardWidthPt;
+                if (mirrorHorizontally.Value)
+                    x = pageSizePt.Width - x - layoutOptions.CardWidthPt;
+                else
+                    y = pageSizePt.Height - y - layoutOptions.CardHeightPt;                
             }
 
             int renderWidthPx = ConvertPointsToPixels(layoutOptions.CardWidthPt, layoutOptions.RenderDpi);

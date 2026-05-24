@@ -69,6 +69,8 @@ public sealed class PdfColorConverter
 
         AddGhostscriptArguments(startInfo, fullInputPdfPath, fullOutputPdfPath, fullIccProfilePath);
 
+        Console.WriteLine($"Starting Ghostscript to convert '{Path.GetFileName(fullInputPdfPath)}' to CMYK PDF '{Path.GetFileName(fullOutputPdfPath)}' using ICC profile '{Path.GetFileName(fullIccProfilePath)}'...");
+
         using Process process = Process.Start(startInfo)
             ?? throw new InvalidOperationException("Ghostscript konnte nicht gestartet werden.");
 

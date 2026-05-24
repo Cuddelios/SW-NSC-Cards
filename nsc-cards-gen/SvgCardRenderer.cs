@@ -68,7 +68,7 @@ public sealed class SvgCardRenderer
             throw new ArgumentOutOfRangeException(nameof(targetHeightPx));
         }
 
-        Console.WriteLine($"Creating SVG of {(values.TryGetValue("name", out var name) || values.TryGetValue("name_short", out name) ? name : "<unknown>")}");
+//        Console.WriteLine($"Creating SVG of {(values.TryGetValue("name", out var name) || values.TryGetValue("name_short", out name) ? name : "<unknown>")}");
 
         string svgContent = BuildFilledSvg(values);
         return RenderSvgToPng(svgContent, targetWidthPx, targetHeightPx);

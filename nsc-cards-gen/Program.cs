@@ -5,8 +5,10 @@ using System.Text.Json;
 string csvPath;
 string svgTemplatePath;
 string backTemplatePath;
-string outputPdfPath;
+string outputPdfHorizontalPath;
+string outputPdfVerticalPath;
 string? titleTemplatePath = null;
+var outputPathBase = string.Empty;
 
 if (args.Length == 0)
 {
@@ -15,7 +17,9 @@ if (args.Length == 0)
     svgTemplatePath = Path.Combine("templates", selectedConfiguration.Template);
     backTemplatePath = Path.Combine("templates", selectedConfiguration.Backcard);
     titleTemplatePath = Path.Combine("templates", selectedConfiguration.Titlecard);
-    outputPdfPath = BuildOutputPath(selectedConfiguration.Output);
+    outputPdfHorizontalPath = BuildOutputPath(selectedConfiguration.Output, horizontalMirror: true);
+    outputPdfVerticalPath = BuildOutputPath(selectedConfiguration.Output, horizontalMirror: false);
+    outputPathBase = BuildOutputPath(selectedConfiguration.Output);
 }
 else
 {
@@ -31,8 +35,13 @@ else
         ? args[2]
         : SelectInputFile("templates", "npc_card_back_*.svg", "Rueckseiten-Vorlage");
 
-    outputPdfPath = BuildOutputPathFromData(csvPath);
+    outputPdfHorizontalPath = BuildOutputPathFromData(csvPath);
+    outputPdfVerticalPath = BuildOutputPathFromData(csvPath).Replace(".pdf", ".v_mirror.pdf");
+    outputPathBase = outputPdfHorizontalPath;
 }
+
+var createCmykPdfs = SelectContinue("Sollen die PDF-Dateien als cmyk erzeugt werden?");
+var createMeinspielOutput = SelectContinue("Moechten Sie die MeinSpiel-Ausgabe erzeugen?");
 
 EnsureFileExists(csvPath, "Daten");
 EnsureFileExists(svgTemplatePath, "Vorlage");
@@ -48,7 +57,7 @@ bool usesCharacterTemplate = true;
 //    "char_template.svg",
 //    StringComparison.OrdinalIgnoreCase);
 
-Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(outputPdfPath)) ?? "output");
+Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(outputPdfHorizontalPath)) ?? "output");
 
 Console.WriteLine();
 if (args.Length > 2)
@@ -64,7 +73,10 @@ if (!string.IsNullOrWhiteSpace(titleTemplatePath))
     Console.WriteLine($"Titelkarte: {Path.GetFullPath(titleTemplatePath)}");
 }
 
-Console.WriteLine($"Ausgabe: {Path.GetFullPath(outputPdfPath)}");
+Console.WriteLine($"Ausgabe (horizontal): {Path.GetFullPath(outputPdfHorizontalPath)}");
+Console.WriteLine($" Die Rückseite ist an der kurzen Seite gespiegelt.");
+Console.WriteLine($"Ausgabe (vertical): {Path.GetFullPath(outputPdfVerticalPath)}");
+Console.WriteLine($" Die Rückseite ist an der langen Seite gespiegelt.");
 Console.WriteLine();
 
 var csvReader = new CsvReaderService();
@@ -96,15 +108,38 @@ var layoutOptions = new PdfLayoutOptions
 
 var pdfWriter = new PdfLayoutWriter();
 pdfWriter.WriteCardsWithInterleavedBacks(
-    outputPdfPath,
+    outputPdfHorizontalPath,
     cards,
     cardRenderer.RenderCardAsPng,
     RenderCardBackAsPng,
     layoutOptions,
     mirrorBackPageHorizontally: true);
 
-var meinspielFrontOutputPath = BuildMeinspielFrontOutputPath(outputPdfPath);
-var meinspielBackOutputPath = BuildMeinspielBackOutputPath(outputPdfPath);
+pdfWriter.WriteCardsWithInterleavedBacks(
+    outputPdfVerticalPath,
+    cards,
+    cardRenderer.RenderCardAsPng,
+    RenderCardBackAsPng,
+    layoutOptions,
+    mirrorBackPageHorizontally: false);
+
+Console.WriteLine($"DinA4 PDF erzeugt: {Path.GetFullPath(outputPdfHorizontalPath)}");
+Console.WriteLine($"DinA4 PDF erzeugt: {Path.GetFullPath(outputPdfVerticalPath)}");
+
+if (createCmykPdfs)
+{
+    ConvertPdfToCmykIfPossible(outputPdfHorizontalPath);
+    ConvertPdfToCmykIfPossible(outputPdfVerticalPath);  
+}
+
+if (!createMeinspielOutput)
+{
+    return;
+}
+
+var meinspielFrontOutputPath = BuildMeinspielFrontOutputPath(outputPathBase);
+var meinspielBackOutputPath = BuildMeinspielBackOutputPath(outputPathBase);
+
 var meinspielLayoutOptions = new PdfLayoutOptions
 {
     MarginPt = 0,
@@ -124,11 +159,9 @@ List<Dictionary<string, string>> meinspielCards = titleCardRenderer != null
 pdfWriter.WriteCards(meinspielFrontOutputPath, meinspielCards, RenderMeinspielFrontCardAsPng, meinspielLayoutOptions);
 pdfWriter.WriteCards(meinspielBackOutputPath, meinspielCards, RenderCardBackAsPng, meinspielLayoutOptions);
 
-Console.WriteLine($"PDF erzeugt: {Path.GetFullPath(outputPdfPath)}");
 Console.WriteLine($"MeinSpiel Front-PDF erzeugt: {Path.GetFullPath(meinspielFrontOutputPath)}");
 Console.WriteLine($"MeinSpiel Back-PDF erzeugt: {Path.GetFullPath(meinspielBackOutputPath)}");
 
-ConvertPdfToCmykIfPossible(outputPdfPath);
 ConvertPdfToCmykIfPossible(meinspielFrontOutputPath);
 ConvertPdfToCmykIfPossible(meinspielBackOutputPath);
 
@@ -176,6 +209,28 @@ static char DetectDelimiter(string csvPath)
     int commaCount = header.Count(character => character == ',');
 
     return semicolonCount > commaCount ? ';' : ',';
+}
+
+static bool SelectContinue(string label)
+{
+    Console.WriteLine($"{label} (y/j/n)");
+    while (true)
+    {
+        Console.Write("Bitte wählen (y/j/n): ");
+        string? input = Console.ReadLine();
+
+        if (string.Equals(input, "y", StringComparison.OrdinalIgnoreCase)||string.Equals(input, "j", StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        if (string.Equals(input, "n", StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+
+        Console.WriteLine("Ungültige Eingabe. Bitte geben Sie 'y/j' für ja oder 'n' für nein ein.");
+    }
 }
 
 static string SelectInputFile(string directoryPath, string searchPattern, string label)
@@ -463,7 +518,7 @@ static string BuildOutputPathFromData(string csvPath)
     return Path.Combine("output", $"{fileNameWithoutExtension}.pdf");
 }
 
-static string BuildOutputPath(string outputName)
+static string BuildOutputPath(string outputName, bool? horizontalMirror = null)
 {
     string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(outputName);
 
@@ -476,6 +531,9 @@ static string BuildOutputPath(string outputName)
     {
         fileNameWithoutExtension = fileNameWithoutExtension.Replace(invalidChar, '_');
     }
+
+    if(horizontalMirror.HasValue)
+        fileNameWithoutExtension += horizontalMirror.Value ? ".h_mirror" : ".v_mirror";
 
     return Path.Combine("output", $"{fileNameWithoutExtension}.pdf");
 }

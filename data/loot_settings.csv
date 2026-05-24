@@ -33,7 +33,7 @@ Ein Treffer kann Ziel Benommen machen (Willenskraft)",2
 Ziel wird Bewegungsunfähig bei Treffer",2
 #f6b26b,Verstecktes Depot,Wahrnehmung,-2,Spezial,Bonus,,,2 extra Karten,"Ein geheimer Lagerraum hinter falschen Wänden oder Böden.
 2 Fundkarten extra",2
-#6d9eeb,Schatzkarte,Recherche,,Karte,,,,,"Eine vergilbte Karte mit geheimen Markierungen.
+#6d9eeb,Schatzkarte,Recherche,,Karte,,,,+1 Raumkarte,"Eine vergilbte Karte mit geheimen Markierungen.
 Führt zu Geheimraum",1
 #ffd966,Adrenalin- injektion,Heilen,,Regal,Bonus,,,+2 Stärke,"Eine Spritze mit leistungssteigernder Substanz.
 +2 Stärke für 5 Kampfrunden",2
@@ -63,3 +63,29 @@ Mittlere Schablone, magischer Schaden",1
 Einmaliger magischer Flächenangriff",1
 #6d9eeb,Antikes Buch,Geisteswissenschaften,,Regal,,,,,"Ein schweres staubiges Buch voller vergessenen Wissens.
 Enthält verborgenes Wissen",0
+#6d9eeb,Alte Münzsammlung,Wahrnehmung,,Beutel,,,,,"Seltene Münzen aus vergangenen Reichen oder längst vergessenen Dynastien.
+Sammler zahlen evtl. mehr",0
+#93c47d,Werkzeugtasche,Wahrnehmung,,Regal,Bonus,,,+1 Reparieren,"Enthält Hammer, Zangen, Feilen und andere Standardwerkzeuge.
++1 auf Reparieren",1
+#93c47d,Kletterausrüstung,Wahrnehmung,,Regal,Bonus,,,,"Seile, Haken und Gurte für schwierige Aufstiege.
++1 auf Klettern",0
+#f6b26b,Verfluchtes Amulett,Zaubern,-2,Kommode,Angeschlagen,,,,"Dunkles Schmuckstück mit bedrohlicher Aura.
++1 Einschüchtern, aber Fluch",0
+#f6b26b,Artefaktfragment,Zaubern,-2,Kommode,,,,,"Teil eines mächtigen verlorenen Artefakts.
+Plotgegenstand",0
+#f6b26b,Fluchidol,Zaubern,-2,,Mallus,,,,"Kleine geschnitzte Figur voller dunkler Magie.
+Ziel erhält -2 auf alle Proben für 3 Runden",0
+#6d9eeb,Lichtsplitter,Wahrnehmung,,,,,,,"Ein Kristall, der beim Zerbrechen grelles heiliges Licht freisetzt.
+Untote oder Schattenwesen erhalten +2 Schaden",0
+#ffd966,Pulver der Schlafenden,Naturwissenschaften,,,,,,,"Feines silbernes Pulver mit betäubender Wirkung.
+Kleine Schablone, Gegner schlafen bei Fehlschlag ein Willenskraft",0
+#6d9eeb,Heilige Weihwasserbombe,Glaube,,,,,,,"Gesegnete Glasampulle mit geweihtem Wasser.
++4 Schaden gegen Untote/Dämonen",0
+#93c47d,Rauch- und Blendpatrone,Kriegskunst,,,,,,,"Militärische Patrone zur Sichtbehinderung.
+Gegner erhalten -2 auf Wahrnehmung / Fernkampf",0
+#f6b26b,Instabiler Energiekern,Reparieren,-2,,,,,,"Ein beschädigter Energiekristall kurz vor dem Kollaps.
+Große Schablone, hoher Schaden, gefährlich beim Transport",0
+#f6b26b,Bio-Nano-Schwarm,Hacken,,,,,,,"Eine Kapsel mit aggressiven Nanoorganismen, die biologische Ziele angreifen.
+Verursacht Schaden über 3 Runden",0
+#6d9eeb,Holo-Blendprojektor,Hacken,,,,,,,"Ein kleiner Projektor erzeugt flackernde Lichtbilder und Geisterbilder.
+Gegner erhalten -2 auf Angriffe",0
