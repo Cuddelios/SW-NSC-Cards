@@ -264,6 +264,16 @@ public sealed class SvgCardRenderer
             return values.TryGetValue("consumption", out value);
         }
 
+        if (string.Equals(fieldName, "mob_typ", StringComparison.OrdinalIgnoreCase))
+        {
+            return values.TryGetValue("mob_type", out value);
+        }
+
+        if (string.Equals(fieldName, "mob_type", StringComparison.OrdinalIgnoreCase))
+        {
+            return values.TryGetValue("mob_typ", out value);
+        }
+
         return false;
     }
 
@@ -299,10 +309,11 @@ public sealed class SvgCardRenderer
             return false;
         }
 
-        XElement? matchingElement = directSelectionElements.FirstOrDefault(child => string.Equals(
-            (string?)child.Attribute("data-field"),
-            value,
-            StringComparison.OrdinalIgnoreCase));
+        string normalizedValue = NormalizeSelectionValue(value);
+        XElement? matchingElement = string.IsNullOrWhiteSpace(normalizedValue)
+            ? null
+            : directSelectionElements.FirstOrDefault(child =>
+                SelectionValuesMatch((string?)child.Attribute("data-field"), normalizedValue));
 
         foreach (XElement childElement in directSelectionElements)
         {
@@ -310,7 +321,59 @@ public sealed class SvgCardRenderer
             childElement.SetAttributeValue("display", isMatch ? null : "none");
         }
 
+        if (string.Equals(element.Name.LocalName, "g", StringComparison.OrdinalIgnoreCase))
+        {
+            element.SetAttributeValue("display", matchingElement == null ? "none" : null);
+        }
+
+        ApplyDefaultSiblingVisibility(element, matchingElement == null);
+
         return true;
+    }
+
+    private static void ApplyDefaultSiblingVisibility(XElement element, bool isVisible)
+    {
+        XElement? parent = element.Parent;
+        if (parent == null)
+        {
+            return;
+        }
+
+        foreach (XElement sibling in parent.Elements().Where(sibling =>
+            !ReferenceEquals(sibling, element)
+            && string.Equals(
+                (string?)sibling.Attribute("data-field"),
+                "default",
+                StringComparison.OrdinalIgnoreCase)))
+        {
+            sibling.SetAttributeValue("display", isVisible ? null : "none");
+        }
+    }
+
+    private static bool SelectionValuesMatch(string? candidate, string normalizedValue)
+    {
+        string normalizedCandidate = NormalizeSelectionValue(candidate ?? string.Empty);
+        if (string.Equals(normalizedCandidate, normalizedValue, StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        return string.Equals(
+            TrimGermanPluralSuffix(normalizedCandidate),
+            TrimGermanPluralSuffix(normalizedValue),
+            StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static string NormalizeSelectionValue(string value)
+    {
+        return value.Trim();
+    }
+
+    private static string TrimGermanPluralSuffix(string value)
+    {
+        return value.EndsWith("en", StringComparison.OrdinalIgnoreCase) && value.Length > 2
+            ? value[..^2]
+            : value;
     }
 
     private static bool TryApplyVisibility(XElement element, string value)
