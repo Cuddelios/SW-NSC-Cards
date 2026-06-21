@@ -3,7 +3,7 @@ Es wird das Savage World Regelwerk (20210421) verwendet.
 
 ## Interaktive Auswahl
 
-Ohne Parameter fragt der Generator jetzt in der Kommandozeile zuerst die CSV-Datei aus `data/`, danach die SVG-Vorderseiten-Vorlage aus `templates/` und zuletzt die Rueckseiten-Vorlage aus `templates/npc_card_back_*.svg` ab.
+Ohne Parameter fragt der Generator die Karten-Konfiguration aus `data/card_configuration.json` ab. Neben einzelnen Einträgen kann mit `A` auch **Alle Konfigurationen** gewählt werden; jede wird dann einmal vollständig erzeugt.
 
 Der Name der PDF-Ausgabe orientiert sich immer am Namen der gewaehlten CSV-Datei:
 

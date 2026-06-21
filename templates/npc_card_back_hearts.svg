@@ -1,7 +1,7 @@
 <svg width="65mm" height="97mm" version="1.1" viewBox="0 0 65 97" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
   <title>NPC Card Back Hearts</title>
   <g>
-    <rect x="7.1483" y="7.1483" width="50.703" height="82.703" fill="none" stroke="#f00" stroke-linecap="round" stroke-linejoin="round" stroke-width=".3"/>
+    <rect ry="3.000" x="7.1483" y="7.1483" width="50.703" height="82.703" fill="none" stroke="#f00" stroke-linecap="round" stroke-linejoin="round" stroke-width=".3"/>
     <g transform="matrix(.96251 0 0 .98205 -53.955 .51939)" fill="#f00">
       <g transform="translate(-1.1698)">
         <g transform="translate(58.53 23.105)">

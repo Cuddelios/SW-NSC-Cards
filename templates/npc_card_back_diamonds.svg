@@ -1,6 +1,6 @@
 <svg width="65mm" height="97mm" version="1.1" viewBox="0 0 65 97" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
   <title>NPC Card Back Diamonds</title>
-  <rect x="7.0994" y="7.0994" width="50.801" height="82.801" fill="none" stroke="#f00" stroke-linecap="round" stroke-linejoin="round" stroke-width=".3"/>
+  <rect ry="3.000" x="7.0994" y="7.0994" width="50.801" height="82.801" fill="none" stroke="#f00" stroke-linecap="round" stroke-linejoin="round" stroke-width=".3"/>
   <g>
     <g transform="matrix(.96078 0 0 .97554 1.2745 1.1712)" fill="#f00">
       <g>
