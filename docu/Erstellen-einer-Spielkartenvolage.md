@@ -14,7 +14,7 @@ Einem Text soll ein Datenfeld zugeordnet werden, so das dieser automatisch erset
 2. In den XML-Editor wechseln (`Umschalt-Strg-X`)
    - In dem Ausgewählten Knoten über das + ein neues Attribut anlegen
    - das Attribut `data-field` nennen
-   - dem Attribut einen Wert zuweisen. z.B.: `description`, `long_name` o.ä.
+   - dem Attribut einen Wert zuweisen. z.B.: `description`, `long_name` o.ä. (siehe [Aktuelle CSV-Spalten](../readme.md#aktuelle-csv-spalten))
 
 ## Exportieren eins Druck-Templates
 
