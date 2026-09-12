@@ -19,6 +19,7 @@ public sealed class SvgCardRenderer
         "rect", "circle", "ellipse", "path", "polygon", "line", "polyline"
     };
 
+    private readonly IReadOnlyDictionary<string, FieldConfiguration> fields;
     private readonly XElement svgRootTemplate;
     private readonly string? templateGroupId;
     private readonly string? templateViewBox;
@@ -26,7 +27,7 @@ public sealed class SvgCardRenderer
     public SvgCardRenderer(
         string svgTemplatePath,
         string? templateGroupId = null,
-        string? templateViewBox = null)
+        string? templateViewBox = null, IReadOnlyDictionary<string, FieldConfiguration>? fields = null)
     {
         if (string.IsNullOrWhiteSpace(svgTemplatePath))
         {
@@ -42,6 +43,8 @@ public sealed class SvgCardRenderer
         this.svgRootTemplate = document.Root
             ?? throw new InvalidOperationException("SVG root element was not found.");
 
+        this.fields = fields ?? new Dictionary<string, FieldConfiguration>(StringComparer.OrdinalIgnoreCase);
+        FieldConfiguration.Validate(this.fields);
         this.templateGroupId = templateGroupId;
         this.templateViewBox = templateViewBox;
 
@@ -86,7 +89,7 @@ public sealed class SvgCardRenderer
         }
     }
 
-    private string BuildFilledSvg(IReadOnlyDictionary<string, string> values)
+    public string BuildFilledSvg(IReadOnlyDictionary<string, string> values)
     {
         XElement svgRootClone = new XElement(this.svgRootTemplate);
         ApplyViewBoxOverride(svgRootClone, this.templateViewBox);
@@ -115,168 +118,76 @@ public sealed class SvgCardRenderer
     }
 
 
-    public enum TemplateFieldType
-    {
-        skills_text,
-        skills_dices,
-        description,
-        edges,
-        weapons,
-        name_short,
-        fail_text
-    }
-
-    private static void FillTemplateFields(
+    private void FillTemplateFields(
         XElement templateClone,
         IReadOnlyDictionary<string, string> values)
     {
-        List<XElement> elementsWithField = templateClone
-            .DescendantsAndSelf()
-            .Where(e => e.Attribute("data-field") != null)
-            .ToList();
-
-        // Sondertypen zuerst ermitteln, damit die Daten bei den Elementen bereits verfügbar sind, wenn die Felder angewendet werden
-        string rawSkillsText = values.TryGetValue(nameof(TemplateFieldType.skills_text), out string? value)
-            ? value
-            : string.Empty;
-        string rawEdgesText = values.TryGetValue(nameof(TemplateFieldType.edges), out value)
-            ? value
-            : string.Empty;
-
-        List<SkillEntry> skillEntries = ParseSkillEntries(rawSkillsText);
-        double skillsLineHeight = 7.5; // Fallback-Wert, wird später ggf. überschrieben
-        double edgesLineHeight = skillsLineHeight;
-
-        skillsLineHeight = elementsWithField
-            .FirstOrDefault(e => string.Equals(
-                (string?)e.Attribute("data-field"),
-                nameof(TemplateFieldType.skills_text),
-                StringComparison.OrdinalIgnoreCase)) is { } skillsTextElement
-            ? GetLineHeight(skillsTextElement)
-            : skillsLineHeight;
-
-        edgesLineHeight = elementsWithField
-            .FirstOrDefault(e => string.Equals(
-                (string?)e.Attribute("data-field"),
-                nameof(TemplateFieldType.edges),
-                StringComparison.OrdinalIgnoreCase)) is { } edgesElement
-            ? GetLineHeight(edgesElement)
-            : edgesLineHeight;
-
-        int skillsLineCount = skillEntries.Count > 0
-            ? skillEntries.Count
-            : CountTextLines(rawSkillsText);
-        int edgesLineCount = CountTextLines(string.Join('\n', SplitTextParts(rawEdgesText)));
-        double edgesOffsetY = Math.Max(0, skillsLineCount - 1) * skillsLineHeight;
-        double descriptionOffsetY = edgesOffsetY + (Math.Max(0, edgesLineCount - 1) * edgesLineHeight) + 0.5;
-
-        foreach (XElement element in elementsWithField)
+        var elements = templateClone.DescendantsAndSelf()
+            .Where(e => e.Attribute("data-field") != null).ToList();
+        var prepared = new Dictionary<string, (string Text, List<SkillEntry> Skills, bool Present)>(StringComparer.OrdinalIgnoreCase);
+        foreach (var (name, rule) in fields)
         {
-            string? fieldName = (string?)element.Attribute("data-field");
-            if (string.IsNullOrWhiteSpace(fieldName))
+            string? raw = null;
+            bool present = new[] { rule.Source ?? name }.Concat(rule.Aliases)
+                .Any(source => values.TryGetValue(source, out raw));
+            raw = present ? raw : rule.DefaultValue;
+            present |= rule.DefaultValue != null;
+            raw ??= string.Empty;
+            var mapping = rule.ValueMap.FirstOrDefault(pair => string.Equals(pair.Key, raw, StringComparison.OrdinalIgnoreCase));
+            if (mapping.Key != null) raw = mapping.Value;
+            var skills = raw.Split(rule.Separators.ToCharArray(), StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
+                .Select(ParseSkillEntry).Where(entry => !string.IsNullOrWhiteSpace(entry.Label)).ToList();
+            string display = rule.Type switch
             {
+                "skillLabels" => string.Join('\n', skills.Select(entry => entry.Label)),
+                "list" => string.Join('\n', raw.Replace("\r\n", "\n").Split(rule.Separators.ToCharArray(), StringSplitOptions.TrimEntries)),
+                _ => raw
+            };
+            if (rule.WrapLength is int length)
+                display = string.Join('\n', display.Replace("\r\n", "\n").Split('\n')
+                    .SelectMany(line => string.IsNullOrEmpty(line) ? new[] { "" } : SplitTextLength(line, length)));
+            prepared[name] = (display, skills, present);
+        }
+
+        double LineHeight(string name)
+        {
+            fields.TryGetValue(name, out var rule);
+            var element = elements.FirstOrDefault(e => string.Equals((string?)e.Attribute("data-field"), name, StringComparison.OrdinalIgnoreCase));
+            return rule?.LineHeight ?? (element == null ? 7.5 : GetLineHeight(element));
+        }
+
+        foreach (var element in elements)
+        {
+            string name = (string)element.Attribute("data-field")!;
+            if (!fields.TryGetValue(name, out var rule))
+            {
+                if (values.TryGetValue(name, out var value)) ApplyFieldValue(element, value);
                 continue;
             }
-
-            if(Enum.TryParse<TemplateFieldType>(fieldName, true, out TemplateFieldType fieldType))
+            var data = prepared[name];
+            if (!data.Present) continue;
+            double offset = rule.OffsetY;
+            foreach (string dependency in rule.OffsetAfter)
+                offset += Math.Max(0, CountTextLines(prepared[dependency].Text) - 1) * LineHeight(dependency);
+            ApplyVerticalOffset(element, offset);
+            if (rule.LineHeight.HasValue) element.SetAttributeValue("data-line-height", FormatNumber(rule.LineHeight.Value));
+            switch (rule.Type)
             {
-                switch (fieldType)
-                {
-                    case TemplateFieldType.skills_text:
-                        var displayText = skillEntries.Count > 0
-                                    ? string.Join('\n', skillEntries.Select(entry => entry.Label))
-                                    : value ?? string.Empty;
-                        //skillsLineHeight = GetLineHeight(element);
-                        ApplyTextValue(element, displayText);
-                        continue;
-
-                    case TemplateFieldType.skills_dices:
-                        ApplySkillDiceIcons(element, skillEntries, skillsLineHeight);
-                        continue;
-
-                    case TemplateFieldType.description:
-                        if(TryGetTemplateValue(values, fieldName, out value))
-                        {
-                            displayText = string.Join('\n', SplitTextLength(value ?? string.Empty, 29));
-                            ApplyVerticalOffset(element, descriptionOffsetY);
-                            ApplyTextValue(element, displayText);
-                        }
-                        continue;
-
-                    case TemplateFieldType.name_short:
-                        if(TryGetTemplateValue(values, fieldName, out value))
-                        {
-                            displayText = string.Join('\n', SplitTextLength(value ?? string.Empty, 16));
-                            ApplyTextValue(element, displayText);
-                        }
-                        continue;
-
-                    case TemplateFieldType.fail_text:
-                        if(TryGetTemplateValue(values, fieldName, out value))
-                        {
-                            displayText = string.Join('\n', SplitTextLength(value ?? string.Empty, 20));
-                            ApplyTextValue(element, displayText);
-                        }
-                        continue;
-    
-                    case TemplateFieldType.edges:  
-                    case TemplateFieldType.weapons:  
-                        if(TryGetTemplateValue(values, fieldName, out value))
-                        {
-                            displayText = string.Join('\n', SplitTextParts(value ?? string.Empty)); 
-                            if (fieldType == TemplateFieldType.edges)
-                            {
-                                ApplyVerticalOffset(element, edgesOffsetY);
-                            }
-
-                            ApplyTextValue(element, displayText);
-                        }
-                        continue;
-                    default:
-                        break;
-                }
-            }
-
-            if(TryGetTemplateValue(values, fieldName, out value))
-            {
-                ApplyFieldValue(element, value ?? string.Empty);
+                case "auto": ApplyFieldValue(element, data.Text); break;
+                case "text":
+                case "list":
+                case "skillLabels": ApplyTextValue(element, data.Text); break;
+                case "skillDice": ApplySkillDiceIcons(element, data.Skills, LineHeight(rule.LineHeightFrom ?? name)); break;
+                case "selection": TryApplyGroupSelection(element, data.Text); break;
+                case "visibility":
+                    if (!TryParseBooleanLike(data.Text, out bool visible))
+                        throw new InvalidOperationException($"Feld '{name}': '{data.Text}' ist kein Wahrheitswert.");
+                    element.SetAttributeValue("display", visible ? null : "none");
+                    break;
+                case "fill": element.SetAttributeValue("fill", data.Text); break;
             }
         }
     }
-
-    private static bool TryGetTemplateValue(
-        IReadOnlyDictionary<string, string> values,
-        string fieldName,
-        out string? value)
-    {
-        if (values.TryGetValue(fieldName, out value))
-        {
-            return true;
-        }
-
-        if (string.Equals(fieldName, "consumption", StringComparison.OrdinalIgnoreCase))
-        {
-            return values.TryGetValue("consumtion", out value);
-        }
-
-        if (string.Equals(fieldName, "consumtion", StringComparison.OrdinalIgnoreCase))
-        {
-            return values.TryGetValue("consumption", out value);
-        }
-
-        if (string.Equals(fieldName, "mob_typ", StringComparison.OrdinalIgnoreCase))
-        {
-            return values.TryGetValue("mob_type", out value);
-        }
-
-        if (string.Equals(fieldName, "mob_type", StringComparison.OrdinalIgnoreCase))
-        {
-            return values.TryGetValue("mob_typ", out value);
-        }
-
-        return false;
-    }
-
     private static void ApplyFieldValue(XElement element, string value)
     {
         if (TryApplyGroupSelection(element, value))
@@ -485,7 +396,7 @@ public sealed class SvgCardRenderer
 
     private static void ApplyVerticalOffset(XElement element, double offsetY)
     {
-        if (offsetY <= 0)
+        if (offsetY == 0)
         {
             return;
         }
@@ -498,6 +409,8 @@ public sealed class SvgCardRenderer
 
     private static double GetLineHeight(XElement textElement)
     {
+        if (double.TryParse((string?)textElement.Attribute("data-line-height"), NumberStyles.Float,
+            CultureInfo.InvariantCulture, out double configuredHeight)) return configuredHeight;
         const double fallbackFontSize = 3.18;
         const double lineHeightFactor = 1.2;
 

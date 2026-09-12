@@ -1,4 +1,4 @@
-﻿using SvgPdfGenerator;
+using SvgPdfGenerator;
 using SvgPdfGenerator.Models;
 using System.Text.Json;
 
@@ -37,6 +37,13 @@ internal class Program
             Output = BuildOutputPathFromData(csvPath)
         }
             ];
+            string defaultsPath = Path.Combine("data", "card_configuration.json");
+            if (File.Exists(defaultsPath))
+            {
+                var defaults = JsonSerializer.Deserialize<CardConfigurationFile>(File.ReadAllText(defaultsPath),
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                selectedConfigurations[0].Fields = FieldConfiguration.Merge(defaults?.Fields ?? new(), new());
+            }
         }
 
         var createCmykPdfs = SelectContinue("Sollen die PDF-Dateien als cmyk erzeugt werden?");
@@ -102,7 +109,7 @@ internal class Program
 
             var csvReader = new CsvReaderService();
             List<Dictionary<string, string>> rows = csvReader.Read(csvPath, DetectDelimiter(csvPath));
-            List<Dictionary<string, string>> cards = ExpandRowsByCount(rows, "count");
+            List<Dictionary<string, string>> cards = ExpandRowsByCount(rows, selectedConfiguration.CountField);
 
             if (cards.Count == 0)
             {
@@ -111,10 +118,10 @@ internal class Program
             }
 
             var cardRenderer = new SvgCardRenderer(
-                svgTemplatePath);
-            var cardBackRenderer = new SvgCardRenderer(backTemplatePath);
+                svgTemplatePath, fields: selectedConfiguration.Fields);
+            var cardBackRenderer = new SvgCardRenderer(backTemplatePath, fields: selectedConfiguration.Fields);
             SvgCardRenderer? titleCardRenderer = !string.IsNullOrWhiteSpace(titleTemplatePath)
-                ? new SvgCardRenderer(titleTemplatePath)
+                ? new SvgCardRenderer(titleTemplatePath, fields: selectedConfiguration.Fields)
                 : null;
 
             var layoutOptions = new PdfLayoutOptions
@@ -327,6 +334,11 @@ internal class Program
             if (configurations.Count == 0)
             {
                 throw new InvalidOperationException($"Keine Karten-Konfigurationen in {fullConfigurationPath} gefunden.");
+            }
+
+            foreach (var configuration in configurations)
+            {
+                configuration.Fields = FieldConfiguration.Merge(configurationFile!.Fields, configuration.Fields);
             }
 
             Console.WriteLine("Karten-Konfiguration auswaehlen:");
@@ -573,11 +585,14 @@ internal class Program
 
 sealed class CardConfigurationFile
 {
+    public Dictionary<string, FieldConfiguration> Fields { get; set; } = new();
     public List<CardConfiguration>? Configurations { get; set; }
 }
 
 sealed class CardConfiguration
 {
+    public Dictionary<string, FieldConfiguration> Fields { get; set; } = new();
+    public string CountField { get; set; } = "count";
     public string Name { get; set; } = string.Empty;
 
     public string Template { get; set; } = string.Empty;

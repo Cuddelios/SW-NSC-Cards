@@ -1,6 +1,45 @@
 Dieses Projekt erstellt mit Hilfe einer SVG-Vorlage und einer CSV-Tabelle eine mehrseitige PDF-Datei.
 Es wird das Savage World Regelwerk (20210421) verwendet.
 
+## Konfigurierbare Feldregeln
+
+`fields` in `data/card_configuration.json` definiert gemeinsame Regeln für SVG-`data-field`-Namen. Jeder Kartensatz unter `configurations` kann eigene `fields` angeben. Eine gleichnamige Regel ersetzt die gemeinsame Regel vollständig. Beispiel innerhalb eines Kartensatzes:
+
+```json
+{
+  "countField": "anzahl",
+  "fields": {
+    "name_short": { "source": "Bezeichnung", "type": "text", "wrapLength": 22 },
+    "edges": { "source": "Talente", "type": "list", "separators": ";", "lineHeight": 4, "offsetAfter": ["skills_text"] },
+    "wc_wound": { "source": "Wildcard", "type": "visibility", "valueMap": { "ja": "true", "nein": "false" }, "defaultValue": "false" }
+  }
+}
+```
+
+| Eigenschaft | Bedeutung |
+|---|---|
+| `source` | CSV-Spalte; ohne Angabe gilt der SVG-Feldname |
+| `aliases` | Alternative Spaltennamen, falls die primäre Spalte fehlt |
+| `type` | `auto`, `text`, `list`, `skillLabels`, `skillDice`, `selection`, `visibility`, `fill` |
+| `defaultValue` | Ersatz für eine fehlende Spalte; leere Zellen bleiben leer |
+| `valueMap` | Zuordnung kompletter Zellwerte vor der Verarbeitung, unabhängig von Groß-/Kleinschreibung |
+| `wrapLength` | Positive maximale Textzeilenlänge; Umbruch bevorzugt an Leerzeichen |
+| `separators` | Einzelne Trennzeichen für Listen/Fertigkeiten; Standard: Komma und Zeilenumbrüche |
+| `lineHeight` | Positive Zeilenhöhe in SVG-Einheiten |
+| `lineHeightFrom` | Feld, dessen Zeilenhöhe für Würfelsymbole gilt |
+| `offsetAfter` | Referenzierte Feldregeln: jede zusätzliche Textzeile verschiebt dieses Element nach unten |
+| `offsetY` | Zusätzliche feste Verschiebung in SVG-Einheiten, auch negativ |
+
+`skillLabels` und `skillDice` interpretieren Einträge wie `Kämpfen d8` (d4, d6, d8, d10, d12). Beide können dieselbe `source` verwenden. `selection` wählt ein direktes SVG-Kindelement anhand seines `data-field`, `visibility` schaltet die Sichtbarkeit und `fill` setzt die Füllfarbe. Die Symbolgrafiken bleiben in der SVG-Vorlage.
+
+Nicht konfigurierte Felder verwenden die automatische SVG-Erkennung (Gruppenauswahl, Sichtbarkeit, Farbe oder Text). Die bisherigen namensabhängigen Sonderregeln stehen jetzt in der JSON-Datei. Bei Aufruf mit CSV-/SVG-Pfadargumenten gelten die gemeinsamen Regeln aus dieser Datei, sofern sie im Arbeitsverzeichnis vorhanden ist. Kartensatzbezogene Überschreibungen gelten bei interaktiver Auswahl. `countField` ist pro Kartensatz einstellbar, Standard: `count`.
+
+Feldverarbeitung und alle mitgelieferten CSV-/SVG-Kombinationen prüfen:
+
+```powershell
+dotnet run --project tests/GeneratorChecks.csproj
+```
+
 ## Interaktive Auswahl
 
 Ohne Parameter fragt der Generator die Karten-Konfiguration aus `data/card_configuration.json` ab. Neben einzelnen Einträgen kann mit `A` auch **Alle Konfigurationen** gewählt werden; jede wird dann einmal vollständig erzeugt.
