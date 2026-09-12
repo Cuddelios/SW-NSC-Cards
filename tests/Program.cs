@@ -52,10 +52,16 @@ try
         new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
     foreach (var deck in json.RootElement.GetProperty("configurations").EnumerateArray())
     {
+        var configuration = JsonSerializer.Deserialize<CardConfiguration>(deck,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
+        configuration.Fields = FieldConfiguration.Merge(shipped, configuration.Fields);
+        CardBatch.Prepare(configuration, true, true);
+        if (configuration.CardSets != null) continue;
         var cardRenderer = new SvgCardRenderer(Path.Combine("templates", deck.GetProperty("template").GetString()!), fields: shipped);
         var rows = new CsvReaderService().Read(Path.Combine("data", deck.GetProperty("data").GetString()!), ',');
         foreach (var row in rows) XDocument.Parse(cardRenderer.BuildFilledSvg(row));
     }
+    BatchChecks.Run();
     Console.WriteLine("All generator checks passed.");
 }
 finally { File.Delete(template); }

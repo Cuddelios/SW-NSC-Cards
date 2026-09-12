@@ -4,7 +4,17 @@ using System.Text.Json;
 
 internal class Program
 {
-    private static void Main(string[] args)
+    private static int Main(string[] args)
+    {
+        try { Run(args); return 0; }
+        catch (Exception error) when (error is InvalidOperationException or IOException or JsonException or ArgumentException)
+        {
+            Console.Error.WriteLine($"Fehler: {error.Message}");
+            return 1;
+        }
+    }
+
+    private static void Run(string[] args)
     {
         List<CardConfiguration> selectedConfigurations;
 
@@ -49,88 +59,37 @@ internal class Program
         var createCmykPdfs = SelectContinue("Sollen die PDF-Dateien als cmyk erzeugt werden?");
         var createMeinspielOutput = SelectContinue("Moechten Sie die MeinSpiel-Ausgabe erzeugen?");
 
+        var batches = selectedConfigurations.Select(configuration => CardBatch.Prepare(configuration, args.Length == 0, createMeinspielOutput)).ToList();
         foreach (CardConfiguration selectedConfiguration in selectedConfigurations)
         {
             Console.WriteLine();
             Console.WriteLine($"Ausfuehrung der Karten-Konfiguration: {selectedConfiguration.Name}");
-            GenerateCards(selectedConfiguration, args.Length == 0, args.Length > 2, createCmykPdfs, createMeinspielOutput);
+            GenerateCards(selectedConfiguration, batches[selectedConfigurations.IndexOf(selectedConfiguration)], createCmykPdfs, createMeinspielOutput);
         }
 
         static void GenerateCards(
             CardConfiguration selectedConfiguration,
-            bool useConfigurationDirectories,
-            bool hasBackTemplateArgument,
+            CardBatch batch,
             bool createCmykPdfs,
             bool createMeinspielOutput)
         {
-            string csvPath = useConfigurationDirectories ? Path.Combine("data", selectedConfiguration.Data) : selectedConfiguration.Data;
-            string svgTemplatePath = useConfigurationDirectories ? Path.Combine("templates", selectedConfiguration.Template) : selectedConfiguration.Template;
-            string backTemplatePath = useConfigurationDirectories ? Path.Combine("templates", selectedConfiguration.Backcard) : selectedConfiguration.Backcard;
-            string? titleTemplatePath = useConfigurationDirectories ? Path.Combine("templates", selectedConfiguration.Titlecard) : selectedConfiguration.Titlecard;
             string outputPdfHorizontalPath = BuildOutputPath(selectedConfiguration.Output, horizontalMirror: true);
             string outputPdfVerticalPath = BuildOutputPath(selectedConfiguration.Output, horizontalMirror: false);
             string outputPathBase = BuildOutputPath(selectedConfiguration.Output);
-
-            EnsureFileExists(csvPath, "Daten");
-            EnsureFileExists(svgTemplatePath, "Vorlage");
-            EnsureFileExists(backTemplatePath, "Rueckseiten-Vorlage");
-            if (!string.IsNullOrWhiteSpace(titleTemplatePath))
+            var cards = batch.Cards;
+            if (cards.Count == 0 && (!createMeinspielOutput || batch.MeinspielCards.Count == 0))
             {
-                EnsureFileExists(titleTemplatePath, "Titelkarten-Vorlage");
-            }
-
-            bool usesCharacterTemplate = true;
-            // bool usesCharacterTemplate = string.Equals(
-            //Path.GetFileName(svgTemplatePath),
-            //    "char_template.svg",
-            //    StringComparison.OrdinalIgnoreCase);
-
-            Directory.CreateDirectory(Path.GetDirectoryName(Path.GetFullPath(outputPdfHorizontalPath)) ?? "output");
-
-            Console.WriteLine();
-            if (hasBackTemplateArgument)
-            {
-                Console.WriteLine("Hinweis: Das dritte Argument wird als Rueckseiten-Vorlage verwendet; ein Ausgabepfad wird weiterhin ignoriert.");
-            }
-
-            Console.WriteLine($"Daten: {Path.GetFullPath(csvPath)}");
-            Console.WriteLine($"Vorlage: {Path.GetFullPath(svgTemplatePath)}");
-            Console.WriteLine($"Rueckseite: {Path.GetFullPath(backTemplatePath)}");
-            if (!string.IsNullOrWhiteSpace(titleTemplatePath))
-            {
-                Console.WriteLine($"Titelkarte: {Path.GetFullPath(titleTemplatePath)}");
-            }
-
-            Console.WriteLine($"Ausgabe (horizontal): {Path.GetFullPath(outputPdfHorizontalPath)}");
-            Console.WriteLine($" Die Rückseite ist an der kurzen Seite gespiegelt.");
-            Console.WriteLine($"Ausgabe (vertical): {Path.GetFullPath(outputPdfVerticalPath)}");
-            Console.WriteLine($" Die Rückseite ist an der langen Seite gespiegelt.");
-            Console.WriteLine();
-
-            var csvReader = new CsvReaderService();
-            List<Dictionary<string, string>> rows = csvReader.Read(csvPath, DetectDelimiter(csvPath));
-            List<Dictionary<string, string>> cards = ExpandRowsByCount(rows, selectedConfiguration.CountField);
-
-            if (cards.Count == 0)
-            {
-                Console.WriteLine("Die CSV enthält keine Daten.");
+                Console.WriteLine("Die Konfiguration enthält keine Karten.");
                 return;
             }
-
-            var cardRenderer = new SvgCardRenderer(
-                svgTemplatePath, fields: selectedConfiguration.Fields);
-            var cardBackRenderer = new SvgCardRenderer(backTemplatePath, fields: selectedConfiguration.Fields);
-            SvgCardRenderer? titleCardRenderer = !string.IsNullOrWhiteSpace(titleTemplatePath)
-                ? new SvgCardRenderer(titleTemplatePath, fields: selectedConfiguration.Fields)
-                : null;
 
             var layoutOptions = new PdfLayoutOptions
             {
                 MarginPt = MmToPt(5),
                 GapXPt = MmToPt(3),
                 GapYPt = MmToPt(3),
-                CardWidthPt = usesCharacterTemplate ? MmToPt(65) : 220,
-                CardHeightPt = usesCharacterTemplate ? MmToPt(97) : 90,
+                CardWidthPt = MmToPt(65),
+                CardHeightPt = MmToPt(97),
                 RenderDpi = 300
             };
 
@@ -138,16 +97,16 @@ internal class Program
             pdfWriter.WriteCardsWithInterleavedBacks(
                 outputPdfHorizontalPath,
                 cards,
-                cardRenderer.RenderCardAsPng,
-                RenderCardBackAsPng,
+                batch.RenderFront,
+                batch.RenderBack,
                 layoutOptions,
                 mirrorBackPageHorizontally: true);
 
             pdfWriter.WriteCardsWithInterleavedBacks(
                 outputPdfVerticalPath,
                 cards,
-                cardRenderer.RenderCardAsPng,
-                RenderCardBackAsPng,
+                batch.RenderFront,
+                batch.RenderBack,
                 layoutOptions,
                 mirrorBackPageHorizontally: false);
 
@@ -180,12 +139,9 @@ internal class Program
                 PageHeightPt = MmToPt(97)
             };
 
-            List<Dictionary<string, string>> meinspielCards = titleCardRenderer != null
-                ? AddMeinspielTitleCard(cards)
-                : cards;
-
-            pdfWriter.WriteCards(meinspielFrontOutputPath, meinspielCards, RenderMeinspielFrontCardAsPng, meinspielLayoutOptions);
-            pdfWriter.WriteCards(meinspielBackOutputPath, meinspielCards, RenderCardBackAsPng, meinspielLayoutOptions);
+            var meinspielCards = batch.MeinspielCards;
+            pdfWriter.WriteCards(meinspielFrontOutputPath, meinspielCards, batch.RenderFront, meinspielLayoutOptions);
+            pdfWriter.WriteCards(meinspielBackOutputPath, meinspielCards, batch.RenderBack, meinspielLayoutOptions);
 
             Console.WriteLine($"MeinSpiel Front-PDF erzeugt: {Path.GetFullPath(meinspielFrontOutputPath)}");
             Console.WriteLine($"MeinSpiel Back-PDF erzeugt: {Path.GetFullPath(meinspielBackOutputPath)}");
@@ -193,52 +149,9 @@ internal class Program
             ConvertPdfToCmykIfPossible(meinspielFrontOutputPath);
             ConvertPdfToCmykIfPossible(meinspielBackOutputPath);
 
-            byte[] RenderCardBackAsPng(
-                IReadOnlyDictionary<string, string> row,
-                int targetWidthPx,
-                int targetHeightPx)
-            {
-                return cardBackRenderer.RenderCardAsPng(
-                    row,
-                    targetWidthPx,
-                    targetHeightPx);
-            }
-
-            byte[] RenderMeinspielFrontCardAsPng(
-                IReadOnlyDictionary<string, string> row,
-                int targetWidthPx,
-                int targetHeightPx)
-            {
-                if (titleCardRenderer != null && IsMeinspielTitleCard(row))
-                {
-                    return titleCardRenderer.RenderCardAsPng(
-                        row,
-                        targetWidthPx,
-                        targetHeightPx);
-                }
-
-                return cardRenderer.RenderCardAsPng(
-                    row,
-                    targetWidthPx,
-                    targetHeightPx);
-            }
         }
 
         static double MmToPt(double millimeters) => millimeters * 72.0 / 25.4;
-
-        static char DetectDelimiter(string csvPath)
-        {
-            string? header = File.ReadLines(csvPath).FirstOrDefault();
-            if (string.IsNullOrWhiteSpace(header))
-            {
-                return ',';
-            }
-
-            int semicolonCount = header.Count(character => character == ';');
-            int commaCount = header.Count(character => character == ',');
-
-            return semicolonCount > commaCount ? ';' : ',';
-        }
 
         static bool SelectContinue(string label)
         {
@@ -382,10 +295,6 @@ internal class Program
             string configurationPath)
         {
             RequireConfigurationValue(configuration.Name, "name", configurationPath);
-            RequireConfigurationValue(configuration.Template, "template", configurationPath);
-            RequireConfigurationValue(configuration.Backcard, "backcard", configurationPath);
-            RequireConfigurationValue(configuration.Titlecard, "titlecard", configurationPath);
-            RequireConfigurationValue(configuration.Data, "data", configurationPath);
             RequireConfigurationValue(configuration.Output, "output", configurationPath);
 
             return configuration;
@@ -401,81 +310,6 @@ internal class Program
                 throw new InvalidOperationException(
                     $"Das Feld '{fieldName}' darf in {configurationPath} nicht leer sein.");
             }
-        }
-
-        static void EnsureFileExists(string filePath, string label)
-        {
-            string fullPath = Path.GetFullPath(filePath);
-            if (!File.Exists(fullPath))
-            {
-                throw new FileNotFoundException($"{label}-Datei wurde nicht gefunden.", fullPath);
-            }
-        }
-
-        static List<Dictionary<string, string>> AddMeinspielTitleCard(
-            IReadOnlyList<Dictionary<string, string>> cards)
-        {
-            var cardsWithTitle = new List<Dictionary<string, string>>(cards.Count + 1)
-                {
-                    new()
-                    {
-                        ["name"] = "Titelkarte",
-                        ["__card_type"] = "meinspiel-title"
-                    }
-                };
-
-            cardsWithTitle.AddRange(cards);
-            return cardsWithTitle;
-        }
-
-        static bool IsMeinspielTitleCard(IReadOnlyDictionary<string, string> row)
-        {
-            return row.TryGetValue("__card_type", out string? cardType)
-                && string.Equals(cardType, "meinspiel-title", StringComparison.Ordinal);
-        }
-
-        static List<Dictionary<string, string>> ExpandRowsByCount(
-            IReadOnlyList<Dictionary<string, string>> rows,
-            string countFieldName)
-        {
-            var expandedRows = new List<Dictionary<string, string>>();
-
-            foreach (Dictionary<string, string> row in rows)
-            {
-                int count = GetCardCount(row, countFieldName);
-
-                for (int copyIndex = 0; copyIndex < count; copyIndex++)
-                {
-                    expandedRows.Add(row);
-                }
-            }
-
-            return expandedRows;
-        }
-
-        static int GetCardCount(
-            IReadOnlyDictionary<string, string> row,
-            string countFieldName)
-        {
-            if (!row.TryGetValue(countFieldName, out string? rawCount)
-                || string.IsNullOrWhiteSpace(rawCount))
-            {
-                return 1;
-            }
-
-            if (!int.TryParse(rawCount, out int count))
-            {
-                throw new InvalidOperationException(
-                    $"Der Wert in der Spalte '{countFieldName}' muss eine ganze Zahl sein: '{rawCount}'.");
-            }
-
-            if (count < 0)
-            {
-                throw new InvalidOperationException(
-                    $"Der Wert in der Spalte '{countFieldName}' darf nicht negativ sein: '{rawCount}'.");
-            }
-
-            return count;
         }
 
         static string BuildMeinspielFrontOutputPath(string outputPdfPath)
@@ -587,21 +421,4 @@ sealed class CardConfigurationFile
 {
     public Dictionary<string, FieldConfiguration> Fields { get; set; } = new();
     public List<CardConfiguration>? Configurations { get; set; }
-}
-
-sealed class CardConfiguration
-{
-    public Dictionary<string, FieldConfiguration> Fields { get; set; } = new();
-    public string CountField { get; set; } = "count";
-    public string Name { get; set; } = string.Empty;
-
-    public string Template { get; set; } = string.Empty;
-
-    public string Backcard { get; set; } = string.Empty;
-
-    public string Titlecard { get; set; } = string.Empty;
-
-    public string Data { get; set; } = string.Empty;
-
-    public string Output { get; set; } = string.Empty;
 }

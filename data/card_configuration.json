@@ -1,6 +1,27 @@
 {
   "configurations": [
     {
+      "name": "Loot und Barrieren kombiniert",
+      "output": "loot_barrier_cards",
+      "meinspielCardCount": 110,
+      "cardSets": [
+        {
+          "name": "Loot Cards",
+          "template": "loot_template.svg",
+          "backcard": "npc_card_back_diamonds.svg",
+          "titlecard": "title_loot.svg",
+          "data": "loot_settings.csv"
+        },
+        {
+          "name": "Barrier Cards",
+          "template": "barriers_template.svg",
+          "backcard": "npc_card_back_clubs.svg",
+          "titlecard": "title_barriers.svg",
+          "data": "barrier_settings.csv"
+        }
+      ]
+    },
+    {
       "name": "Loot Cards",
       "template": "loot_template.svg",
       "backcard": "npc_card_back_diamonds.svg",

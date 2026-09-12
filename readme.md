@@ -42,6 +42,60 @@ dotnet run --project tests/GeneratorChecks.csproj
 
 ## Interaktive Auswahl
 
+### Mehrere Kartensätze in einer Ausgabe
+
+Eine Konfiguration kann statt einzelner CSV-/Vorlagenangaben eine Liste `cardSets`
+enthalten. Alle Sätze werden in Listenreihenfolge in gemeinsame PDFs geschrieben.
+Jeder Satz hat eigene `data`, `template`, `backcard`, optional `titlecard`,
+`countField` und `fields`. Feldregeln gelten in der Reihenfolge: gemeinsame Regeln,
+Regeln der Ausgabe, Regeln des Kartensatzes; gleichnamige Regeln werden vollständig ersetzt.
+`output` und `meinspielCardCount` stehen auf der äußeren Konfiguration.
+Verschachtelte `cardSets` sind nicht erlaubt.
+
+```json
+{
+  "name": "Loot und Barrieren kombiniert",
+  "output": "loot_barrier_cards",
+  "meinspielCardCount": 110,
+  "cardSets": [
+    {
+      "name": "Loot",
+      "data": "loot_settings.csv",
+      "template": "loot_template.svg",
+      "backcard": "npc_card_back_diamonds.svg",
+      "titlecard": "title_loot.svg"
+    },
+    {
+      "name": "Barrieren",
+      "data": "barrier_settings.csv",
+      "template": "barriers_template.svg",
+      "backcard": "npc_card_back_clubs.svg",
+      "titlecard": "title_barriers.svg"
+    }
+  ]
+}
+```
+
+Dieses Beispiel ist bereits in der Auswahl enthalten: 54 Loot-Karten plus
+54 Barrieren plus zwei Titelkarten ergeben genau 110 Karten im MeinSpiel-Export.
+Die Vorderseiten stehen gemeinsam in `output/loot_barrier_cards.meinspiel-front.pdf`,
+die zugehörigen Rückseiten in `output/loot_barrier_cards.meinspiel-back.pdf`.
+Auch die beiden A4-Duplexvarianten enthalten die zusammengefassten Sätze.
+
+Bei kombinierten MeinSpiel-Exporten ist die positive ganze Zahl
+`meinspielCardCount` erforderlich. Sie zählt CSV-Kopien gemäß `countField`
+(Standard `count`) **einschließlich einer Titelkarte pro Satz mit `titlecard`**.
+Eine Rückseite zählt nicht als zusätzliche Karte. Titelkarten stehen unmittelbar
+vor ihrem Satz und sind wie bisher nur im MeinSpiel-Export enthalten.
+Ein `count` von 0 überspringt die betreffende Datenkarte; die Titelkarte bleibt enthalten.
+
+Bei Abweichungen bricht das Programm mit Exitcode 1 sowie Soll-/Istzahl und
+Aufschlüsselung je Satz ab. Alle ausgewählten Konfigurationen werden vor dem
+ersten Schreiben geprüft; vorhandene PDFs bleiben bei einem Zählfehler unberührt.
+Bei reiner A4-Ausgabe wird die Gleichheit mit der MeinSpiel-Sollzahl nicht verlangt.
+Bestehende Einzelkonfigurationen funktionieren weiterhin; auch dort kann
+`meinspielCardCount` optional gesetzt werden.
+
 Ohne Parameter fragt der Generator die Karten-Konfiguration aus `data/card_configuration.json` ab. Neben einzelnen Einträgen kann mit `A` auch **Alle Konfigurationen** gewählt werden; jede wird dann einmal vollständig erzeugt.
 
 Der Name der PDF-Ausgabe orientiert sich immer am Namen der gewaehlten CSV-Datei:
