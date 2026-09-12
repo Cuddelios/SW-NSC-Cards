@@ -35,6 +35,20 @@ static class BatchChecks
             Check(Color(batch.RenderBack(batch.Cards[0], 10, 10)) == SKColors.Blue, "First back");
             Check(Color(batch.RenderFront(batch.Cards[2], 10, 10)) == SKColors.Blue, "Second front");
             Check(Color(batch.RenderBack(batch.Cards[2], 10, 10)) == SKColors.Red, "Second back");
+            string sharedTemplate = Temp(Svg("red").Replace("<rect ", "<rect data-field=\"tint\" "));
+            var independent = new CardConfiguration
+            {
+                CardSets = [
+                    new() { Data = config.CardSets[1].Data, Template = sharedTemplate, Backcard = red,
+                        Fields = new() { ["tint"] = new() { Type = "fill", DefaultValue = "blue" } } },
+                    new() { Data = config.CardSets[1].Data, Template = sharedTemplate, Backcard = red,
+                        Fields = new() { ["tint"] = new() { Type = "fill", DefaultValue = "lime" } } }
+                ]
+            };
+            var independentBatch = CardBatch.Prepare(independent, false, false);
+            Check(Color(independentBatch.RenderFront(independentBatch.Cards[0], 10, 10)) == SKColors.Blue
+                && Color(independentBatch.RenderFront(independentBatch.Cards[1], 10, 10)) == SKColors.Lime,
+                "Field definitions must remain independent per set with the same template");
             foreach (int? expected in new int?[] { 3, 5, 0, null })
             {
                 config.MeinspielCardCount = expected;

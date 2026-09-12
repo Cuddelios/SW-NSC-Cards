@@ -53,6 +53,18 @@ internal class Program
                 var defaults = JsonSerializer.Deserialize<CardConfigurationFile>(File.ReadAllText(defaultsPath),
                     new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                 selectedConfigurations[0].Fields = FieldConfiguration.Merge(defaults?.Fields ?? new(), new());
+                // Explicit CSV/template arguments use the matching set's field definitions too.
+                foreach (var configuration in defaults?.Configurations ?? [])
+                {
+                    var matchingSet = (configuration.CardSets ?? [configuration]).FirstOrDefault(set =>
+                        string.Equals(Path.GetFullPath(Path.Combine("data", set.Data)), Path.GetFullPath(csvPath), StringComparison.OrdinalIgnoreCase)
+                        && string.Equals(Path.GetFullPath(Path.Combine("templates", set.Template)), Path.GetFullPath(svgTemplatePath), StringComparison.OrdinalIgnoreCase));
+                    if (matchingSet == null) continue;
+                    selectedConfigurations[0].Fields = FieldConfiguration.Merge(
+                        FieldConfiguration.Merge(defaults!.Fields, configuration.Fields), matchingSet.Fields);
+                    selectedConfigurations[0].CountField = matchingSet.CountField;
+                    break;
+                }
             }
         }
 

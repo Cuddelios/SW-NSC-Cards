@@ -10,14 +10,81 @@
           "template": "loot_template.svg",
           "backcard": "npc_card_back_diamonds.svg",
           "titlecard": "title_loot.svg",
-          "data": "loot_settings.csv"
+          "data": "loot_settings.csv",
+          "fields": {
+            "consumption": {
+              "aliases": [
+                "consumtion"
+              ]
+            },
+            "name_short": {
+              "type": "text",
+              "wrapLength": 16
+            },
+            "description": {
+              "type": "text",
+              "wrapLength": 29,
+              "offsetAfter": [
+                "skills_text",
+                "edges"
+              ],
+              "offsetY": 0.5
+            },
+            "skills_text": {
+              "type": "skillLabels",
+              "defaultValue": ""
+            },
+            "edges": {
+              "type": "list",
+              "offsetAfter": [
+                "skills_text"
+              ]
+            }
+          }
         },
         {
           "name": "Barrier Cards",
           "template": "barriers_template.svg",
           "backcard": "npc_card_back_clubs.svg",
           "titlecard": "title_barriers.svg",
-          "data": "barrier_settings.csv"
+          "data": "barrier_settings.csv",
+          "fields": {
+            "name_short": {
+              "type": "text",
+              "wrapLength": 16
+            },
+            "weapons": {
+              "type": "list"
+            },
+            "fail_text": {
+              "type": "text",
+              "wrapLength": 20
+            },
+            "description": {
+              "type": "text",
+              "wrapLength": 29,
+              "offsetAfter": [
+                "skills_text",
+                "edges"
+              ],
+              "offsetY": 0.5
+            },
+            "consumption": {
+              "aliases": [
+                "consumtion"
+              ]
+            },
+            "skills_text": {
+              "type": "skillLabels",
+              "defaultValue": ""
+            },
+            "edges": {
+              "type": "list",
+              "offsetAfter": [
+                "skills_text"
+              ]
+            }
+          }
         }
       ]
     },
@@ -27,7 +94,37 @@
       "backcard": "npc_card_back_diamonds.svg",
       "titlecard": "title_loot.svg",
       "data": "loot_settings.csv",
-      "output": "loot_cards"
+      "output": "loot_cards",
+      "fields": {
+        "consumption": {
+          "aliases": [
+            "consumtion"
+          ]
+        },
+        "name_short": {
+          "type": "text",
+          "wrapLength": 16
+        },
+        "description": {
+          "type": "text",
+          "wrapLength": 29,
+          "offsetAfter": [
+            "skills_text",
+            "edges"
+          ],
+          "offsetY": 0.5
+        },
+        "skills_text": {
+          "type": "skillLabels",
+          "defaultValue": ""
+        },
+        "edges": {
+          "type": "list",
+          "offsetAfter": [
+            "skills_text"
+          ]
+        }
+      }
     },
     {
       "name": "Barrier Cards",
@@ -35,7 +132,44 @@
       "backcard": "npc_card_back_clubs.svg",
       "titlecard": "title_barriers.svg",
       "data": "barrier_settings.csv",
-      "output": "barrier_cards"
+      "output": "barrier_cards",
+      "fields": {
+        "name_short": {
+          "type": "text",
+          "wrapLength": 16
+        },
+        "weapons": {
+          "type": "list"
+        },
+        "fail_text": {
+          "type": "text",
+          "wrapLength": 20
+        },
+        "description": {
+          "type": "text",
+          "wrapLength": 29,
+          "offsetAfter": [
+            "skills_text",
+            "edges"
+          ],
+          "offsetY": 0.5
+        },
+        "consumption": {
+          "aliases": [
+            "consumtion"
+          ]
+        },
+        "skills_text": {
+          "type": "skillLabels",
+          "defaultValue": ""
+        },
+        "edges": {
+          "type": "list",
+          "offsetAfter": [
+            "skills_text"
+          ]
+        }
+      }
     },
     {
       "name": "Enemy Cards",
@@ -43,7 +177,39 @@
       "backcard": "npc_card_back_sprades.svg",
       "titlecard": "title_enemies.svg",
       "data": "npc_settings_normal.csv",
-      "output": "enemy_cards"
+      "output": "enemy_cards",
+      "fields": {
+        "skills_dices": {
+          "type": "skillDice",
+          "source": "skills_text",
+          "defaultValue": "",
+          "lineHeightFrom": "skills_text"
+        },
+        "skills_text": {
+          "type": "skillLabels",
+          "defaultValue": ""
+        },
+        "description": {
+          "type": "text",
+          "wrapLength": 29,
+          "offsetAfter": [
+            "skills_text",
+            "edges"
+          ],
+          "offsetY": 0.5
+        },
+        "edges": {
+          "type": "list",
+          "offsetAfter": [
+            "skills_text"
+          ]
+        },
+        "consumption": {
+          "aliases": [
+            "consumtion"
+          ]
+        }
+      }
     },
     {
       "name": "Wildcard Enemy Cards",
@@ -51,7 +217,39 @@
       "backcard": "npc_card_back_sprades_wc.svg",
       "titlecard": "title_enemies_wc.svg",
       "data": "npc_settings_wc.csv",
-      "output": "wildcard_enemy_cards"
+      "output": "wildcard_enemy_cards",
+      "fields": {
+        "skills_dices": {
+          "type": "skillDice",
+          "source": "skills_text",
+          "defaultValue": "",
+          "lineHeightFrom": "skills_text"
+        },
+        "skills_text": {
+          "type": "skillLabels",
+          "defaultValue": ""
+        },
+        "description": {
+          "type": "text",
+          "wrapLength": 29,
+          "offsetAfter": [
+            "skills_text",
+            "edges"
+          ],
+          "offsetY": 0.5
+        },
+        "edges": {
+          "type": "list",
+          "offsetAfter": [
+            "skills_text"
+          ]
+        },
+        "consumption": {
+          "aliases": [
+            "consumtion"
+          ]
+        }
+      }
     },
     {
       "name": "Encounter Cards",
@@ -59,65 +257,39 @@
       "backcard": "npc_card_back_hearts.svg",
       "titlecard": "title_encounters.svg",
       "data": "npc_settings_encounter.csv",
-      "output": "encounter_cards"
+      "output": "encounter_cards",
+      "fields": {
+        "skills_dices": {
+          "type": "skillDice",
+          "source": "skills_text",
+          "defaultValue": "",
+          "lineHeightFrom": "skills_text"
+        },
+        "skills_text": {
+          "type": "skillLabels",
+          "defaultValue": ""
+        },
+        "description": {
+          "type": "text",
+          "wrapLength": 29,
+          "offsetAfter": [
+            "skills_text",
+            "edges"
+          ],
+          "offsetY": 0.5
+        },
+        "edges": {
+          "type": "list",
+          "offsetAfter": [
+            "skills_text"
+          ]
+        },
+        "consumption": {
+          "aliases": [
+            "consumtion"
+          ]
+        }
+      }
     }
-  ],
-  "fields": {
-    "skills_text": {
-      "type": "skillLabels",
-      "defaultValue": ""
-    },
-    "skills_dices": {
-      "type": "skillDice",
-      "source": "skills_text",
-      "defaultValue": "",
-      "lineHeightFrom": "skills_text"
-    },
-    "edges": {
-      "type": "list",
-      "offsetAfter": [
-        "skills_text"
-      ]
-    },
-    "weapons": {
-      "type": "list"
-    },
-    "description": {
-      "type": "text",
-      "wrapLength": 29,
-      "offsetAfter": [
-        "skills_text",
-        "edges"
-      ],
-      "offsetY": 0.5
-    },
-    "name_short": {
-      "type": "text",
-      "wrapLength": 16
-    },
-    "fail_text": {
-      "type": "text",
-      "wrapLength": 20
-    },
-    "consumption": {
-      "aliases": [
-        "consumtion"
-      ]
-    },
-    "consumtion": {
-      "aliases": [
-        "consumption"
-      ]
-    },
-    "mob_typ": {
-      "aliases": [
-        "mob_type"
-      ]
-    },
-    "mob_type": {
-      "aliases": [
-        "mob_typ"
-      ]
-    }
-  }
+  ]
 }

@@ -48,16 +48,13 @@ try
         Check(rejected, "Invalid configuration was accepted");
     }
     using var json = JsonDocument.Parse(File.ReadAllText("data/card_configuration.json"));
-    var shipped = JsonSerializer.Deserialize<Dictionary<string, FieldConfiguration>>(json.RootElement.GetProperty("fields"),
-        new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
     foreach (var deck in json.RootElement.GetProperty("configurations").EnumerateArray())
     {
         var configuration = JsonSerializer.Deserialize<CardConfiguration>(deck,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
-        configuration.Fields = FieldConfiguration.Merge(shipped, configuration.Fields);
         CardBatch.Prepare(configuration, true, true);
         if (configuration.CardSets != null) continue;
-        var cardRenderer = new SvgCardRenderer(Path.Combine("templates", deck.GetProperty("template").GetString()!), fields: shipped);
+        var cardRenderer = new SvgCardRenderer(Path.Combine("templates", deck.GetProperty("template").GetString()!), fields: configuration.Fields);
         var rows = new CsvReaderService().Read(Path.Combine("data", deck.GetProperty("data").GetString()!), ',');
         foreach (var row in rows) XDocument.Parse(cardRenderer.BuildFilledSvg(row));
     }

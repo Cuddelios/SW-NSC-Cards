@@ -3,7 +3,7 @@ Es wird das Savage World Regelwerk (20210421) verwendet.
 
 ## Konfigurierbare Feldregeln
 
-`fields` in `data/card_configuration.json` definiert gemeinsame Regeln für SVG-`data-field`-Namen. Jeder Kartensatz unter `configurations` kann eigene `fields` angeben. Eine gleichnamige Regel ersetzt die gemeinsame Regel vollständig. Beispiel innerhalb eines Kartensatzes:
+`fields` wird direkt beim jeweiligen Kartensatz in `data/card_configuration.json` hinterlegt, neben `data`, `template` und `backcard`. Bei kombinierten Ausgaben hat jeder Eintrag in `cardSets` seine eigenen Feldregeln. Bei Einzelkonfigurationen steht `fields` direkt im Eintrag unter `configurations`. So kann derselbe SVG-Feldname je Satz unterschiedlich interpretiert werden. Beispiel innerhalb eines Kartensatzes:
 
 ```json
 {
@@ -32,7 +32,7 @@ Es wird das Savage World Regelwerk (20210421) verwendet.
 
 `skillLabels` und `skillDice` interpretieren Einträge wie `Kämpfen d8` (d4, d6, d8, d10, d12). Beide können dieselbe `source` verwenden. `selection` wählt ein direktes SVG-Kindelement anhand seines `data-field`, `visibility` schaltet die Sichtbarkeit und `fill` setzt die Füllfarbe. Die Symbolgrafiken bleiben in der SVG-Vorlage.
 
-Nicht konfigurierte Felder verwenden die automatische SVG-Erkennung (Gruppenauswahl, Sichtbarkeit, Farbe oder Text). Die bisherigen namensabhängigen Sonderregeln stehen jetzt in der JSON-Datei. Bei Aufruf mit CSV-/SVG-Pfadargumenten gelten die gemeinsamen Regeln aus dieser Datei, sofern sie im Arbeitsverzeichnis vorhanden ist. Kartensatzbezogene Überschreibungen gelten bei interaktiver Auswahl. `countField` ist pro Kartensatz einstellbar, Standard: `count`.
+Nicht konfigurierte Felder verwenden die automatische SVG-Erkennung (Gruppenauswahl, Sichtbarkeit, Farbe oder Text). Die bisherigen namensabhängigen Sonderregeln stehen jetzt beim jeweiligen Satz in der JSON-Datei. Bei Aufruf mit CSV-/SVG-Pfadargumenten werden Feldregeln und `countField` des ersten Satzes mit passendem CSV- und Vorlagenpfad übernommen, sofern die Konfigurationsdatei im Arbeitsverzeichnis vorhanden ist. `countField` ist pro Kartensatz einstellbar, Standard: `count`.
 
 Feldverarbeitung und alle mitgelieferten CSV-/SVG-Kombinationen prüfen:
 
@@ -47,8 +47,9 @@ dotnet run --project tests/GeneratorChecks.csproj
 Eine Konfiguration kann statt einzelner CSV-/Vorlagenangaben eine Liste `cardSets`
 enthalten. Alle Sätze werden in Listenreihenfolge in gemeinsame PDFs geschrieben.
 Jeder Satz hat eigene `data`, `template`, `backcard`, optional `titlecard`,
-`countField` und `fields`. Feldregeln gelten in der Reihenfolge: gemeinsame Regeln,
-Regeln der Ausgabe, Regeln des Kartensatzes; gleichnamige Regeln werden vollständig ersetzt.
+`countField` und `fields`. Die mitgelieferte Konfiguration definiert Feldregeln pro Satz.
+Für bestehende Konfigurationen bleiben gemeinsame Regeln und Regeln auf Ausgabeebene
+als Vorgaben unterstützt; die Regel im Kartensatz ersetzt eine gleichnamige Vorgabe vollständig.
 `output` und `meinspielCardCount` stehen auf der äußeren Konfiguration.
 Verschachtelte `cardSets` sind nicht erlaubt.
 
@@ -63,14 +64,22 @@ Verschachtelte `cardSets` sind nicht erlaubt.
       "data": "loot_settings.csv",
       "template": "loot_template.svg",
       "backcard": "npc_card_back_diamonds.svg",
-      "titlecard": "title_loot.svg"
+      "titlecard": "title_loot.svg",
+      "fields": {
+        "name_short": { "type": "text", "wrapLength": 16 },
+        "description": { "type": "text", "wrapLength": 29, "offsetY": 0.5 }
+      }
     },
     {
       "name": "Barrieren",
       "data": "barrier_settings.csv",
       "template": "barriers_template.svg",
       "backcard": "npc_card_back_clubs.svg",
-      "titlecard": "title_barriers.svg"
+      "titlecard": "title_barriers.svg",
+      "fields": {
+        "name_short": { "type": "text", "wrapLength": 16 },
+        "fail_text": { "type": "text", "wrapLength": 20 }
+      }
     }
   ]
 }
