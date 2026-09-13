@@ -1,0 +1,249 @@
+﻿id;name;stufe;rang;rolle;konzept;beschreibung;portraet_datei;attribut_geschicklichkeit;attribut_konstitution;attribut_verstand;attribut_staerke;attribut_willenskraft;tempo;parade;robustheit;panzerung;machtpunkte;talent_liste;macht_liste;handicap_liste;ausruestung_liste;fertigkeit_01_name;fertigkeit_01_wuerfel;fertigkeit_02_name;fertigkeit_02_wuerfel;fertigkeit_03_name;fertigkeit_03_wuerfel;fertigkeit_04_name;fertigkeit_04_wuerfel;fertigkeit_05_name;fertigkeit_05_wuerfel;fertigkeit_06_name;fertigkeit_06_wuerfel;fertigkeit_07_name;fertigkeit_07_wuerfel;fertigkeit_08_name;fertigkeit_08_wuerfel;fertigkeit_09_name;fertigkeit_09_wuerfel
+mira_voss_stufe_3;Mira Voss;3;Anfänger;Halbelfische Infiltratorin;Ehemalige Konzernsaboteurin, spezialisiert auf Eindringen, Täuschung und magisch verstärkte Heimlichkeit.;Mira löst Probleme lieber, bevor jemand merkt, dass es ein Problem gab. Ihre Magie macht sie zur Meisterin verdeckter Operationen, ihre technischen Fähigkeiten öffnen fast jede Tür. Ihre größte Stärke – alles wissen zu wollen – bringt sie regelmäßig in Schwierigkeiten. Ihre Loyalität zu den Drachen geht oft über taktische Vernunft hinaus, und weil sie von Feinden gesucht wird, kann jede Begegnung plötzlich eskalieren.;portraets/mira_voss.png;W10;W6;W8;W4;W6;6;5;5;2;10;"Arkane Hintergrund (Magie)
+Dieb";"Unsichtbarkeit
+Ablenkung
+Licht/Dunkelheit";"Loyal (klein)
+Gesucht (groß) – mehrere Syndikate wollen sie tot
+Neugierig (klein)";"Schalldämpfer-Pistole (2W6)
+Teleskopschlagstock (Str+W4)
+Dietriche und Hacking-Set
+Leichte Schutzweste (+2)";Heimlichkeit;W10;Athletik;W8;Kämpfen;W6;Schießen;W8;Wahrnehmung;W6;Diebeskunst;W10;Überreden;W6;Zaubern;W6;Elektronik;W4
+mira_voss_stufe_6;Mira Voss;6;Fortgeschritten;Halbelfische Infiltratorin;Ehemalige Konzernsaboteurin, spezialisiert auf Eindringen, Täuschung und magisch verstärkte Heimlichkeit.;Mira löst Probleme lieber, bevor jemand merkt, dass es ein Problem gab. Ihre Magie macht sie zur Meisterin verdeckter Operationen, ihre technischen Fähigkeiten öffnen fast jede Tür. Ihre größte Stärke – alles wissen zu wollen – bringt sie regelmäßig in Schwierigkeiten. Ihre Loyalität zu den Drachen geht oft über taktische Vernunft hinaus, und weil sie von Feinden gesucht wird, kann jede Begegnung plötzlich eskalieren.;portraets/mira_voss.png;W10;W6;W8;W4;W8;6;5;5;2;10;"Arkane Hintergrund (Magie)
+Dieb
+Ausweichen";"Unsichtbarkeit
+Ablenkung
+Licht/Dunkelheit";"Loyal (klein)
+Gesucht (groß) – mehrere Syndikate wollen sie tot
+Neugierig (klein)";"Schalldämpfer-Pistole (2W6)
+Teleskopschlagstock (Str+W4)
+Dietriche und Hacking-Set
+Leichte Schutzweste (+2)
+Drohnenkamera";Heimlichkeit;W10;Athletik;W8;Kämpfen;W6;Schießen;W8;Wahrnehmung;W8;Diebeskunst;W10;Überreden;W6;Zaubern;W6;Elektronik;W6
+viktor_kane_stufe_3;Viktor Kane;3;Anfänger;Halborkischer Straßenbrecher;Frontkämpfer, Einschüchterer und lebender Rammbock.;Viktor ist die Antwort auf jede Tür, die nicht freiwillig aufgeht. Wenn subtil nichts bringt, bringt Viktor meistens eine Wand zum Einsturz. Sein Temperament ist legendär und problematisch. Beleidigungen, Ungerechtigkeit oder Bedrohungen gegen Schwächere treiben ihn sofort zur Konfrontation – was Missionen gern chaotisch macht.;portraets/viktor_kane.png;W6;W8;W4;W10;W8;6;7;7;2;;"Kräftig
+Schmerzresistenz";;"Jähzornig (groß)
+Ehrenkodex (klein)
+Hässlich (klein)";"Kampfstab
+Schrotflinte (1–3W6)
+Schwerer Mantelpanzer (+2)
+Blendgranaten";Kämpfen;W10;Schießen;W6;Athletik;W8;Einschüchtern;W8;Wahrnehmung;W4;Fahren;W6;Überleben;W4;Überreden;W6;;
+viktor_kane_stufe_7;Viktor Kane;7;Fortgeschritten;Halborkischer Straßenbrecher;Frontkämpfer, Einschüchterer und lebender Rammbock.;Viktor ist die Antwort auf jede Tür, die nicht freiwillig aufgeht. Wenn subtil nichts bringt, bringt Viktor meistens eine Wand zum Einsturz. Sein Temperament ist legendär und problematisch. Beleidigungen, Ungerechtigkeit oder Bedrohungen gegen Schwächere treiben ihn sofort zur Konfrontation – was Missionen gern chaotisch macht.;portraets/viktor_kane.png;W6;W10;W4;W10;W8;6;7;8;3;;"Kräftig
+Schmerzresistenz
+Block
+Kampfreflexe";;"Jähzornig (groß)
+Ehrenkodex (klein)
+Hässlich (klein)";"Verstärkter Kampfstab (Str+W8)
+Schrotflinte (1–3W6)
+Schwerer Mantelpanzer (+2)
+Blendgranaten
+Motorrad";Kämpfen;W10;Schießen;W6;Athletik;W8;Einschüchtern;W8;Wahrnehmung;W6;Fahren;W6;Überleben;W4;Überreden;W6;;
+dr_selene_ward_stufe_3;Dr. Selene Ward;3;Anfänger;Dimensionsmagierin;Arkaner Support, Informationsbeschaffung, Kampfzauber.;"Selene betrachtet Realität als bearbeitbares Problem. Sie ist analytisch brillant und mit ihren Mächten oft der taktische Wendepunkt. Leider hält sie sich fast immer für die Klügste im Raum – oft zurecht. Ihre Gespräche mit ""nichtlokalen Entitäten"" irritieren selbst Verbündete.";portraets/dr_selene_ward.png;W6;W6;W10;W4;W8;6;4;5;1;15;"Arkane Hintergrund (Magie)
+Gelehrter
+Machtpunkte";"Geschoss
+Schutz
+Heilung";"Überheblich (groß)
+Angewohnheit: spricht mit Wesen aus anderen Dimensionen (klein)
+Zerbrechlich (klein)";"Fokus-Amulett
+Ritualbuch
+Kampfstab
+Medizinisches Kit
+Schutzmantel (+1)";Arkane Fertigkeit (Magie);W10;Okkultismus;W8;Wissen Wissenschaft;W8;Wahrnehmung;W8;Heilen;W8;Überreden;W6;Kämpfen;W4;;;;
+dr_selene_ward_stufe_7;Dr. Selene Ward;7;Fortgeschritten;Dimensionsmagierin;Arkaner Support, Informationsbeschaffung, Kampfzauber.;"Selene betrachtet Realität als bearbeitbares Problem. Sie ist analytisch brillant und mit ihren Mächten oft der taktische Wendepunkt. Leider hält sie sich fast immer für die Klügste im Raum – oft zurecht. Ihre Gespräche mit ""nichtlokalen Entitäten"" irritieren selbst Verbündete.";portraets/dr_selene_ward.png;W6;W6;W10;W4;W10;6;5;5;1;15;"Arkane Hintergrund (Magie)
+Neue Macht
+Gelehrter
+Konzentration
+Machtpunkte";"Geschoss
+Schutz
+Entdecken/Verbergen Arkana
+Telekinese
+Heilung";"Überheblich (groß)
+Angewohnheit: spricht mit Wesen aus anderen Dimensionen (klein)
+Zerbrechlich (klein)";"Fokus-Amulett
+Ritualbuch
+Kampfstab
+Medizinisches Kit
+Schutzmantel (+1)";Arkane Fertigkeit (Magie);W10;Okkultismus;W10;Wissen Wissenschaft;W8;Wahrnehmung;W8;Heilen;W8;Überreden;W6;Kämpfen;W6;;;;
+jonah_cross_stufe_3;Jonah Cross;3;Anfänger;Straßenschamane und Heiler;;Jonah hält Gruppen zusammen – medizinisch, spirituell und moralisch. Er rettet andere oft gegen jede Vernunft. Sein Problem: Er weigert sich fast immer, jemanden aufzugeben, selbst Feinde. Dadurch wird aus Rückzug schnell Rettungsmission.;portraets/jonah_cross.png;W6;W6;W8;W6;W8;6;5;5;1;;"Arkane Hintergrund (Wunder)
+Heiler
+Neue Macht";"Heilung
+Furcht bannen
+Schutz
+Stärkung
+Linderung";"Pazifist (klein)
+Gelübde, niemanden zurückzulassen (groß)
+Arm (klein)";"Ritualmesser
+Kampfstab
+Medizinrucksack
+Fetische und Talismane
+Lederjacke (+1)";Glauben;W8;Heilen;W8;Wahrnehmung;W6;Kämpfen;W6;Überreden;W8;Überleben;W6;Einschüchtern;W6;;;;
+jonah_cross_stufe_7;Jonah Cross;7;Fortgeschritten;Straßenschamane und Heiler;;Jonah hält Gruppen zusammen – medizinisch, spirituell und moralisch. Er rettet andere oft gegen jede Vernunft. Sein Problem: Er weigert sich fast immer, jemanden aufzugeben, selbst Feinde. Dadurch wird aus Rückzug schnell Rettungsmission.;portraets/jonah_cross.png;W6;W6;W8;W6;W10;6;5;5;1;;"Arkane Hintergrund (Wunder)
+Heiler
+Block
+Neue Macht";"Heilung
+Furcht bannen
+Schutz
+Stärkung
+Linderung";"Pazifist (klein)
+Gelübde, niemanden zurückzulassen (groß)
+Arm (klein)";"Ritualmesser
+Kampfstab
+Medizinrucksack
+Fetische und Talismane
+Lederjacke (+1)";Glauben;W10;Heilen;W8;Wahrnehmung;W8;Kämpfen;W6;Überreden;W8;Überleben;W8;Einschüchtern;W8;;;;
+nyx_arkwell_stufe_3;Nyx Arkwell;3;Anfänger;Hex-Hackerin;;Nyx hackt Magie wie andere Firewalls. Sie ist Spezialistin für digitale und arkane Sicherheit. Ihre Paranoia macht sie brillant vorsichtig – und sozial unerquicklich. Sie traut grundsätzlich niemandem. Nicht einmal Aufzügen.;portraets/nyx_arkwell.png;W8;W6;W10;W4;W6;6;3;5;1;;"Arkane Hintergrund (Weird Science)
+McGyver";"Geschoss (Arc-Taser)
+Verwirrung (Neuro-Störsender)";"Paranoid (groß)
+Schlaflos (klein)
+Eigenartig: redet mit Maschinen (klein)";"Cyberdeck
+EMP-Ladungen
+Tech-Rüstung (+1)";Elektronik;W8;Hacken/Forschung;W8;verrückte Wissenschaft;W8;Heimlichkeit;W8;Schießen;W6;Wahrnehmung;W8;Okkultismus;W4;Reparieren;W8;;
+nyx_arkwell_stufe_7;Nyx Arkwell;7;Fortgeschritten;Hex-Hackerin;;Nyx hackt Magie wie andere Firewalls. Sie ist Spezialistin für digitale und arkane Sicherheit. Ihre Paranoia macht sie brillant vorsichtig – und sozial unerquicklich. Sie traut grundsätzlich niemandem. Nicht einmal Aufzügen.;portraets/nyx_arkwell.png;W8;W6;W10;W4;W8;6;3;5;2;;"Arkane Hintergrund (Weird Science)
+Bastler
+McGyver
+Neue Macht";"Geschoss (Arc-Taser)
+Verwirrung (Neuro-Störsender)
+Unsichtbarkeit (Cloak-Gürtel)
+Telekinese (Traktorstrahl)";"Paranoid (groß)
+Schlaflos (klein)
+Eigenartig: redet mit Maschinen (klein)";"Maschinenpistole
+Cyberdeck
+EMP-Ladungen
+Tech-Rüstung (+2)";Elektronik;W8;Hacken/Forschung;W10;verrückte Wissenschaft;W8;Heimlichkeit;W8;Schießen;W6;Wahrnehmung;W8;Okkultismus;W6;Reparieren;W8;;
+elias_grimm_stufe_3;Elias Grimm;3;Anfänger;Monsterjäger;;Elias jagt alles, was durch Dimensionsrisse kriecht. Er kennt Schwächen von Kreaturen, die offiziell gar nicht existieren. Seine Besessenheit von Rache führt oft zu Tunnelblick. Sobald ein Ziel auf seiner Liste auftaucht, wird die Mission schnell persönlich.;portraets/elias_grimm.png;W8;W8;W8;W6;W4;6;4;6;2;;"Sechster Sinn
+Schmerzresistenz";;"Rachsüchtig (groß)
+Düster (klein)
+Misstrauisch (klein)";"Geweihte Machete (Str+W6)
+Jagdgewehr
+Silbermunition
+Monster-Kit
+Kevlar (+2)";Kämpfen;W8;Schießen;W8;Wahrnehmung;W8;Überleben;W8;Nachforschungen;W8;Provozieren;W8;;;;;;
+elias_grimm_stufe_7;Elias Grimm;7;Fortgeschritten;Monsterjäger;;Elias jagt alles, was durch Dimensionsrisse kriecht. Er kennt Schwächen von Kreaturen, die offiziell gar nicht existieren. Seine Besessenheit von Rache führt oft zu Tunnelblick. Sobald ein Ziel auf seiner Liste auftaucht, wird die Mission schnell persönlich.;portraets/elias_grimm.png;W8;W8;W8;W8;W4;6;5;6;2;;"Block
+Sechster Sinn
+Schmerzresistenz";;"Rachsüchtig (groß)
+Düster (klein)
+Misstrauisch (klein)";"Geweihte Machete (Str+W6)
+Jagdgewehr
+Silbermunition
+Monster-Kit
+Kevlar (+2)";Kämpfen;W10;Schießen;W8;Wahrnehmung;W10;Überleben;W8;Nachforschungen;W8;Provozieren;W8;;;;;;
+rhea_solaris_stufe_3;Rhea Solaris;3;Anfänger;Elementar-Agentin;;Rhea kombiniert mobile Feuerkraft mit echter Superhelden-Attitüde. Wenn etwas explodieren soll – elegant – ist sie erste Wahl. Leider stürzt sie sich wegen ihres Heldenkomplexes regelmäßig in unnötige Gefahr, besonders wenn Unschuldige betroffen sind.;portraets/rhea_solaris.png;W8;W6;W6;W6;W8;6;5;5;;;"Arkane Hintergrund (Wunder)
+Charismatisch
+Neue Macht";"Geschoss (Feuer)
+Element manipulieren
+Wandkrabbler
+Schutz
+Eigenschaften erhöhen/senken";"Eitel (klein)
+Heldenhaft (groß)
+Phobie: Enge Räume (klein)";"Feuerfokus-Ringe
+Pistole
+Leichte taktische Rüstung (+2)
+Rauchgranaten";Glaube;W8;Schießen;W8;Kämpfen;W6;Athletik;W8;Überreden;W8;Einschüchtern;W6;Wahrnehmung;W6;Heimlichkeit;W6;;
+rhea_solaris_stufe_7;Rhea Solaris;7;Fortgeschritten;Elementar-Agentin;;Rhea kombiniert mobile Feuerkraft mit echter Superhelden-Attitüde. Wenn etwas explodieren soll – elegant – ist sie erste Wahl. Leider stürzt sie sich wegen ihres Heldenkomplexes regelmäßig in unnötige Gefahr, besonders wenn Unschuldige betroffen sind.;portraets/rhea_solaris.png;W8;W6;W6;W6;W10;6;5;5;;;"Arkane Hintergrund (Wunder)
+Charismatisch
+Neue Macht
+Ausweichen
+Machtpunkte";"Geschoss (Feuer)
+Element manipulieren
+Wandkrabbler
+Schutz
+Eigenschaften erhöhen/senken";"Eitel (klein)
+Heldenhaft (groß)
+Phobie: Enge Räume (klein)";"Feuerfokus-Ringe
+Pistole
+Leichte taktische Rüstung (+2)
+Rauchgranaten";Glaube;W10;Schießen;W8;Kämpfen;W6;Athletik;W8;Überreden;W8;Einschüchtern;W6;Wahrnehmung;W6;Heimlichkeit;W8;;
+adrian_vale_stufe_3;Adrian Vale;3;Anfänger;Gesichtswechsler und Sozialmanipulator;;Adrian gewinnt Kämpfe oft, bevor sie beginnen – durch Lügen, Erpressung oder charmante Manipulation. Sein großes Geheimnis könnte die Drachen kompromittieren, falls es ans Licht kommt. Dazu kommt, dass er viel zu gern zeigt, wie clever er ist.;portraets/adrian_vale.png;W8;W6;W8;W4;W8;6;3;5;1;;"Arkane Hintergrund (Psionik)
+Charismatisch
+Beziehungen";"Gedankenlesen
+Empathie
+Illusion";"Habgier (klein)
+Geheimnis (groß) – frühere Verbindung zum Feind
+Angeber (klein)";"Elegante schwere Pistole
+Verkleidungsset
+Falsche IDs";Überreden;W8;Einschüchtern;W8;Heimlichkeit;W8;Psionik(Täuschen);W8;Wahrnehmung;W8;Schießen;W6;Diebeskunst;W8;;;;
+adrian_vale_stufe_7;Adrian Vale;7;Fortgeschritten;Gesichtswechsler und Sozialmanipulator;;Adrian gewinnt Kämpfe oft, bevor sie beginnen – durch Lügen, Erpressung oder charmante Manipulation. Sein großes Geheimnis könnte die Drachen kompromittieren, falls es ans Licht kommt. Dazu kommt, dass er viel zu gern zeigt, wie clever er ist.;portraets/adrian_vale.png;W8;W6;W8;W4;W10;6;3;5;2;;"Arkane Hintergrund (Psionik)
+Charismatisch
+Beziehungen
+Starker Wille
+Neue Mächte";"Verkleiden
+Telekinese
+Gedankenlesen
+Empathie
+Illusion";"Habgier (klein)
+Geheimnis (groß) – frühere Verbindung zum Feind
+Angeber (klein)";"Elegante schwere Pistole
+Verkleidungsset
+Falsche IDs
+Maßanzug mit Schutzfaser (+2)";Überreden;W10;Einschüchtern;W8;Heimlichkeit;W8;Psionik(Täuschen);W10;Wahrnehmung;W8;Schießen;W6;Diebeskunst;W8;;;;
+leon_hartmann_stufe_3;Leon Hartmann;3;Anfänger;Ex-KSK Einsatzführer;;Leon ist ein präziser Teamführer und Spezialist für harte Einsätze. Seine größte Stärke ist Ruhe unter Feuer. Sein Pflichtgefühl kann ihn in unmögliche Rettungsaktionen treiben, und sein Trauma lässt ihn auf bestimmte Reize überreagieren.;portraets/leon_hartmann.png;W8;W6;W8;W6;W6;6;6;5;2;;"Anführer
+Sechster Sinn";;"Pflichtbewusst (groß)
+Stur (klein)
+Schlechte Erinnerungen/Kriegstrauma (klein)";"Dienstpistole
+Kampfmesser
+Taktische Panzerung (+2)
+Rauch- und Splittergranaten";Schießen;W8;Kämpfen;W8;Athletik;W8;Wahrnehmung;W8;Einschüchtern;W6;Überleben;W8;Taktik/Wissen;W6;Fahren;W4;;
+leon_hartmann_stufe_7;Leon Hartmann;7;Fortgeschritten;Ex-KSK Einsatzführer;;Leon ist ein präziser Teamführer und Spezialist für harte Einsätze. Seine größte Stärke ist Ruhe unter Feuer. Sein Pflichtgefühl kann ihn in unmögliche Rettungsaktionen treiben, und sein Trauma lässt ihn auf bestimmte Reize überreagieren.;portraets/leon_hartmann.png;W8;W6;W8;W8;W6;6;6;5;3;;"Anführer
+Kampfreflexe
+Sechster Sinn";;"Pflichtbewusst (groß)
+Stur (klein)
+Schlechte Erinnerungen/Kriegstrauma (klein)";"Sturmgewehr
+Dienstpistole
+Kampfmesser
+Taktische Panzerung (+3)
+Rauch- und Splittergranaten";Schießen;W10;Kämpfen;W8;Athletik;W8;Wahrnehmung;W8;Einschüchtern;W6;Überleben;W8;Taktik/Wissen;W8;Fahren;W6;;
+zoe_brandt_stufe_3;Zoe Brandt;3;Anfänger;Fluchtfahrerin und Schmugglerin;;Zoe fährt, als hätten Naturgesetze nur Empfehlungscharakter. In Verfolgungen glänzt sie. Ihr Hang zum Nervenkitzel sorgt dafür, dass selbst einfache Transporte plötzlich halsbrecherisch werden.;portraets/zoe_brandt.png;W10;W6;W8;W4;W6;6;3;5;;;"Ass
+Flink
+Glück";;"Angewohnheit: nimmt Risiken aus Spaß (klein)
+Loyal (klein)
+Gesucht (groß)";"Kompakte MP
+Motorrad
+Werkzeugset
+Leichte Weste (+1)";Fahren;W10;Schießen;W8;Heimlichkeit;W8;Reparieren;W6;Athletik;W8;Wahrnehmung;W8;Überreden;W6;;;;
+zoe_brandt_stufe_7;Zoe Brandt;7;Fortgeschritten;Fluchtfahrerin und Schmugglerin;;Zoe fährt, als hätten Naturgesetze nur Empfehlungscharakter. In Verfolgungen glänzt sie. Ihr Hang zum Nervenkitzel sorgt dafür, dass selbst einfache Transporte plötzlich halsbrecherisch werden.;portraets/zoe_brandt.png;W10;W6;W8;W4;W8;6;3;5;;;"Ass
+Flink
+Ausweichen
+Schnell
+Glück";;"Angewohnheit: nimmt Risiken aus Spaß (klein)
+Loyal (klein)
+Gesucht (groß)";"Kompakte MP
+Motorrad
+Werkzeugset
+Leichte Weste (+1)";Fahren;W10;Schießen;W8;Heimlichkeit;W8;Reparieren;W8;Athletik;W10;Wahrnehmung;W8;Überreden;W6;;;;
+markus_feld_stufe_3;Markus Feld;3;Anfänger;Ermittler und Verschwörungsjäger;;Markus findet Zusammenhänge, wo andere nur Zufälle sehen. Für Geheimoperationen ist er Informationsgold. Leider bohrt er immer weiter – auch dann, wenn Wegsehen gesünder wäre.;portraets/markus_feld.png;W6;W6;W10;W4;W8;6;3;5;;;"Ermittler
+Gassenwissen
+Beziehungen";;"Neugierig (groß)
+Misstrauisch (klein)
+Feind (klein)";"Dienstpistole
+Aufnahmegerät
+Drohnenkamera
+Forensik-Kit
+Verdeckte Schutzweste (+1)";Recherche;W10;Wahrnehmung;W10;Schießen;W6;Überreden;W8;Einschüchtern;W6;Elektronik;W8;Heimlichkeit;W6;;;;
+markus_feld_stufe_7;Markus Feld;7;Fortgeschritten;Ermittler und Verschwörungsjäger;;Markus findet Zusammenhänge, wo andere nur Zufälle sehen. Für Geheimoperationen ist er Informationsgold. Leider bohrt er immer weiter – auch dann, wenn Wegsehen gesünder wäre.;portraets/markus_feld.png;W8;W6;W10;W4;W8;6;3;5;;;"Ermittler
+Gelehrter
+Sechster Sinn
+Gassenwissen
+Beziehungen";;"Neugierig (groß)
+Misstrauisch (klein)
+Feind (klein)";"Dienstpistole
+Aufnahmegerät
+Drohnenkamera
+Forensik-Kit
+Verdeckte Schutzweste (+1)";Recherche;W10;Wahrnehmung;W10;Schießen;W8;Überreden;W8;Einschüchtern;W6;Elektronik;W8;Heimlichkeit;W8;;;;
+jana_krueger_stufe_3;Jana Krüger;3;Anfänger;Nahkampfspezialistin und Bodyguard;;Jana stellt sich zwischen Gefahr und Team. Im Nahkampf ist sie eine Wand. Ihr Beschützerinstinkt macht Rückzüge schwierig, und wer ihre Schutzbefohlenen bedroht, lernt ihren Zorn kennen.;portraets/jana_krueger.png;W8;W8;W6;W6;W6;6;7;6;2;;"Erstschlag
+Mächtiger Hieb
+Schmerzresistenz";;"Beschützerinstinkt (groß)
+Jähzornig (klein)
+Loyal (klein)";"Teleskopstock/Totschläger
+Pistole
+Schwere Schutzweste (+2)
+Handschellen und Einsatzkit";Kämpfen;W10;Athletik;W8;Einschüchtern;W8;Schießen;W6;Wahrnehmung;W6;Heilen;W6;;;;;;
+jana_krueger_stufe_7;Jana Krüger;7;Fortgeschritten;Nahkampfspezialistin und Bodyguard;;Jana stellt sich zwischen Gefahr und Team. Im Nahkampf ist sie eine Wand. Ihr Beschützerinstinkt macht Rückzüge schwierig, und wer ihre Schutzbefohlenen bedroht, lernt ihren Zorn kennen.;portraets/jana_krueger.png;W8;W8;W6;W8;W6;6;7;6;3;;"Block
+Erstschlag
+Mächtiger Hieb
+Schmerzresistenz
+Stärkere Schmerzresistenz";;"Beschützerinstinkt (groß)
+Jähzornig (klein)
+Loyal (klein)";"Teleskopstock/Totschläger
+Pistole
+Schwere Schutzweste (+3)
+Schild
+Handschellen und Einsatzkit";Kämpfen;W10;Athletik;W8;Einschüchtern;W8;Schießen;W6;Wahrnehmung;W8;Heilen;W6;Provozieren;W6;;;;

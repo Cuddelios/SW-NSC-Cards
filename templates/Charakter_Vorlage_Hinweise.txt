@@ -1,0 +1,6 @@
+Die SVG-Kopien enthalten data-field und data-bind; Gestaltung und Beispielwerte sind unverändert.
+Ein Generator muss Text und Bilder ersetzen, Würfelgruppen über data-value auswählen und Magiepunkte anzeigen. data-field allein erzeugt noch keine Karten.
+Mehrzeilige SVG-Texte verwenden tspan und teils feste Positionen. Bei anderen Figuren muss der Generator Umbruch und Überlauf behandeln.
+robustheit und panzerung enthalten jeweils die letzte explizite Teilangabe der PDF; keine Addition. Fehlende Panzerungsangaben bleiben leer.
+Fertigkeiten-Slots folgen der Reihenfolge in der PDF. Die Vorlage hat neun Würfelplätze.
+Die PDF nennt Mira Parade 5, Robustheit 5 (+2); das SVG zeigt aktuell 8 und 8.

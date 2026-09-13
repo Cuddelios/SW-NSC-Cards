@@ -12,6 +12,8 @@ public sealed class CardConfiguration
     public string Output { get; set; } = string.Empty;
     public List<CardConfiguration>? CardSets { get; set; }
     public int? MeinspielCardCount { get; set; }
+    public int? ExpectedCardCount { get; set; }
+    public bool SingleCardPages { get; set; }
 }
 
 /// <summary>Prepares every card before any PDF is opened; renderer bindings are not CSV metadata.</summary>
@@ -19,6 +21,7 @@ public sealed class CardBatch
 {
     public List<Dictionary<string, string>> Cards { get; } = [];
     public List<Dictionary<string, string>> MeinspielCards { get; } = [];
+    public (double Width, double Height) CardSizePt { get; private set; }
     private readonly Dictionary<IReadOnlyDictionary<string, string>, (SvgCardRenderer Front, SvgCardRenderer Back)> renderers = new(ReferenceEqualityComparer.Instance);
 
     public byte[] RenderFront(IReadOnlyDictionary<string, string> row, int width, int height)
@@ -53,10 +56,20 @@ public sealed class CardBatch
             var fields = FieldConfiguration.Merge(configuration.Fields, set.Fields);
             var front = new SvgCardRenderer(Resolve("templates", set.Template), fields: fields);
             var back = new SvgCardRenderer(Resolve("templates", set.Backcard), fields: fields);
+            void CheckSize(SvgCardRenderer renderer)
+            {
+                var size = renderer.SizePt;
+                if (batch.CardSizePt == default) batch.CardSizePt = size;
+                if (Math.Abs(size.Width - batch.CardSizePt.Width) > .01 || Math.Abs(size.Height - batch.CardSizePt.Height) > .01)
+                    throw new InvalidOperationException($"Kartensatz '{set.Name}': Alle Vorlagen müssen dieselbe Größe haben.");
+            }
+            CheckSize(front);
+            CheckSize(back);
             int countBefore = batch.MeinspielCards.Count;
             if (!string.IsNullOrWhiteSpace(set.Titlecard))
             {
                 var title = new SvgCardRenderer(Resolve("templates", set.Titlecard), fields: fields);
+                CheckSize(title);
                 var row = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) { ["name"] = "Titelkarte" };
                 batch.MeinspielCards.Add(row);
                 batch.renderers.Add(row, (title, back));
@@ -66,6 +79,9 @@ public sealed class CardBatch
             char delimiter = header.Count(c => c == ';') > header.Count(c => c == ',') ? ';' : ',';
             foreach (var row in new CsvReaderService().Read(csvPath, delimiter))
             {
+                foreach (var key in front.ImageSources.Concat(back.ImageSources).Distinct(StringComparer.OrdinalIgnoreCase))
+                    if (row.TryGetValue(key, out var image) && !string.IsNullOrWhiteSpace(image))
+                        row[key] = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(Path.GetFullPath(csvPath))!, image));
                 int count = 1;
                 if (row.TryGetValue(set.CountField, out var raw) && !string.IsNullOrWhiteSpace(raw)
                     && (!int.TryParse(raw, out count) || count < 0))
@@ -79,6 +95,8 @@ public sealed class CardBatch
             }
             counts.Add($"{set.Name}: {batch.MeinspielCards.Count - countBefore}");
         }
+        if (configuration.ExpectedCardCount is int expectedCards && (expectedCards <= 0 || batch.Cards.Count != expectedCards))
+            throw new InvalidOperationException($"Kartenanzahl für '{configuration.Name}': erwartet {expectedCards}, tatsächlich {batch.Cards.Count}.");
         if (exportMeinspiel && configuration.MeinspielCardCount is int expected && batch.MeinspielCards.Count != expected)
             throw new InvalidOperationException($"MeinSpiel-Kartenanzahl für '{configuration.Name}' stimmt nicht: erwartet {expected}, tatsächlich {batch.MeinspielCards.Count} (inklusive Titelkarten; {string.Join(", ", counts)}). Es wurden keine PDFs erzeugt.");
         return batch;

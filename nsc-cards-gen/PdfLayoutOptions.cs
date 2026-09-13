@@ -8,6 +8,7 @@ public sealed class PdfLayoutOptions
     public double CardWidthPt { get; set; } = 220;
     public double CardHeightPt { get; set; } = 90;
     public double RenderDpi { get; set; } = 300;
+    public bool RotateCardsClockwise { get; set; }
     public double? PageWidthPt { get; set; }
     public double? PageHeightPt { get; set; }
 }

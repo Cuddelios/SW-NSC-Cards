@@ -63,6 +63,12 @@ internal class Program
                     selectedConfigurations[0].Fields = FieldConfiguration.Merge(
                         FieldConfiguration.Merge(defaults!.Fields, configuration.Fields), matchingSet.Fields);
                     selectedConfigurations[0].CountField = matchingSet.CountField;
+                    selectedConfigurations[0].SingleCardPages = configuration.SingleCardPages;
+                    if (configuration.CardSets == null)
+                    {
+                        selectedConfigurations[0].ExpectedCardCount = configuration.ExpectedCardCount;
+                        selectedConfigurations[0].MeinspielCardCount = configuration.MeinspielCardCount;
+                    }
                     break;
                 }
             }
@@ -100,12 +106,27 @@ internal class Program
                 MarginPt = MmToPt(5),
                 GapXPt = MmToPt(3),
                 GapYPt = MmToPt(3),
-                CardWidthPt = MmToPt(65),
-                CardHeightPt = MmToPt(97),
+                CardWidthPt = batch.CardSizePt.Width,
+                CardHeightPt = batch.CardSizePt.Height,
                 RenderDpi = 300
             };
 
             var pdfWriter = new PdfLayoutWriter();
+            if (selectedConfiguration.SingleCardPages)
+            {
+                var single = new PdfLayoutOptions
+                {
+                    MarginPt = 0, GapXPt = 0, GapYPt = 0,
+                    CardWidthPt = Math.Min(batch.CardSizePt.Width, batch.CardSizePt.Height),
+                    CardHeightPt = Math.Max(batch.CardSizePt.Width, batch.CardSizePt.Height),
+                    PageWidthPt = Math.Min(batch.CardSizePt.Width, batch.CardSizePt.Height),
+                    PageHeightPt = Math.Max(batch.CardSizePt.Width, batch.CardSizePt.Height),
+                    RotateCardsClockwise = batch.CardSizePt.Width > batch.CardSizePt.Height,
+                    RenderDpi = 300
+                };
+                pdfWriter.WriteCardsWithInterleavedBacks(outputPathBase, cards, batch.RenderFront, batch.RenderBack, single);
+                if (createCmykPdfs) ConvertPdfToCmykIfPossible(outputPathBase);
+            }
             pdfWriter.WriteCardsWithInterleavedBacks(
                 outputPdfHorizontalPath,
                 cards,
@@ -144,11 +165,11 @@ internal class Program
                 MarginPt = 0,
                 GapXPt = 0,
                 GapYPt = 0,
-                CardWidthPt = MmToPt(65),
-                CardHeightPt = MmToPt(97),
+                CardWidthPt = batch.CardSizePt.Width,
+                CardHeightPt = batch.CardSizePt.Height,
                 RenderDpi = 300,
-                PageWidthPt = MmToPt(65),
-                PageHeightPt = MmToPt(97)
+                PageWidthPt = batch.CardSizePt.Width,
+                PageHeightPt = batch.CardSizePt.Height
             };
 
             var meinspielCards = batch.MeinspielCards;

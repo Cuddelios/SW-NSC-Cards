@@ -55,10 +55,17 @@ try
         CardBatch.Prepare(configuration, true, true);
         if (configuration.CardSets != null) continue;
         var cardRenderer = new SvgCardRenderer(Path.Combine("templates", deck.GetProperty("template").GetString()!), fields: configuration.Fields);
-        var rows = new CsvReaderService().Read(Path.Combine("data", deck.GetProperty("data").GetString()!), ',');
-        foreach (var row in rows) XDocument.Parse(cardRenderer.BuildFilledSvg(row));
+        string csvPath = Path.Combine("data", deck.GetProperty("data").GetString()!);
+        string header = File.ReadLines(csvPath).First();
+        var rows = new CsvReaderService().Read(csvPath, header.Count(c => c == ';') > header.Count(c => c == ',') ? ';' : ',');
+        foreach (var row in rows)
+        {
+            if (row.TryGetValue("portraet_datei", out var portrait)) row["portraet_datei"] = Path.Combine("data", portrait);
+            XDocument.Parse(cardRenderer.BuildFilledSvg(row));
+        }
     }
     BatchChecks.Run();
+    CharacterChecks.Run();
     Console.WriteLine("All generator checks passed.");
 }
 finally { File.Delete(template); }

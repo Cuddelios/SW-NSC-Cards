@@ -14,6 +14,8 @@ public sealed class FieldConfiguration
     public string? LineHeightFrom { get; set; }
     public string[] OffsetAfter { get; set; } = [];
     public double OffsetY { get; set; }
+    public double? BoxWidth { get; set; }
+    public double? BoxHeight { get; set; }
 
     public static Dictionary<string, FieldConfiguration> Merge(
         Dictionary<string, FieldConfiguration> defaults,
@@ -34,6 +36,8 @@ public sealed class FieldConfiguration
                 throw new InvalidOperationException("Feldregeln benötigen einen Namen und ein Regelobjekt.");
             if (!types.Contains(rule.Type) || rule.WrapLength is <= 0 || rule.LineHeight is <= 0
                 || !double.IsFinite(rule.OffsetY) || (rule.LineHeight.HasValue && !double.IsFinite(rule.LineHeight.Value))
+                || (rule.BoxWidth.HasValue && (!double.IsFinite(rule.BoxWidth.Value) || rule.BoxWidth <= 0))
+                || (rule.BoxHeight.HasValue && (!double.IsFinite(rule.BoxHeight.Value) || rule.BoxHeight <= 0))
                 || rule.Aliases == null || rule.OffsetAfter == null || rule.ValueMap == null || string.IsNullOrEmpty(rule.Separators))
                 throw new InvalidOperationException($"Ungültige Feldregel für '{name}' (Typ, Umbruch, Trennzeichen oder Zeilenhöhe).");
             foreach (string dependency in rule.OffsetAfter.Concat(rule.LineHeightFrom == null ? [] : new[] { rule.LineHeightFrom }))

@@ -8,7 +8,7 @@ using Svg.Skia;
 
 namespace SvgPdfGenerator;
 
-public sealed class SvgCardRenderer
+public sealed partial class SvgCardRenderer
 {
     private static readonly XNamespace SvgNs = "http://www.w3.org/2000/svg";
     private static readonly Regex SkillDicePattern = new(
@@ -97,6 +97,7 @@ public sealed class SvgCardRenderer
         XElement template = FindTemplateRoot(svgRootClone)
             ?? throw new InvalidOperationException("Template group was not found in SVG clone.");
 
+        FillBoundFields(template, values);
         FillTemplateFields(template, values);
 
         return svgRootClone.ToString(SaveOptions.DisableFormatting);
@@ -123,7 +124,7 @@ public sealed class SvgCardRenderer
         IReadOnlyDictionary<string, string> values)
     {
         var elements = templateClone.DescendantsAndSelf()
-            .Where(e => e.Attribute("data-field") != null).ToList();
+            .Where(e => e.Attribute("data-field") != null && e.Attribute("data-bind") == null).ToList();
         var prepared = new Dictionary<string, (string Text, List<SkillEntry> Skills, bool Present)>(StringComparer.OrdinalIgnoreCase);
         foreach (var (name, rule) in fields)
         {

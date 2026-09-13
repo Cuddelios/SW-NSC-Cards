@@ -1,0 +1,186 @@
+[
+  {
+    "seite": "vorne",
+    "element_id": "text2",
+    "feld": "name",
+    "typ": "text"
+  },
+  {
+    "seite": "vorne",
+    "element_id": "text3",
+    "feld": "rolle",
+    "typ": "text"
+  },
+  {
+    "seite": "vorne",
+    "element_id": "text4",
+    "feld": "konzept",
+    "typ": "text"
+  },
+  {
+    "seite": "vorne",
+    "element_id": "text5",
+    "feld": "beschreibung",
+    "typ": "text"
+  },
+  {
+    "seite": "vorne",
+    "element_id": "text7",
+    "feld": "handicap_liste",
+    "typ": "text"
+  },
+  {
+    "seite": "vorne",
+    "element_id": "edges",
+    "feld": "talent_liste",
+    "typ": "text"
+  },
+  {
+    "seite": "vorne",
+    "element_id": "image1",
+    "feld": "portraet_datei",
+    "typ": "image"
+  },
+  {
+    "seite": "rueck",
+    "element_id": "skills_text",
+    "felder": [
+      "fertigkeit_01_name",
+      "fertigkeit_02_name",
+      "fertigkeit_03_name",
+      "fertigkeit_04_name",
+      "fertigkeit_05_name",
+      "fertigkeit_06_name",
+      "fertigkeit_07_name",
+      "fertigkeit_08_name",
+      "fertigkeit_09_name"
+    ],
+    "typ": "skill-list"
+  },
+  {
+    "seite": "rueck",
+    "element_id": "speed",
+    "feld": "tempo",
+    "typ": "text"
+  },
+  {
+    "seite": "rueck",
+    "element_id": "parry",
+    "feld": "parade",
+    "typ": "text"
+  },
+  {
+    "seite": "rueck",
+    "element_id": "toughness",
+    "feld": "robustheit",
+    "typ": "text"
+  },
+  {
+    "seite": "rueck",
+    "element_id": "text4",
+    "feld": "panzerung",
+    "typ": "text"
+  },
+  {
+    "seite": "rueck",
+    "element_id": "text6",
+    "feld": "ausruestung_liste",
+    "typ": "text"
+  },
+  {
+    "seite": "rueck",
+    "element_id": "edges-6",
+    "feld": "macht_liste",
+    "typ": "text"
+  },
+  {
+    "seite": "rueck",
+    "element_id": "agility_dices",
+    "feld": "attribut_geschicklichkeit",
+    "typ": "dice"
+  },
+  {
+    "seite": "rueck",
+    "element_id": "vigor_dices",
+    "feld": "attribut_konstitution",
+    "typ": "dice"
+  },
+  {
+    "seite": "rueck",
+    "element_id": "strength_dices",
+    "feld": "attribut_staerke",
+    "typ": "dice"
+  },
+  {
+    "seite": "rueck",
+    "element_id": "smarts_dices",
+    "feld": "attribut_verstand",
+    "typ": "dice"
+  },
+  {
+    "seite": "rueck",
+    "element_id": "spirit_dices",
+    "feld": "attribut_willenskraft",
+    "typ": "dice"
+  },
+  {
+    "seite": "rueck",
+    "element_id": "magic",
+    "feld": "machtpunkte",
+    "typ": "counter"
+  },
+  {
+    "seite": "rueck",
+    "element_id": "skills_dices",
+    "feld": "fertigkeit_01_wuerfel",
+    "typ": "dice"
+  },
+  {
+    "seite": "rueck",
+    "element_id": "skills_dices-8",
+    "feld": "fertigkeit_02_wuerfel",
+    "typ": "dice"
+  },
+  {
+    "seite": "rueck",
+    "element_id": "skills_dices-4",
+    "feld": "fertigkeit_03_wuerfel",
+    "typ": "dice"
+  },
+  {
+    "seite": "rueck",
+    "element_id": "skills_dices-8-9",
+    "feld": "fertigkeit_04_wuerfel",
+    "typ": "dice"
+  },
+  {
+    "seite": "rueck",
+    "element_id": "skills_dices-40",
+    "feld": "fertigkeit_05_wuerfel",
+    "typ": "dice"
+  },
+  {
+    "seite": "rueck",
+    "element_id": "skills_dices-8-99",
+    "feld": "fertigkeit_06_wuerfel",
+    "typ": "dice"
+  },
+  {
+    "seite": "rueck",
+    "element_id": "skills_dices-84",
+    "feld": "fertigkeit_07_wuerfel",
+    "typ": "dice"
+  },
+  {
+    "seite": "rueck",
+    "element_id": "skills_dices-8-4",
+    "feld": "fertigkeit_08_wuerfel",
+    "typ": "dice"
+  },
+  {
+    "seite": "rueck",
+    "element_id": "skills_dices-6",
+    "feld": "fertigkeit_09_wuerfel",
+    "typ": "dice"
+  }
+]

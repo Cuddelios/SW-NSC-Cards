@@ -290,6 +290,42 @@
           ]
         }
       }
+    },
+    {
+      "name": "GnM Charaktere (24 Karten)",
+      "template": "Charakter_Vorlage_vorne.svg",
+      "backcard": "Charakter_Vorlage_rueck.svg",
+      "data": "GnM_Charaktere.csv",
+      "output": "GnM_Charaktere",
+      "expectedCardCount": 24,
+      "meinspielCardCount": 24,
+      "singleCardPages": true,
+      "fields": {
+        "name": {
+          "boxWidth": 24
+        },
+        "rolle": {
+          "boxWidth": 113
+        },
+        "konzept": {
+          "boxWidth": 113
+        },
+        "beschreibung": {
+          "boxWidth": 87
+        },
+        "handicap_liste": {
+          "boxWidth": 33
+        },
+        "talent_liste": {
+          "boxWidth": 50
+        },
+        "ausruestung_liste": {
+          "boxWidth": 54
+        },
+        "macht_liste": {
+          "boxWidth": 46
+        }
+      }
     }
   ]
 }

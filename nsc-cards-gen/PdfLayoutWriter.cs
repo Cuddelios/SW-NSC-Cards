@@ -181,7 +181,8 @@ public sealed class PdfLayoutWriter
         pdf.Close();
 
         Console.WriteLine(" done");
-        Console.WriteLine($"with {rows.Count} cards and {(rows.Count + itemsPerPage - 1) / itemsPerPage} pages.");
+        int pageCount = (rows.Count + itemsPerPage - 1) / itemsPerPage * (backRenderer == null ? 1 : 2);
+        Console.WriteLine($"with {rows.Count} cards and {pageCount} pages.");
     }
 
     private static void DrawCardPage(
@@ -213,6 +214,8 @@ public sealed class PdfLayoutWriter
 
             int renderWidthPx = ConvertPointsToPixels(layoutOptions.CardWidthPt, layoutOptions.RenderDpi);
             int renderHeightPx = ConvertPointsToPixels(layoutOptions.CardHeightPt, layoutOptions.RenderDpi);
+            if (layoutOptions.RotateCardsClockwise)
+                (renderWidthPx, renderHeightPx) = (renderHeightPx, renderWidthPx);
 
             byte[] pngBytes = renderer(
                 rows[pageStartIndex + pageIndex],
@@ -229,9 +232,15 @@ public sealed class PdfLayoutWriter
                 (float)(x + layoutOptions.CardWidthPt),
                 (float)(y + layoutOptions.CardHeightPt));
 
-            canvas.DrawImage(
-                image,
-                destination);
+            if (layoutOptions.RotateCardsClockwise)
+            {
+                canvas.Save();
+                canvas.Translate((float)(x + layoutOptions.CardWidthPt), (float)y);
+                canvas.RotateDegrees(90);
+                canvas.DrawImage(image, new SKRect(0, 0, (float)layoutOptions.CardHeightPt, (float)layoutOptions.CardWidthPt));
+                canvas.Restore();
+            }
+            else canvas.DrawImage(image, destination);
         }
     }
 

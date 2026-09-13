@@ -1,6 +1,51 @@
 Dieses Projekt erstellt mit Hilfe einer SVG-Vorlage und einer CSV-Tabelle eine mehrseitige PDF-Datei.
 Es wird das Savage World Regelwerk (20210421) verwendet.
 
+## GnM-Charakterkarten (24 Karten)
+
+Mit `dotnet run --project nsc-cards-gen` die Konfiguration **GnM Charaktere (24 Karten)**
+auswählen (derzeit Nummer 7). Sie verarbeitet alle 24 Datensätze aus
+`data/GnM_Charaktere.csv` mit `Charakter_Vorlage_vorne.svg` und
+`Charakter_Vorlage_rueck.svg`. Relative Bildpfade beziehen sich auf den CSV-Ordner;
+die Porträts werden in die Ausgabe eingebettet.
+
+- `output/GnM_Charaktere.pdf`: 48 Einzelseiten im Hochformat (76 × 126 mm), je Charakter
+  zuerst vorne, dann hinten. Querformatvorlagen werden samt Inhalt um 90° im Uhrzeigersinn
+  gedreht; Schriftgrößen und Proportionen bleiben erhalten.
+- `output/GnM_Charaktere.h_mirror.pdf` und `.v_mirror.pdf`: je 12 A4-Querformatseiten
+  mit vier Karten pro Seite und passend angeordneten Rückseiten für Duplexdruck.
+- Die optionale MeinSpiel-Ausgabe enthält je 24 Vorder- bzw. Rückseiten ohne Titelkarte.
+
+`expectedCardCount: 24` prüft die Anzahl auch ohne MeinSpiel-Export.
+`singleCardPages: true` aktiviert zusätzlich das PDF mit einzelnen Kartenseiten.
+Breite und Höhe aller Karten werden aus den SVG-Wurzelattributen übernommen
+(hier **126 × 76 mm**, einschließlich des in der Vorlage angelegten Randes).
+Unterstützt sind mm, cm, in, pt, pc und px; ohne Einheit gelten 96 px pro Zoll.
+Fehlt eine Dimension, dient die entsprechende `viewBox`-Dimension als Pixelmaß.
+Unterschiedlich große Vorder-, Rück- oder Titelvorlagen innerhalb einer Ausgabe
+werden abgewiesen. Die A4-Bögen bleiben A4; Kartenbilder und Einzelseiten verwenden
+die Vorlagengröße. Skia rundet die PDF-Seitenbox auf ganze PDF-Punkte.
+
+Die Charaktervorlagen verwenden explizite `data-bind`-Bindungen:
+`text`, `image`, `dice` (Auswahl über `data-value`), `skill-list` (neun feste
+`data-fields`-Zeilen) und `counter` (Machtpunkte; leer oder 0 blendet sie aus).
+Der Zähler wächst von links nach rechts mit unveränderter Symbolbreite und
+unverändertem Abstand pro Machtpunkt. Die Würfelgrafiken bleiben unverändert.
+`boxWidth` legt den Textumbruch in SVG-Koordinaten fest. Die Schriftgrößen aus
+der Vorlage bleiben immer erhalten. Listen dürfen nach unten wachsen;
+ein optionales `boxHeight` meldet bei Überschreitung einen Fehler, statt Text
+zu verkleinern. Fertigkeiten behalten ihre festen Zeilen und Schriftgrößen.
+
+Die Wurzelattribute `data-layout="character-front"` und
+`data-layout="character-back"` aktivieren das Charakterlayout: Handicap- und
+Talentlisten beginnen unter der Beschreibung; Rolle und Konzept rücken bei
+Bedarf nach unten. Mehrzeilige Namen wachsen im Porträt nach oben. Die Mächte
+beginnen fünf SVG-Einheiten unter der letzten belegten Fertigkeitszeile.
+Patronen erscheinen nur mit der Fertigkeit `Schießen` (auch `Schiessen`).
+Der Rang `Fortgeschritten` setzt den Hintergrund auf beiden Seiten auf `#ffeeaa`.
+Diese Bindungen verwenden `source`/`defaultValue` und die Boxmaße; die unten
+beschriebenen klassischen Feldregeln gelten für Elemente ohne `data-bind`.
+
 ## Konfigurierbare Feldregeln
 
 `fields` wird direkt beim jeweiligen Kartensatz in `data/card_configuration.json` hinterlegt, neben `data`, `template` und `backcard`. Bei kombinierten Ausgaben hat jeder Eintrag in `cardSets` seine eigenen Feldregeln. Bei Einzelkonfigurationen steht `fields` direkt im Eintrag unter `configurations`. So kann derselbe SVG-Feldname je Satz unterschiedlich interpretiert werden. Beispiel innerhalb eines Kartensatzes:
