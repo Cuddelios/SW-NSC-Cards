@@ -51,6 +51,38 @@ public sealed partial class SvgCardRenderer
             Move(Field("macht_liste"), lastSkillY + 5, 65);
             var magic = Field("machtpunkte");
             magic.SetAttributeValue("transform", "translate(0 3) " + (string?)magic.Attribute("transform"));
+            if (Bottom(Field("macht_liste")) > 66 && magic.Attribute("display")?.Value != "none")
+            {
+                var strip = magic.Elements().Single();
+                var points = strip.Elements().ToList();
+                // A second row preserves point widths while clearing long power lists.
+                foreach (var point in points.Skip(10))
+                {
+                    var coordinates = Regex.Matches((string)point.Attribute("transform")!, @"-?\d+(?:\.\d+)?")
+                        .Select(m => double.Parse(m.Value, CultureInfo.InvariantCulture)).ToArray();
+                    point.SetAttributeValue("transform", $"translate({FormatNumber(coordinates[0] - 6 / 1.0222987)} {FormatNumber(coordinates[1] + 10 * 5.511867)})");
+                }
+                // Draw the upper row first, so its stems cannot cover the lower symbols.
+                strip.ReplaceNodes(points.Skip(10).Concat(points.Take(10)));
+            }
+            var backgroundType = Regex.Match(values.GetValueOrDefault("talent_liste") ?? "",
+                @"Arkane[rms]? Hintergrund\s*\(([^)]+)\)", RegexOptions.IgnoreCase).Groups[1].Value.Trim();
+            string? arcaneColor = backgroundType.ToLowerInvariant() switch
+            {
+                "magie" => "#7B2CBF",
+                "wunder" => "#8A5700",
+                "weird science" => "#006B73",
+                "psionik" => "#2448A5",
+                _ => null
+            };
+            if (arcaneColor != null)
+            {
+                void Color(XElement element, string color) => element.SetAttributeValue("style",
+                    Regex.Replace((string?)element.Attribute("style") ?? "", @"(?<![-\w])fill:[^;]+", "fill:" + color));
+                Color(Field("macht_liste"), arcaneColor);
+                foreach (var rectangle in magic.Descendants(SvgNs + "rect")) Color(rectangle, arcaneColor);
+                foreach (var symbol in magic.Descendants(SvgNs + "path")) Color(symbol, "#ffffff");
+            }
         }
     }
 }

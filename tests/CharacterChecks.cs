@@ -57,12 +57,24 @@ static class CharacterChecks
             Check((Field(b, "machtpunkte").Attribute("display")?.Value != "none") == hasMagic, "Magic visibility");
             if (hasMagic)
             {
+                string color = row["talent_liste"].Contains("(Magie)") ? "#7B2CBF"
+                    : row["talent_liste"].Contains("(Wunder)") ? "#8A5700"
+                    : row["talent_liste"].Contains("(Weird Science)") ? "#006B73" : "#2448A5";
+                Check(((string?)Field(b, "macht_liste").Attribute("style"))?.Contains("fill:" + color) == true, "Arcane power text color");
+                Check(Field(b, "machtpunkte").Descendants().Where(e => e.Name.LocalName == "rect")
+                    .All(e => ((string?)e.Attribute("style"))?.Contains("fill:" + color) == true), "Arcane counter color");
                 var strip = Field(b, "machtpunkte").Elements().Single();
                 Check(strip.Elements().Count() == points, "Exact magic counter symbol count");
                 Check(strip.Attribute("transform") == null, "No point width scaling");
-                var positions = strip.Elements().Select(e => double.Parse(Regex.Matches((string)e.Attribute("transform")!, @"-?\d+(?:\.\d+)?")[1].Value, CultureInfo.InvariantCulture)).ToArray();
-                Check(positions.Zip(positions.Skip(1)).All(p => Math.Abs(p.First - p.Second - 5.511867) < .002), "Constant point spacing for 10 and 15 points");
+                var pointRows = strip.Elements().Select(e => Regex.Matches((string)e.Attribute("transform")!, @"-?\d+(?:\.\d+)?")
+                    .Select(m => double.Parse(m.Value, CultureInfo.InvariantCulture)).ToArray()).GroupBy(p => p[0]);
+                foreach (var pointRow in pointRows)
+                {
+                    var positions = pointRow.Select(p => p[1]).OrderDescending().ToArray();
+                    Check(positions.Zip(positions.Skip(1)).All(p => Math.Abs(p.First - p.Second - 5.511867) < .002), "Constant point spacing for 10 and 15 points");
+                }
             }
+            if (row["talent_liste"].Contains("Arkane Hintergrund")) Check(hasMagic, "All arcane characters have power points");
         }
         config.ExpectedCardCount = 23;
         bool rejected = false;

@@ -43,6 +43,12 @@ Bedarf nach unten. Mehrzeilige Namen wachsen im Porträt nach oben. Die Mächte
 beginnen fünf SVG-Einheiten unter der letzten belegten Fertigkeitszeile.
 Patronen erscheinen nur mit der Fertigkeit `Schießen` (auch `Schiessen`).
 Der Rang `Fortgeschritten` setzt den Hintergrund auf beiden Seiten auf `#ffeeaa`.
+Mächtelisten und Machtpunkt-Flächen verwenden je nach arkanem Hintergrund
+Violett (`#7B2CBF`, Magie), Goldbraun (`#8A5700`, Wunder), Petrol (`#006B73`,
+Weird Science) oder Dunkelblau (`#2448A5`, Psionik); die Symbole bleiben weiß.
+Bei langen Mächtelisten werden mehr als zehn Punkte auf zwei Reihen verteilt.
+In der CSV sind für Jonah, Nyx, Rhea und Adrian jeweils zehn Punkte festgelegt,
+für Rhea auf Stufe 7 fünfzehn. Vorhandene Punktzahlen bleiben erhalten.
 Diese Bindungen verwenden `source`/`defaultValue` und die Boxmaße; die unten
 beschriebenen klassischen Feldregeln gelten für Elemente ohne `data-bind`.
 

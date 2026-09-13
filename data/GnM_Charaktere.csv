@@ -62,7 +62,7 @@ Ritualbuch
 Kampfstab
 Medizinisches Kit
 Schutzmantel (+1)";Arkane Fertigkeit (Magie);W10;Okkultismus;W10;Wissen Wissenschaft;W8;Wahrnehmung;W8;Heilen;W8;Überreden;W6;Kämpfen;W6;;;;
-jonah_cross_stufe_3;Jonah Cross;3;Anfänger;Straßenschamane und Heiler;;Jonah hält Gruppen zusammen – medizinisch, spirituell und moralisch. Er rettet andere oft gegen jede Vernunft. Sein Problem: Er weigert sich fast immer, jemanden aufzugeben, selbst Feinde. Dadurch wird aus Rückzug schnell Rettungsmission.;portraets/jonah_cross.png;W6;W6;W8;W6;W8;6;5;5;1;;"Arkane Hintergrund (Wunder)
+jonah_cross_stufe_3;Jonah Cross;3;Anfänger;Straßenschamane und Heiler;;Jonah hält Gruppen zusammen – medizinisch, spirituell und moralisch. Er rettet andere oft gegen jede Vernunft. Sein Problem: Er weigert sich fast immer, jemanden aufzugeben, selbst Feinde. Dadurch wird aus Rückzug schnell Rettungsmission.;portraets/jonah_cross.png;W6;W6;W8;W6;W8;6;5;5;1;10;"Arkane Hintergrund (Wunder)
 Heiler
 Neue Macht";"Heilung
 Furcht bannen
@@ -75,7 +75,7 @@ Kampfstab
 Medizinrucksack
 Fetische und Talismane
 Lederjacke (+1)";Glauben;W8;Heilen;W8;Wahrnehmung;W6;Kämpfen;W6;Überreden;W8;Überleben;W6;Einschüchtern;W6;;;;
-jonah_cross_stufe_7;Jonah Cross;7;Fortgeschritten;Straßenschamane und Heiler;;Jonah hält Gruppen zusammen – medizinisch, spirituell und moralisch. Er rettet andere oft gegen jede Vernunft. Sein Problem: Er weigert sich fast immer, jemanden aufzugeben, selbst Feinde. Dadurch wird aus Rückzug schnell Rettungsmission.;portraets/jonah_cross.png;W6;W6;W8;W6;W10;6;5;5;1;;"Arkane Hintergrund (Wunder)
+jonah_cross_stufe_7;Jonah Cross;7;Fortgeschritten;Straßenschamane und Heiler;;Jonah hält Gruppen zusammen – medizinisch, spirituell und moralisch. Er rettet andere oft gegen jede Vernunft. Sein Problem: Er weigert sich fast immer, jemanden aufzugeben, selbst Feinde. Dadurch wird aus Rückzug schnell Rettungsmission.;portraets/jonah_cross.png;W6;W6;W8;W6;W10;6;5;5;1;10;"Arkane Hintergrund (Wunder)
 Heiler
 Block
 Neue Macht";"Heilung
@@ -89,14 +89,14 @@ Kampfstab
 Medizinrucksack
 Fetische und Talismane
 Lederjacke (+1)";Glauben;W10;Heilen;W8;Wahrnehmung;W8;Kämpfen;W6;Überreden;W8;Überleben;W8;Einschüchtern;W8;;;;
-nyx_arkwell_stufe_3;Nyx Arkwell;3;Anfänger;Hex-Hackerin;;Nyx hackt Magie wie andere Firewalls. Sie ist Spezialistin für digitale und arkane Sicherheit. Ihre Paranoia macht sie brillant vorsichtig – und sozial unerquicklich. Sie traut grundsätzlich niemandem. Nicht einmal Aufzügen.;portraets/nyx_arkwell.png;W8;W6;W10;W4;W6;6;3;5;1;;"Arkane Hintergrund (Weird Science)
+nyx_arkwell_stufe_3;Nyx Arkwell;3;Anfänger;Hex-Hackerin;;Nyx hackt Magie wie andere Firewalls. Sie ist Spezialistin für digitale und arkane Sicherheit. Ihre Paranoia macht sie brillant vorsichtig – und sozial unerquicklich. Sie traut grundsätzlich niemandem. Nicht einmal Aufzügen.;portraets/nyx_arkwell.png;W8;W6;W10;W4;W6;6;3;5;1;10;"Arkane Hintergrund (Weird Science)
 McGyver";"Geschoss (Arc-Taser)
 Verwirrung (Neuro-Störsender)";"Paranoid (groß)
 Schlaflos (klein)
 Eigenartig: redet mit Maschinen (klein)";"Cyberdeck
 EMP-Ladungen
 Tech-Rüstung (+1)";Elektronik;W8;Hacken/Forschung;W8;verrückte Wissenschaft;W8;Heimlichkeit;W8;Schießen;W6;Wahrnehmung;W8;Okkultismus;W4;Reparieren;W8;;
-nyx_arkwell_stufe_7;Nyx Arkwell;7;Fortgeschritten;Hex-Hackerin;;Nyx hackt Magie wie andere Firewalls. Sie ist Spezialistin für digitale und arkane Sicherheit. Ihre Paranoia macht sie brillant vorsichtig – und sozial unerquicklich. Sie traut grundsätzlich niemandem. Nicht einmal Aufzügen.;portraets/nyx_arkwell.png;W8;W6;W10;W4;W8;6;3;5;2;;"Arkane Hintergrund (Weird Science)
+nyx_arkwell_stufe_7;Nyx Arkwell;7;Fortgeschritten;Hex-Hackerin;;Nyx hackt Magie wie andere Firewalls. Sie ist Spezialistin für digitale und arkane Sicherheit. Ihre Paranoia macht sie brillant vorsichtig – und sozial unerquicklich. Sie traut grundsätzlich niemandem. Nicht einmal Aufzügen.;portraets/nyx_arkwell.png;W8;W6;W10;W4;W8;6;3;5;2;10;"Arkane Hintergrund (Weird Science)
 Bastler
 McGyver
 Neue Macht";"Geschoss (Arc-Taser)
@@ -125,7 +125,7 @@ Jagdgewehr
 Silbermunition
 Monster-Kit
 Kevlar (+2)";Kämpfen;W10;Schießen;W8;Wahrnehmung;W10;Überleben;W8;Nachforschungen;W8;Provozieren;W8;;;;;;
-rhea_solaris_stufe_3;Rhea Solaris;3;Anfänger;Elementar-Agentin;;Rhea kombiniert mobile Feuerkraft mit echter Superhelden-Attitüde. Wenn etwas explodieren soll – elegant – ist sie erste Wahl. Leider stürzt sie sich wegen ihres Heldenkomplexes regelmäßig in unnötige Gefahr, besonders wenn Unschuldige betroffen sind.;portraets/rhea_solaris.png;W8;W6;W6;W6;W8;6;5;5;;;"Arkane Hintergrund (Wunder)
+rhea_solaris_stufe_3;Rhea Solaris;3;Anfänger;Elementar-Agentin;;Rhea kombiniert mobile Feuerkraft mit echter Superhelden-Attitüde. Wenn etwas explodieren soll – elegant – ist sie erste Wahl. Leider stürzt sie sich wegen ihres Heldenkomplexes regelmäßig in unnötige Gefahr, besonders wenn Unschuldige betroffen sind.;portraets/rhea_solaris.png;W8;W6;W6;W6;W8;6;5;5;;10;"Arkane Hintergrund (Wunder)
 Charismatisch
 Neue Macht";"Geschoss (Feuer)
 Element manipulieren
@@ -137,7 +137,7 @@ Phobie: Enge Räume (klein)";"Feuerfokus-Ringe
 Pistole
 Leichte taktische Rüstung (+2)
 Rauchgranaten";Glaube;W8;Schießen;W8;Kämpfen;W6;Athletik;W8;Überreden;W8;Einschüchtern;W6;Wahrnehmung;W6;Heimlichkeit;W6;;
-rhea_solaris_stufe_7;Rhea Solaris;7;Fortgeschritten;Elementar-Agentin;;Rhea kombiniert mobile Feuerkraft mit echter Superhelden-Attitüde. Wenn etwas explodieren soll – elegant – ist sie erste Wahl. Leider stürzt sie sich wegen ihres Heldenkomplexes regelmäßig in unnötige Gefahr, besonders wenn Unschuldige betroffen sind.;portraets/rhea_solaris.png;W8;W6;W6;W6;W10;6;5;5;;;"Arkane Hintergrund (Wunder)
+rhea_solaris_stufe_7;Rhea Solaris;7;Fortgeschritten;Elementar-Agentin;;Rhea kombiniert mobile Feuerkraft mit echter Superhelden-Attitüde. Wenn etwas explodieren soll – elegant – ist sie erste Wahl. Leider stürzt sie sich wegen ihres Heldenkomplexes regelmäßig in unnötige Gefahr, besonders wenn Unschuldige betroffen sind.;portraets/rhea_solaris.png;W8;W6;W6;W6;W10;6;5;5;;15;"Arkane Hintergrund (Wunder)
 Charismatisch
 Neue Macht
 Ausweichen
@@ -151,7 +151,7 @@ Phobie: Enge Räume (klein)";"Feuerfokus-Ringe
 Pistole
 Leichte taktische Rüstung (+2)
 Rauchgranaten";Glaube;W10;Schießen;W8;Kämpfen;W6;Athletik;W8;Überreden;W8;Einschüchtern;W6;Wahrnehmung;W6;Heimlichkeit;W8;;
-adrian_vale_stufe_3;Adrian Vale;3;Anfänger;Gesichtswechsler und Sozialmanipulator;;Adrian gewinnt Kämpfe oft, bevor sie beginnen – durch Lügen, Erpressung oder charmante Manipulation. Sein großes Geheimnis könnte die Drachen kompromittieren, falls es ans Licht kommt. Dazu kommt, dass er viel zu gern zeigt, wie clever er ist.;portraets/adrian_vale.png;W8;W6;W8;W4;W8;6;3;5;1;;"Arkane Hintergrund (Psionik)
+adrian_vale_stufe_3;Adrian Vale;3;Anfänger;Gesichtswechsler und Sozialmanipulator;;Adrian gewinnt Kämpfe oft, bevor sie beginnen – durch Lügen, Erpressung oder charmante Manipulation. Sein großes Geheimnis könnte die Drachen kompromittieren, falls es ans Licht kommt. Dazu kommt, dass er viel zu gern zeigt, wie clever er ist.;portraets/adrian_vale.png;W8;W6;W8;W4;W8;6;3;5;1;10;"Arkane Hintergrund (Psionik)
 Charismatisch
 Beziehungen";"Gedankenlesen
 Empathie
@@ -160,7 +160,7 @@ Geheimnis (groß) – frühere Verbindung zum Feind
 Angeber (klein)";"Elegante schwere Pistole
 Verkleidungsset
 Falsche IDs";Überreden;W8;Einschüchtern;W8;Heimlichkeit;W8;Psionik(Täuschen);W8;Wahrnehmung;W8;Schießen;W6;Diebeskunst;W8;;;;
-adrian_vale_stufe_7;Adrian Vale;7;Fortgeschritten;Gesichtswechsler und Sozialmanipulator;;Adrian gewinnt Kämpfe oft, bevor sie beginnen – durch Lügen, Erpressung oder charmante Manipulation. Sein großes Geheimnis könnte die Drachen kompromittieren, falls es ans Licht kommt. Dazu kommt, dass er viel zu gern zeigt, wie clever er ist.;portraets/adrian_vale.png;W8;W6;W8;W4;W10;6;3;5;2;;"Arkane Hintergrund (Psionik)
+adrian_vale_stufe_7;Adrian Vale;7;Fortgeschritten;Gesichtswechsler und Sozialmanipulator;;Adrian gewinnt Kämpfe oft, bevor sie beginnen – durch Lügen, Erpressung oder charmante Manipulation. Sein großes Geheimnis könnte die Drachen kompromittieren, falls es ans Licht kommt. Dazu kommt, dass er viel zu gern zeigt, wie clever er ist.;portraets/adrian_vale.png;W8;W6;W8;W4;W10;6;3;5;2;10;"Arkane Hintergrund (Psionik)
 Charismatisch
 Beziehungen
 Starker Wille
