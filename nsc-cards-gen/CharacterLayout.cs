@@ -6,7 +6,7 @@ namespace SvgPdfGenerator;
 
 public sealed partial class SvgCardRenderer
 {
-    private static void ApplyCharacterLayout(
+    private void ApplyCharacterLayout(
         XElement root,
         XElement templateRoot,
         IReadOnlyDictionary<string, string> values)
@@ -15,6 +15,8 @@ public sealed partial class SvgCardRenderer
         if (layout is not ("character-front" or "character-back")) return;
         XElement Field(string name) => root.Descendants().Single(e => (string?)e.Attribute("data-field") == name);
         XElement TemplateField(string name) => templateRoot.Descendants().Single(e => (string?)e.Attribute("data-field") == name);
+        XElement? OptionalField(string name) => root.Descendants().FirstOrDefault(e => (string?)e.Attribute("data-field") == name);
+        XElement? OptionalTemplateField(string name) => templateRoot.Descendants().FirstOrDefault(e => (string?)e.Attribute("data-field") == name);
         double Number(XElement e, string attribute) => double.Parse((string)e.Attribute(attribute)!, CultureInfo.InvariantCulture);
         double FontSize(XElement e) => double.Parse(Regex.Match((string?)e.Attribute("style") ?? "", @"font-size:([\d.]+)").Groups[1].Value, CultureInfo.InvariantCulture);
         double Bottom(XElement e) => Number(e, "y") + Math.Max(0, e.Elements(SvgNs + "tspan").Count() - 1) * FontSize(e) * 1.25;
@@ -57,21 +59,81 @@ public sealed partial class SvgCardRenderer
             var skills = root.Descendants().Single(e => (string?)e.Attribute("data-bind") == "skill-list");
             double lastSkillY = skills.Elements(SvgNs + "tspan").Where(e => !string.IsNullOrWhiteSpace(e.Value))
                 .Select(e => Number(e, "y")).DefaultIfEmpty(Number(skills, "y")).Max();
-            Move(Field("macht_liste"), lastSkillY + 5);
-            var magic = Field("machtpunkte");
-            if (Bottom(Field("macht_liste")) > 66 && magic.Attribute("display")?.Value != "none")
+            var powers = Field("macht_liste");
+            var templatePowers = TemplateField("macht_liste");
+            var equipment = Field("ausruestung_liste");
+            double PowerListGap(XElement element) => FontSize(element) * 1.25 * 1.5;
+            Move(powers, Bottom(equipment) + PowerListGap(powers));
+
+            var powers2 = OptionalField("macht_liste_2");
+            var templatePowers2 = OptionalTemplateField("macht_liste_2");
+            if (powers2 != null && templatePowers2 != null)
             {
-                var strip = magic.Elements().Single();
-                var points = strip.Elements().ToList();
-                // A second row preserves point widths while clearing long power lists.
-                foreach (var point in points.Skip(10))
+                Move(powers2, lastSkillY + PowerListGap(powers2));
+            }
+
+            var magic = Field("machtpunkte");
+            double ReservedBottom(XElement templateElement)
+            {
+                var explicitLineYs = templateElement.Elements(SvgNs + "tspan")
+                    .Where(e => e.Attribute("y") != null).Select(e => Number(e, "y")).ToList();
+                return explicitLineYs.Count > 0 ? explicitLineYs.Max() : Bottom(templateElement);
+            }
+            double reservedPowersBottom = ReservedBottom(templatePowers);
+            const double coordinateTolerance = .001;
+            bool powerPointsCanOverlap = int.TryParse(values.GetValueOrDefault("machtpunkte"), out int powerPointCount)
+                && powerPointCount > 10;
+            void ReportPotentialOverlap(string field, double actualBottom, double reservedBottom, string? detail = null)
+            {
+                string card = values.GetValueOrDefault("name") ?? values.GetValueOrDefault("id") ?? "unbekannte Karte";
+                Console.Error.WriteLine(
+                    $"Fehler: Layoutwarnung bei '{card}': SVG-Feld '{field}' überschreitet seinen Vorlagenbereich " +
+                    $"(Unterkante y={FormatNumber(actualBottom)}, Grenze y={FormatNumber(reservedBottom)}). " +
+                    $"Mögliche Überschneidung mit SVG-Feld 'machtpunkte'.{(detail == null ? "" : " " + detail)} Die PDF-Erstellung wird fortgesetzt.");
+            }
+            if (Bottom(Field("macht_liste")) > reservedPowersBottom + coordinateTolerance && powerPointsCanOverlap)
+            {
+                if (powers2 == null || templatePowers2 == null)
                 {
-                    var coordinates = Regex.Matches((string)point.Attribute("transform")!, @"-?\d+(?:\.\d+)?")
-                        .Select(m => double.Parse(m.Value, CultureInfo.InvariantCulture)).ToArray();
-                    point.SetAttributeValue("transform", $"translate({FormatNumber(coordinates[0] - 6 / 1.0222987)} {FormatNumber(coordinates[1] + 10 * 5.511867)})");
+                    ReportPotentialOverlap("macht_liste", Bottom(powers), reservedPowersBottom,
+                        "Das Fortsetzungsfeld 'macht_liste_2' fehlt.");
                 }
-                // Draw the upper row first, so its stems cannot cover the lower symbols.
-                strip.ReplaceNodes(points.Skip(10).Concat(points.Take(10)));
+                else
+                {
+                    string[] entries = (values.GetValueOrDefault("macht_liste") ?? "")
+                        .Replace("\r\n", "\n").Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                    fields.TryGetValue("macht_liste", out var powerRule);
+                    fields.TryGetValue("macht_liste_2", out var powerRule2);
+                    double? firstWidth = powerRule?.BoxWidth;
+                    double? secondWidth = powerRule2?.BoxWidth ?? firstWidth;
+                    void FillPowerList(XElement element, IEnumerable<string> items, double? width)
+                    {
+                        string text = string.Join('\n', items);
+                        if (width.HasValue) FitBoundText(element, text, width.Value, null);
+                        else element.Value = text;
+                    }
+
+                    int firstCount = entries.Length - 1;
+                    for (; firstCount >= 0; firstCount--)
+                    {
+                        FillPowerList(powers, entries.Take(firstCount), firstWidth);
+                        if (Bottom(powers) <= reservedPowersBottom + coordinateTolerance) break;
+                    }
+                    if (firstCount < 0)
+                    {
+                        FillPowerList(powers, entries, firstWidth);
+                        ReportPotentialOverlap("macht_liste", Bottom(powers), reservedPowersBottom,
+                            $"SVG-Feld 'ausruestung_liste' reicht bis y={FormatNumber(Bottom(equipment))} und lässt keinen Platz für die Mächteliste.");
+                    }
+                    else
+                    {
+                        FillPowerList(powers2, entries.Skip(firstCount), secondWidth);
+                        double reservedPowers2Bottom = ReservedBottom(templatePowers2);
+                        if (Bottom(powers2) > reservedPowers2Bottom + coordinateTolerance)
+                            ReportPotentialOverlap("macht_liste_2", Bottom(powers2), reservedPowers2Bottom,
+                                "Beide Mächtelisten zusammen reichen für den Inhalt nicht aus.");
+                    }
+                }
             }
             var backgroundType = Regex.Match(values.GetValueOrDefault("talent_liste") ?? "",
                 @"Arkane[rms]? Hintergrund\s*\(([^)]+)\)", RegexOptions.IgnoreCase).Groups[1].Value.Trim();
@@ -88,6 +150,7 @@ public sealed partial class SvgCardRenderer
                 void Color(XElement element, string color) => element.SetAttributeValue("style",
                     Regex.Replace((string?)element.Attribute("style") ?? "", @"(?<![-\w])fill:[^;]+", "fill:" + color));
                 Color(Field("macht_liste"), arcaneColor);
+                if (powers2 != null) Color(powers2, arcaneColor);
                 foreach (var rectangle in magic.Descendants(SvgNs + "rect")) Color(rectangle, arcaneColor);
                 foreach (var symbol in magic.Descendants(SvgNs + "path")) Color(symbol, "#ffffff");
             }

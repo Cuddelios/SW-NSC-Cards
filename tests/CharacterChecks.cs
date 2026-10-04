@@ -20,6 +20,15 @@ static class CharacterChecks
         var back = new SvgCardRenderer("templates/" + config.Backcard, fields: config.Fields);
         var frontTemplate = XDocument.Load("templates/" + config.Template);
         var backTemplate = XDocument.Load("templates/" + config.Backcard);
+        XElement Field(XDocument doc, string name) => doc.Descendants().Single(e => (string?)e.Attribute("data-field") == name);
+        double Y(XElement e) => double.Parse((string)e.Attribute("y")!, CultureInfo.InvariantCulture);
+        double FontSize(XElement e) => double.Parse(Regex.Match((string?)e.Attribute("style") ?? "", @"font-size:([\d.]+)").Groups[1].Value, CultureInfo.InvariantCulture);
+        double Bottom(XElement e) => Y(e) + Math.Max(0, e.Elements().Count() - 1) * FontSize(e) * 1.25;
+        var layoutErrors = new StringWriter();
+        TextWriter originalError = Console.Error;
+        Console.SetError(layoutErrors);
+        try
+        {
         foreach (var row in batch.Cards)
         {
             var f = XDocument.Parse(front.BuildFilledSvg(row));
@@ -37,8 +46,6 @@ static class CharacterChecks
                 string background = (string)doc.Descendants().Single(e => (string?)e.Attribute("id") == "rect24").Attribute("style")!;
                 Check(background.Contains(row["rang"] == "Fortgeschritten" ? "fill:#ffeeaa" : "fill:#c6e9af"), "Rank background on both sides");
             }
-            XElement Field(XDocument doc, string name) => doc.Descendants().Single(e => (string?)e.Attribute("data-field") == name);
-            double Y(XElement e) => double.Parse((string)e.Attribute("y")!, CultureInfo.InvariantCulture);
             Check(Field(f, "portraet_datei").Attribute("href")!.Value.StartsWith("data:image/png;base64,"), "Embedded portrait");
             Check(Y(Field(f, "handicap_liste")) + .001 >= Y(Field(frontTemplate, "handicap_liste")), "Handicaps preserve template minimum y position");
             Check(Y(Field(f, "talent_liste")) + .001 >= Y(Field(frontTemplate, "talent_liste")), "Edges preserve template minimum y position");
@@ -53,10 +60,15 @@ static class CharacterChecks
             }
             var skills = b.Descendants().Single(e => (string?)e.Attribute("data-bind") == "skill-list");
             Check(skills.Elements().Select(e => e.Value).SequenceEqual(Enumerable.Range(1, 9).Select(i => row[$"fertigkeit_{i:00}_name"])), "Nine ordered skill slots");
-            double lastSkill = skills.Elements().Where(e => e.Value.Length > 0).Max(Y);
-            Check(Math.Abs(Y(Field(b, "macht_liste")) - lastSkill - 5) < .001, "Powers below last occupied skill with fixed gap");
+            double lastSkillY = skills.Elements().Where(e => !string.IsNullOrWhiteSpace(e.Value)).Max(Y);
+            Check(Math.Abs(Y(Field(b, "macht_liste")) - Bottom(Field(b, "ausruestung_liste")) - FontSize(Field(b, "macht_liste")) * 1.25 * 1.5) < .002,
+                "First power list starts one and a half lines below equipment");
+            Check(Math.Abs(Y(Field(b, "macht_liste_2")) - lastSkillY - FontSize(Field(b, "macht_liste_2")) * 1.25 * 1.5) < .002,
+                "Continued power list starts one and a half lines below skills");
             Check((string?)Field(b, "macht_liste").Attribute("x") == (string?)Field(backTemplate, "macht_liste").Attribute("x"),
                 "Power list preserves template x position");
+            Check((string?)Field(b, "macht_liste_2").Attribute("x") == (string?)Field(backTemplate, "macht_liste_2").Attribute("x"),
+                "Continued power list preserves template x position");
             bool shooting = Enumerable.Range(1, 9).Any(i => row[$"fertigkeit_{i:00}_name"].Equals("Schießen", StringComparison.OrdinalIgnoreCase));
             var ammo = b.Descendants().Single(e => (string?)e.Attribute("data-template-role") == "ammo");
             Check((ammo.Attribute("display")?.Value != "none") == shooting, "Ammo only for shooting skill");
@@ -74,7 +86,8 @@ static class CharacterChecks
                 Check(strip.Elements().Count() == points, "Exact magic counter symbol count");
                 Check(strip.Attribute("transform") == null, "No point width scaling");
                 var pointRows = strip.Elements().Select(e => Regex.Matches((string)e.Attribute("transform")!, @"-?\d+(?:\.\d+)?")
-                    .Select(m => double.Parse(m.Value, CultureInfo.InvariantCulture)).ToArray()).GroupBy(p => p[0]);
+                    .Select(m => double.Parse(m.Value, CultureInfo.InvariantCulture)).ToArray()).GroupBy(p => p[0]).ToList();
+                Check(pointRows.Count == 1, "Power points remain in one row");
                 foreach (var pointRow in pointRows)
                 {
                     var positions = pointRow.Select(p => p[1]).OrderDescending().ToArray();
@@ -83,6 +96,34 @@ static class CharacterChecks
             }
             if (row["talent_liste"].Contains("Arkane Hintergrund")) Check(hasMagic, "All arcane characters have power points");
         }
+        var continuationRow = batch.Cards.First(row => int.TryParse(row["machtpunkte"], out int points) && points > 10)
+            .ToDictionary(pair => pair.Key, pair => pair.Value, StringComparer.OrdinalIgnoreCase);
+        continuationRow["ausruestung_liste"] = "";
+        continuationRow["macht_liste"] = "Macht A\nMacht B\nMacht C\nMacht D\nMacht E\nMacht F\nMacht G\nMacht H";
+        for (int i = 2; i <= 9; i++) continuationRow[$"fertigkeit_{i:00}_name"] = "";
+        var continuedBack = XDocument.Parse(back.BuildFilledSvg(continuationRow));
+        Check(Field(continuedBack, "macht_liste").Value.Contains("Macht A")
+            && Field(continuedBack, "macht_liste").Value.Contains("Macht F"), "First power-list field keeps the fitting prefix");
+        Check(Field(continuedBack, "macht_liste_2").Value.Contains("Macht H"), "Overflowing power lists continue in the _2 field");
+        var tooLongPowerList = continuationRow.ToDictionary(pair => pair.Key, pair => pair.Value, StringComparer.OrdinalIgnoreCase);
+        tooLongPowerList["macht_liste"] = string.Join('\n', Enumerable.Range(1, 20).Select(i => $"Macht {i}"));
+        _ = XDocument.Parse(back.BuildFilledSvg(tooLongPowerList));
+        int errorLengthBeforeTenPoints = layoutErrors.GetStringBuilder().Length;
+        tooLongPowerList["machtpunkte"] = "10";
+        var tenPointBack = XDocument.Parse(back.BuildFilledSvg(tooLongPowerList));
+        Check(layoutErrors.GetStringBuilder().Length == errorLengthBeforeTenPoints
+            && string.IsNullOrWhiteSpace(Field(tenPointBack, "macht_liste_2").Value),
+            "Ten or fewer power points cannot trigger power-point overlap handling");
+        }
+        finally
+        {
+            Console.SetError(originalError);
+        }
+        string layoutErrorText = layoutErrors.ToString();
+        Check(layoutErrorText.Contains("Fehler: Layoutwarnung bei '")
+            && layoutErrorText.Contains("'macht_liste_2'")
+            && layoutErrorText.Contains("'machtpunkte'"),
+            "Overlapping power lists identify both potentially colliding fields without aborting rendering");
         config.ExpectedCardCount = 23;
         bool rejected = false;
         try { CardBatch.Prepare(config, true, false); } catch (InvalidOperationException) { rejected = true; }
