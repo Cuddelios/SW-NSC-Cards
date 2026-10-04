@@ -50,7 +50,6 @@ public sealed partial class SvgCardRenderer
                 .Select(e => Number(e, "y")).DefaultIfEmpty(Number(skills, "y")).Max();
             Move(Field("macht_liste"), lastSkillY + 5, 65);
             var magic = Field("machtpunkte");
-            magic.SetAttributeValue("transform", "translate(0 3) " + (string?)magic.Attribute("transform"));
             if (Bottom(Field("macht_liste")) > 66 && magic.Attribute("display")?.Value != "none")
             {
                 var strip = magic.Elements().Single();
