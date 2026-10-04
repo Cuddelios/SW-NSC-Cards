@@ -18,6 +18,8 @@ static class CharacterChecks
         Check(Math.Abs(batch.CardSizePt.Width * 25.4 / 72 - 126) < .001 && Math.Abs(batch.CardSizePt.Height * 25.4 / 72 - 76) < .001, "SVG dimensions");
         var front = new SvgCardRenderer("templates/" + config.Template, fields: config.Fields);
         var back = new SvgCardRenderer("templates/" + config.Backcard, fields: config.Fields);
+        var frontTemplate = XDocument.Load("templates/" + config.Template);
+        var backTemplate = XDocument.Load("templates/" + config.Backcard);
         foreach (var row in batch.Cards)
         {
             var f = XDocument.Parse(front.BuildFilledSvg(row));
@@ -36,7 +38,11 @@ static class CharacterChecks
                 Check(background.Contains(row["rang"] == "Fortgeschritten" ? "fill:#ffeeaa" : "fill:#c6e9af"), "Rank background on both sides");
             }
             XElement Field(XDocument doc, string name) => doc.Descendants().Single(e => (string?)e.Attribute("data-field") == name);
+            double Y(XElement e) => double.Parse((string)e.Attribute("y")!, CultureInfo.InvariantCulture);
             Check(Field(f, "portraet_datei").Attribute("href")!.Value.StartsWith("data:image/png;base64,"), "Embedded portrait");
+            Check(Y(Field(f, "handicap_liste")) + .001 >= Y(Field(frontTemplate, "handicap_liste")), "Handicaps preserve template minimum y position");
+            Check(Y(Field(f, "talent_liste")) + .001 >= Y(Field(frontTemplate, "talent_liste")), "Edges preserve template minimum y position");
+            Check(Y(Field(f, "rolle")) + .001 >= Y(Field(frontTemplate, "rolle")), "Role preserves template minimum y position");
             Check(Field(b, "parade").Value == row["parade"], "Individual back values");
             foreach (var dice in b.Descendants().Where(e => (string?)e.Attribute("data-bind") == "dice"))
             {
@@ -47,9 +53,10 @@ static class CharacterChecks
             }
             var skills = b.Descendants().Single(e => (string?)e.Attribute("data-bind") == "skill-list");
             Check(skills.Elements().Select(e => e.Value).SequenceEqual(Enumerable.Range(1, 9).Select(i => row[$"fertigkeit_{i:00}_name"])), "Nine ordered skill slots");
-            double Y(XElement e) => double.Parse((string)e.Attribute("y")!, CultureInfo.InvariantCulture);
             double lastSkill = skills.Elements().Where(e => e.Value.Length > 0).Max(Y);
             Check(Math.Abs(Y(Field(b, "macht_liste")) - lastSkill - 5) < .001, "Powers below last occupied skill with fixed gap");
+            Check((string?)Field(b, "macht_liste").Attribute("x") == (string?)Field(backTemplate, "macht_liste").Attribute("x"),
+                "Power list preserves template x position");
             bool shooting = Enumerable.Range(1, 9).Any(i => row[$"fertigkeit_{i:00}_name"].Equals("Schießen", StringComparison.OrdinalIgnoreCase));
             var ammo = b.Descendants().Single(e => (string?)e.Attribute("data-template-role") == "ammo");
             Check((ammo.Attribute("display")?.Value != "none") == shooting, "Ammo only for shooting skill");

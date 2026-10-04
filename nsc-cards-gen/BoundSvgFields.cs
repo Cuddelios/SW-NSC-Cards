@@ -113,7 +113,7 @@ public sealed partial class SvgCardRenderer
                 default: throw new InvalidOperationException($"Unbekannte SVG-Bindung: {element.Attribute("data-bind")}");
             }
         }
-        ApplyCharacterLayout(root, values);
+        ApplyCharacterLayout(root, FindTemplateRoot(svgRootTemplate) ?? svgRootTemplate, values);
     }
 
     private static void FitBoundText(XElement element, string value, double width, double? height)

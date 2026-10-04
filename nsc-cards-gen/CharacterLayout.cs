@@ -6,11 +6,15 @@ namespace SvgPdfGenerator;
 
 public sealed partial class SvgCardRenderer
 {
-    private static void ApplyCharacterLayout(XElement root, IReadOnlyDictionary<string, string> values)
+    private static void ApplyCharacterLayout(
+        XElement root,
+        XElement templateRoot,
+        IReadOnlyDictionary<string, string> values)
     {
         string? layout = (string?)root.Attribute("data-layout");
         if (layout is not ("character-front" or "character-back")) return;
         XElement Field(string name) => root.Descendants().Single(e => (string?)e.Attribute("data-field") == name);
+        XElement TemplateField(string name) => templateRoot.Descendants().Single(e => (string?)e.Attribute("data-field") == name);
         double Number(XElement e, string attribute) => double.Parse((string)e.Attribute(attribute)!, CultureInfo.InvariantCulture);
         double FontSize(XElement e) => double.Parse(Regex.Match((string?)e.Attribute("style") ?? "", @"font-size:([\d.]+)").Groups[1].Value, CultureInfo.InvariantCulture);
         double Bottom(XElement e) => Number(e, "y") + Math.Max(0, e.Elements(SvgNs + "tspan").Count() - 1) * FontSize(e) * 1.25;
@@ -32,12 +36,17 @@ public sealed partial class SvgCardRenderer
         {
             var name = Field("name");
             Move(name, Number(name, "y") - (Bottom(name) - Number(name, "y")));
-            double listY = Math.Max(36, Bottom(Field("beschreibung")) + 5);
+            double listY = Math.Max(
+                Math.Max(Number(TemplateField("handicap_liste"), "y"), Number(TemplateField("talent_liste"), "y")),
+                Bottom(Field("beschreibung")) + 5);
             Move(Field("handicap_liste"), listY);
             Move(Field("talent_liste"), listY);
-            double roleY = Math.Max(58.304237, Math.Max(Bottom(Field("handicap_liste")), Bottom(Field("talent_liste"))) + 5);
+            double roleY = Math.Max(
+                Number(TemplateField("rolle"), "y"),
+                Math.Max(Bottom(Field("handicap_liste")), Bottom(Field("talent_liste"))) + 5);
             Move(Field("rolle"), roleY);
-            Move(Field("konzept"), Bottom(Field("rolle")) + 5);
+            double conceptGap = Number(TemplateField("konzept"), "y") - Number(TemplateField("rolle"), "y");
+            Move(Field("konzept"), Bottom(Field("rolle")) + conceptGap);
         }
         else
         {
@@ -48,7 +57,7 @@ public sealed partial class SvgCardRenderer
             var skills = root.Descendants().Single(e => (string?)e.Attribute("data-bind") == "skill-list");
             double lastSkillY = skills.Elements(SvgNs + "tspan").Where(e => !string.IsNullOrWhiteSpace(e.Value))
                 .Select(e => Number(e, "y")).DefaultIfEmpty(Number(skills, "y")).Max();
-            Move(Field("macht_liste"), lastSkillY + 5, 65);
+            Move(Field("macht_liste"), lastSkillY + 5);
             var magic = Field("machtpunkte");
             if (Bottom(Field("macht_liste")) > 66 && magic.Attribute("display")?.Value != "none")
             {
